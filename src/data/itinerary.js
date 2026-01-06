@@ -4,7 +4,7 @@ export const itineraryPackages = {
         title: "Gran Tour Magia Andina",
         subtitle: "La Experiencia Clásica Completa",
         description: "El equilibrio perfecto entre cultura, comodidad y descubrimiento. Un recorrido exhaustivo por los tesoros de Puno y el Altiplano.",
-        image: "https://www.rutaverdebolivia.com/wp-content/uploads/lake-ticicaca-e1484658328183.jpg",
+        image: "src/assets/image/portada.png",
         benefits: {
             accommodation: "Hoteles 3 y 4 estrellas con encanto local (Casa Andina, Sonesta).",
             food: "Desayunos buffet y almuerzos en restaurantes turísticos tradicionales.",

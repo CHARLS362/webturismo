@@ -50,7 +50,7 @@ const getRecommendation = (interests, activities) => {
             id: 'nature',
             title: "Santuario Natural Titicaca (30 Días)",
             desc: "Para los amantes de la biodiversidad. Expediciones fotográficas diarias a islas remotas, avistamiento de aves endémicas y atardeceres únicos.",
-            image: "https://www.rutaverdebolivia.com/wp-content/uploads/lake-ticicaca-e1484658328183.jpg"
+            image: "src/assets/image/portada.png"
         };
     }
     // Default
@@ -58,7 +58,7 @@ const getRecommendation = (interests, activities) => {
         id: 'standard',
         title: "Gran Tour Magia Andina (30 Días)",
         desc: "La experiencia definitiva. Lo mejor de todos los mundos: cultura, naturaleza y gastronomía equilibrados perfectamente en un itinerario inolvidable.",
-        image: "https://www.rutaverdebolivia.com/wp-content/uploads/lake-ticicaca-e1484658328183.jpg"
+        image: "src/assets/image/portada.png"
     };
 };
 
