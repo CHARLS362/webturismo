@@ -1,0 +1,16 @@
+﻿
+> weewe@0.0.0 lint
+> eslint .
+
+
+C:\Users\ASUS\OneDrive\Escritorio\weewe\src\components\Hero.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ASUS\OneDrive\Escritorio\weewe\src\components\Itinerary.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\ASUS\OneDrive\Escritorio\weewe\src\components\Overview.jsx
+  2:10  error  'motion' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+Ô£û 3 problems (3 errors, 0 warnings)
+
