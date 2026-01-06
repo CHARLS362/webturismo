@@ -20,7 +20,7 @@ const Hero = () => {
             <motion.div style={{
                 position: 'absolute', inset: 0,
                 y,
-                backgroundImage: 'linear-gradient(to bottom, rgba(15, 44, 89, 0.3), rgba(15, 44, 89, 0.7)), url("https://www.rutaverdebolivia.com/wp-content/uploads/lake-ticicaca-e1484658328183.jpg")', // Authentic Puno/Titicaca
+                backgroundImage: 'linear-gradient(to bottom, rgba(15, 44, 89, 0.3), rgba(15, 44, 89, 0.7)), url("https://media.traveler.es/photos/63a6f462777730b397020ac4/1:1/w_960,c_limit/GettyImages-523528056.jpg")', // Authentic Puno/Titicaca
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 zIndex: -1
