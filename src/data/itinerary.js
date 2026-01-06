@@ -14,56 +14,56 @@ export const itineraryPackages = {
         weeks: [
             {
                 id: 1,
-                title: "Semana 1: Inmersión Cultural en Puno",
+                title: "Semana 1: Ciudad de Puno y Lago Titicaca Conocido",
                 days: [
-                    { day: 1, title: "Llegada y Aclimatación", desc: "Recepción en aeropuerto, mate de coca de bienvenida y descanso en hotel céntrico." },
-                    { day: 2, title: "City Tour Puno", desc: "Visita a la Catedral, Museo Dreyer y Arco Deustua. Tarde libre." },
-                    { day: 3, title: "Uros Tradicional", desc: "Visita a las islas flotantes y paseo en balsa de totora." },
-                    { day: 4, title: "Taquile Exclusivo", desc: "Navegación a Taquile, almuerzo local y caminata paisajística." },
-                    { day: 5, title: "Chucuito y la Fertilidad", desc: "Templo Inca Uyo y criadero de truchas." },
-                    { day: 6, title: "Aramu Muro", desc: "Portal de Aramu Muro y formaciones rocosas." },
-                    { day: 7, title: "Día Libre y Compras", desc: "Mercado artesanal y descanso." }
+                    { day: 1, title: "Llegada a Puno y Adaptación", desc: "08:00 Recepción y traslado a lodge. 10:00 Charla sobre cultura andina y adaptación. 18:00 Cena típica (chairo) y danzas folklóricas." },
+                    { day: 2, title: "Centro Histórico y Miradores", desc: "09:00 Tour Plaza de Armas, Catedral y Museo Dreyer. 14:00 Almuerzo (pesque). 16:00 Mirador Huajsapata con vistas al lago." },
+                    { day: 3, title: "Uros y Kayak en Totorales", desc: "07:00 Lancha a Uros. 15:00 Kayak especializado entre totoras (1h). 17:00 Traslado a Isla Taquile (homestay)." },
+                    { day: 4, title: "Tradición en Taquile", desc: "08:00 Caminata y taller de tejido tradicional (Patrimonio UNESCO). 14:00 Regreso a la ciudad de Puno." },
+                    { day: 5, title: "Isla Amantaní y Kayak Costero", desc: "06:30 Salida a Amantaní. 10:00 Visita restos prehispánicos. 16:00 Kayak costero (1.5h). 18:00 Ceremonia 'k'antu' con familia local." },
+                    { day: 6, title: "Isla Esteves Arqueológica", desc: "09:00 Exploración de reliquias Colla y Tiahuanaco en Isla Esteves. Almuerzo insular. 16:00 Retorno." },
+                    { day: 7, title: "Cocina Vivencial y Artesanías", desc: "09:00 Taller de cocina típica (preparación de chairo). 15:00 Tiempo libre en mercado de artesanías." }
                 ]
             },
             {
                 id: 2,
-                title: "Semana 2: Arqueología e Historia",
+                title: "Semana 2: Sitios Arqueológicos Remotos",
                 days: [
-                    { day: 8, title: "Sillustani al Atardecer", desc: "Chullpas sagradas y vistas a la laguna Umayo." },
-                    { day: 9, title: "Lampa, Ciudad Rosada", desc: "Iglesia de Santiago Apóstol y catacumbas." },
-                    { day: 10, title: "Pukara y su Legado", desc: "Museo Lítico y complejo arqueológico de Kalasaya." },
-                    { day: 11, title: "Cañón de Tinajani", desc: "Formaciones geológicas impresionantes y bosque de puyas." },
-                    { day: 12, title: "Ayaviri y Gastronomía", desc: "Degustación del famoso Cancacho y visita a la catedral." },
-                    { day: 13, title: "Putina y Aguas Termales", desc: "Relajación en baños termomedicinales." },
-                    { day: 14, title: "Regreso a Puno", desc: "Tarde de relax y música folclórica." }
+                    { day: 8, title: "Expedición Sillustani", desc: "07:00 Salida 4x4 a Sillustani (chullpas sagradas). 11:00 Excursión guiada. 18:00 Pernocte en lodge cercano." },
+                    { day: 9, title: "Naturaleza en Sillustani", desc: "08:00 Caminata de flora andina alrededor de la laguna Umayo. 14:00 Regreso a Puno." },
+                    { day: 10, title: "Ruta de la Fertilidad: Inca Uyo", desc: "06:30 Visita al templo Inca Uyo. Almuerzo en Juliaca. 16:00 Arribo a complejo de a Cutimbo." },
+                    { day: 11, title: "Secretos de Cutimbo", desc: "08:00 Exploración arqueológica profunda en Cutimbo. 15:00 Regreso a la base en Puno." },
+                    { day: 12, title: "Reserva Salinas y Aguada Blanca", desc: "07:00 Expedición a hábitat de vicuñas y flamencos. 18:00 Noche en refugio comunitario." },
+                    { day: 13, title: "Lagunas Saladas", desc: "08:00 Trekking por las lagunas saladas y bofedales. 14:00 Retorno a Puno." },
+                    { day: 14, title: "Gastronomía Local", desc: "10:00 Degustación de 'Cancacho' (lechón al horno) en mercado local. Tarde libre de descanso." }
                 ]
             },
             {
                 id: 3,
-                title: "Semana 3: Naturaleza Vivencial",
+                title: "Semana 3: Pueblos Indígenas y Kayak",
                 days: [
-                    { day: 15, title: "Península de Capachica", desc: "Traslado a la comunidad de Llachón. Turismo vivencial." },
-                    { day: 16, title: "Vida Rural en Llachón", desc: "Actividades agrícolas y pesca artesanal con locales." },
-                    { day: 17, title: "Isla Amantaní", desc: "Pernocte en casa de habitantes y ascenso al Pachatata." },
-                    { day: 18, title: "Amanecer en el Lago", desc: "Ceremonia de agradecimiento al sol y retorno a Capachica." },
-                    { day: 19, title: "Tikonata", desc: "Visita a la isla mística y sus momias preservadas." },
-                    { day: 20, title: "Playa de Chifrón", desc: "Relax a orillas del Titicaca, el 'Caribe de los Andes'." },
-                    { day: 21, title: "Retorno a Puno", desc: "Cena show con danzas típicas." }
+                    { day: 15, title: "Pukara y Arte Rupestre", desc: "08:00 Salida a Pukara (arte preincaico y museo). 18:00 Vivencia en homestay local." },
+                    { day: 16, title: "Cerámica Torito de Pukara", desc: "09:00 Taller maestro de cerámica tradicional. 14:00 Regreso a Puno." },
+                    { day: 17, title: "Lago Arapindi Oculto", desc: "07:00 Expedición 4x4. 11:00 Kayak y pesca de trucha artesanal (2h). 18:00 Cabaña rural." },
+                    { day: 18, title: "Senderos de Arapindi", desc: "08:00 Caminata paisajística de altura. 15:00 Regreso a Puno." },
+                    { day: 19, title: "Comunidad de Llachón", desc: "09:00 Lancha a pueblo pesquero. 16:00 Kayak costero a calas ocultas (1h). 18:00 Posible fiesta comunitaria." },
+                    { day: 20, title: "Huertas Andinas", desc: "08:00 Actividad agrícola en huertas comunitarias. 14:00 Regreso a Puno." },
+                    { day: 21, title: "Tejido Ancestral Uros", desc: "10:00 Masterclass de tejido con fibra de totora. 16:00 Presentación final de obras." }
                 ]
             },
             {
                 id: 4,
-                title: "Semana 4: Misticismo y Despedida",
+                title: "Semana 4: Festividades y Cierre",
                 days: [
-                    { day: 22, title: "Copacabana (Bolivia)", desc: "Cruce de frontera (opcional) o visita a Yunguyo." },
-                    { day: 23, title: "Isla del Sol (Full Day)", desc: "Cuna del imperio Inca, escalinatas de Yumani." },
-                    { day: 24, title: "Retorno a Perú", desc: "Paso por Pomata, el 'Balcón Filosófico'." },
-                    { day: 25, title: "Juli y sus Iglesias", desc: "La 'Pequeña Roma de América' y sus templos." },
-                    { day: 26, title: "Artesanía en Puno", desc: "Talleres finales de cerámica o tejido." },
-                    { day: 27, title: "Cena de Despedida", desc: "Banquete novoandino en restaurante mirador." },
-                    { day: 28, title: "Día Libre", desc: "Últimas fotos y caminatas por el malecón." },
-                    { day: 29, title: "Preparación de Partida", desc: "Organización de equipaje y traslado a Juliaca." },
-                    { day: 30, title: "Vuelo de Retorno", desc: "Traslado final al aeropuerto." }
+                    { day: 22, title: "Preparación Alasitas", desc: "09:00 Charla sobre ritualidad de miniaturas. 14:00 Compra de alasitas para la feria." },
+                    { day: 23, title: "Feria de las Alasitas", desc: "08:00 Participación en feria y ofrenda a dioses andinos. 18:00 Cena de celebración." },
+                    { day: 24, title: "Volcán Ampato Panorámico", desc: "06:30 Salida hacia vistas del Ampato. 11:00 Caminata en faldeos. 18:00 Noche en Macusani." },
+                    { day: 25, title: "Termas de Macusani", desc: "08:00 Relax en aguas termales de altura. 15:00 Regreso a Puno." },
+                    { day: 26, title: "Ruta de la Chicha", desc: "10:00 Tour y degustación en bodegas de chicha de jora. 16:00 Fotografía libre." },
+                    { day: 27, title: "Reserva de Aves y Kayak", desc: "09:00 Visita reserva Titicaca. 14:00 Kayak de observación de flamencos (1h). Almuerzo de trucha." },
+                    { day: 28, title: "Cierre Comunitario", desc: "10:00 Despedida con líderes locales y entrega de certificados de participación." },
+                    { day: 29, title: "Despedida Fusión", desc: "09:00 Compras finales. 18:00 Cena despedida (Fusión Andino-Asiática)." },
+                    { day: 30, title: "Partida", desc: "07:00 Traslado final al aeropuerto de Juliaca. Fin de servicios." }
                 ]
             }
         ]
