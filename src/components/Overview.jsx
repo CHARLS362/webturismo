@@ -58,7 +58,7 @@ const getRecommendation = (interests, activities) => {
         id: 'standard',
         title: "Gran Tour Magia Andina (30 Días)",
         desc: "La experiencia definitiva. Lo mejor de todos los mundos: cultura, naturaleza y gastronomía equilibrados perfectamente en un itinerario inolvidable.",
-        image: "src/assets/image/portada.png"
+        image: "https://www.salkantaytrekmachu.com/img/amantani-island-5-reasons-to-visit-this-impressive-place-in-puno-252.jpg"
     };
 };
 
