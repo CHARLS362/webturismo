@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Clock, Award, Sailboat, Mountain, Camera,
@@ -14,6 +14,20 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
     // Default to 'standard' if not provided
     const currentPackageId = selectedPackage || 'standard';
     const currentPackage = itineraryPackages[currentPackageId];
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        setCurrentImageIndex(0);
+    }, [currentPackageId]);
+
+    useEffect(() => {
+        if (!currentPackage.images) return;
+        const timer = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % currentPackage.images.length);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [currentPackage]);
 
     return (
         <section className="section" id="itinerario" style={{ backgroundColor: '#F8FAFC', padding: '4rem 0' }}>
@@ -83,9 +97,13 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                         }}
                     >
                         <div style={{ position: 'relative', minHeight: '300px' }}>
-                            <img
-                                src={currentPackage.image}
+                            <motion.img
+                                key={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
+                                src={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
                                 alt={currentPackage.title}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.2), transparent)' }}></div>

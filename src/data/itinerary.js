@@ -4,7 +4,11 @@ export const itineraryPackages = {
         title: "Gran Tour Magia Andina",
         subtitle: "La Experiencia Clásica Completa",
         description: "El equilibrio perfecto entre cultura, comodidad y descubrimiento. Un recorrido exhaustivo por los tesoros de Puno y el Altiplano.",
-        image: "https://www.salkantaytrekmachu.com/img/amantani-island-5-reasons-to-visit-this-impressive-place-in-puno-252.jpg",
+        images: [
+            "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/a7/1d/86.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSixjOgUyPY8xG-6BH-jGpaDgMFv9231fE1TA&s",
+            "https://chijnayafoundation.org/wp-content/uploads/2022/05/Diadel-torito3-scaled.jpg"
+        ],
         benefits: {
             accommodation: "Hoteles 3 y 4 estrellas con encanto local (Casa Andina, Sonesta).",
             food: "Desayunos buffet y almuerzos en restaurantes turísticos tradicionales.",

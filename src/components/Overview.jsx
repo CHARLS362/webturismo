@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mountain, Utensils, Waves, Users, CheckCircle, ArrowRight, Star, Heart, Camera, Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -58,7 +58,11 @@ const getRecommendation = (interests, activities) => {
         id: 'standard',
         title: "Gran Tour Magia Andina (30 Días)",
         desc: "La experiencia definitiva. Lo mejor de todos los mundos: cultura, naturaleza y gastronomía equilibrados perfectamente en un itinerario inolvidable.",
-        image: "https://www.salkantaytrekmachu.com/img/amantani-island-5-reasons-to-visit-this-impressive-place-in-puno-252.jpg"
+        images: [
+            "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/a7/1d/86.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSixjOgUyPY8xG-6BH-jGpaDgMFv9231fE1TA&s",
+            "https://chijnayafoundation.org/wp-content/uploads/2022/05/Diadel-torito3-scaled.jpg"
+        ]
     };
 };
 
@@ -75,6 +79,20 @@ const Overview = ({ onSelectPackage }) => {
     };
 
     const recommendation = getRecommendation(selectedInterests, selectedActivities);
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        setCurrentImageIndex(0);
+    }, [recommendation.id]);
+
+    useEffect(() => {
+        if (!recommendation.images) return;
+        const timer = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % recommendation.images.length);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [recommendation]);
 
     return (
         <section className="section bg-white" id="exclusividad">
@@ -181,7 +199,15 @@ const Overview = ({ onSelectPackage }) => {
                                 }}
                             >
                                 <div style={{ height: '250px', position: 'relative' }}>
-                                    <img src={recommendation.image} alt={recommendation.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    <motion.img
+                                        key={recommendation.images ? recommendation.images[currentImageIndex] : recommendation.image}
+                                        src={recommendation.images ? recommendation.images[currentImageIndex] : recommendation.image}
+                                        alt={recommendation.title}
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.5 }}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
                                     <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '1.5rem', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}>
                                         <span style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>
                                             Recomendado para ti
