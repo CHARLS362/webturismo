@@ -78,6 +78,7 @@ const Hero = () => {
                             whileTap={{ scale: 0.95 }}
                             className="btn btn-primary"
                             style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)', border: 'none' }}
+                            onClick={() => document.getElementById('itinerario').scrollIntoView({ behavior: 'smooth' })}
                         >
                             Ver Itinerario Completo
                         </motion.button>
@@ -86,6 +87,7 @@ const Hero = () => {
                             whileTap={{ scale: 0.95 }}
                             className="btn"
                             style={{ border: '2px solid white', color: 'white' }}
+                            onClick={() => document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' })}
                         >
                             Consultar Disponibilidad <ArrowRight size={18} />
                         </motion.button>

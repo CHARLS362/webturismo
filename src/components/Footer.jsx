@@ -23,7 +23,7 @@ const Footer = () => {
                     <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.2rem' }}>Contacto</h4>
                     <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                            <Phone size={18} color="var(--accent)" /> +51 951 123 456
+                            <Phone size={18} color="var(--accent)" /> +51 900 207 335
                         </li>
                         <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                             <Mail size={18} color="var(--accent)" /> reservas@magiaandina.com
