@@ -92,7 +92,6 @@ const Header = () => {
                 { name: 'Walking Tour', href: '#pucara-recorrido' },
                 { name: 'Mapa Cultural 3D', href: '#pucara-mapa' },
                 { name: 'Paquetes Turísticos', href: '#pucara-paquetes' },
-                { name: 'Estudio Google Flow IA', href: '#pucara-flow-studio' },
                 { name: 'Festividades', href: '#pucara-festividades' },
                 { name: 'Hoja de Ruta 2030', href: '#pucara-roadmap' }
             ]
