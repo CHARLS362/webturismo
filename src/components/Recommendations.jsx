@@ -1,43 +1,45 @@
-import { Info, Heart, Camera, Droplets } from 'lucide-react';
+import { Info, Heart, Camera, Droplets, Palette } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const tips = [
     {
         icon: Droplets,
-        title: "Altura y Salud",
-        text: "Puno está a 3,827 msnm. Beber mucha agua y mate de coca. Evitar alcohol y comidas pesadas los primeros 2 días."
+        title: "Altura y Clima",
+        text: "Pucará se encuentra a 3,860 msnm. El viento altiplánico puede ser fuerte; lleva ropa abrigadora, cortavientos y mantente hidratado con mate de coca."
     },
     {
         icon: Camera,
-        title: "Etiqueta Cultural",
-        text: "Siempre pedir permiso antes de fotografiar a las personas. El respeto es la base de nuestra conexión trasciende el idioma."
+        title: "Respeto Patrimonial",
+        text: "Kalasaya es un centro ceremonial sagrado. Por favor, respeta los senderos señalizados y no toques las piedras rojas ni monolitos antiguos."
     },
     {
-        icon: Heart,
-        title: "Ritmo y Bienestar",
-        text: "Caminaremos 'despacito'. Nuestros guías monitorean su oxigenación diariamente. Disponemos de oxígeno en todo momento."
+        icon: Palette,
+        title: "Alfarería Vivencial",
+        text: "Durante los talleres prácticos de moldeado y pintura de arcilla con los maestros artesanos, te sugerimos usar ropa cómoda que se pueda ensuciar."
     }
 ];
 
 const Recommendations = () => {
     return (
-        <section className="section" style={{ backgroundColor: '#F9FAFB' }}>
+        <section className="section" style={{ backgroundColor: 'var(--bg-dark)' }}>
             <div className="container">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     style={{
-                        backgroundColor: 'white',
-                        borderRadius: '24px',
-                        padding: '3rem 2rem',
-                        boxShadow: 'var(--shadow-lg)',
-                        border: '1px solid rgba(0,0,0,0.03)'
+                        backgroundColor: '#FCFAF6',
+                        borderRadius: '36px 12px 36px 12px',
+                        padding: '4rem 3rem',
+                        boxShadow: 'var(--shadow-premium)',
+                        border: '4px double var(--accent)',
+                        outline: '1px solid var(--terracotta)',
+                        outlineOffset: '-6px'
                     }}
                 >
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '3rem', justifyContent: 'center' }}>
-                        <Info size={32} className="text-accent" />
-                        <h2 style={{ margin: 0, fontSize: '2rem', color: 'var(--primary)' }}>Información Importante</h2>
+                        <Info size={32} className="text-secondary" style={{ color: 'var(--terracotta)' }} />
+                        <h2 style={{ margin: 0, fontSize: '2.2rem', color: 'var(--primary)', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>Información Importante</h2>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem' }}>
@@ -52,16 +54,16 @@ const Recommendations = () => {
                             >
                                 <div style={{
                                     padding: '1rem',
-                                    backgroundColor: '#eef2ff',
+                                    backgroundColor: 'rgba(184, 92, 56, 0.08)',
                                     borderRadius: '50%',
-                                    color: 'var(--primary)',
+                                    color: 'var(--terracotta)',
                                     flexShrink: 0,
-                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                    boxShadow: '0 4px 10px rgba(184, 92, 56, 0.08)'
                                 }}>
                                     <tip.icon size={24} />
                                 </div>
                                 <div>
-                                    <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem', fontWeight: 700 }}>{tip.title}</h3>
+                                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)' }}>{tip.title}</h3>
                                     <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: 1.6 }}>{tip.text}</p>
                                 </div>
                             </motion.div>

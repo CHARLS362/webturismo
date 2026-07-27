@@ -1,40 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Lato:wght@300;400;700&display=swap');
+@import "leaflet/dist/leaflet.css";
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@700&family=Outfit:wght@300;400;500;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
 
 :root {
-  /* Palette - Magia Andina */
-  --primary: #0F2C59;       /* Deep Titicaca Blue */
-  --primary-light: #1E4D8C;
-  --secondary: #D95F59;     /* Terracotta/Andean Red */
-  --accent: #F4CE14;        /* Inca Gold */
-  --accent-hover: #D4B200;
+  /* Palette - Pucará Ancestral Theme */
+  --primary: #0B2240;         /* Azul Titicaca Profundo */
+  --primary-light: #163660;
   
-  --bg-body: #F9FAFB;
+  --terracotta: #B85C38;      /* Arcilla Terracota */
+  --rose-stone: #9E4A4E;      /* Piedra Rosa de Kalasaya */
+  --bronze-gold: #C59B27;     /* Oro Sagrado Andino */
+  --ichu-green: #5A6E4B;      /* Verde Ichu Altiplánico */
+  
+  --secondary: var(--terracotta);
+  --accent: var(--bronze-gold);
+  --accent-hover: #A87E1B;
+  
+  /* HSL System */
+  --hsl-bg: 36, 33%, 96%;
+  --hsl-primary: 214, 71%, 15%;
+  --hsl-secondary: 17, 53%, 47%;
+  --hsl-accent: 44, 67%, 46%;
+  --hsl-text: 214, 71%, 15%;
+  
+  /* Warm Artisan Backgrounds */
+  --bg-body: #FAF6F0;         /* Sandstone / Arena Cálida */
   --bg-surface: #FFFFFF;
-  --bg-dark: #121212;
+  --bg-dark: #F3ECE3;         /* Arcilla Suave / Arcilla Húmeda */
+  --bg-section-alt: #EFE6DA;  /* Alterno Contraste */
   
-  --text-main: #1F2937;
-  --text-muted: #6B7280;
-  --text-light: #F3F4F6;
-
+  --text-main: #0B2240;       /* Azul Titicaca */
+  --text-muted: #5C626C;      /* Gris Muted Cálido */
+  --text-light: #FFFFFF;
+ 
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 4rem;
   --spacing-xl: 6rem;
-
-  /* Typography */
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Lato', sans-serif;
+ 
+  /* Typography Hierarchy - Premium Tourism */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --font-script: 'Dancing Script', 'Caveat', cursive;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-premium: 0 20px 25px -5px rgba(15, 44, 89, 0.15), 0 10px 10px -5px rgba(15, 44, 89, 0.1);
-
+  /* Shadows - Organic warmth */
+  --shadow-sm: 0 2px 6px rgba(11, 34, 64, 0.04);
+  --shadow-md: 0 8px 20px rgba(11, 34, 64, 0.06);
+  --shadow-lg: 0 16px 35px rgba(11, 34, 64, 0.08);
+  --shadow-premium: 0 24px 60px rgba(184, 92, 56, 0.1);
+ 
   /* Transitions */
-  --transition-fast: 0.2s ease;
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -50,18 +67,35 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar - Warm Altiplano Track */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 92, 56, 0.35);
+  border-radius: 5px;
+  border: 2px solid var(--bg-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terracotta);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  line-height: 1.2;
-  color: var(--primary);
+  line-height: 1.15;
+  color: var(--text-main);
   margin-bottom: var(--spacing-sm);
 }
 
-h1 { font-size: 3.5rem; font-weight: 700; }
-h2 { font-size: 2.5rem; font-weight: 600; }
-h3 { font-size: 1.75rem; font-weight: 500; }
+h1 { font-size: 4rem; font-weight: 900; }
+h2 { font-size: 3.2rem; font-weight: 900; }
+h3 { font-size: 1.85rem; font-weight: 700; }
 
 a {
   text-decoration: none;
@@ -88,6 +122,58 @@ ul {
 
 .section {
   padding: var(--spacing-xl) 0;
+  position: relative;
+}
+
+/* Alternating Section Backgrounds - Light Theme with artisan textured weaves */
+.bg-blue-base {
+  background-color: #FAF6F0 !important;
+  background-image: linear-gradient(180deg, #FAF6F0 0%, #F5EFEB 100%) !important;
+}
+
+.bg-blue-contrast {
+  background-color: var(--bg-dark) !important;
+  background-image: radial-gradient(rgba(184, 92, 56, 0.035) 1.5px, transparent 1.5px), 
+                    radial-gradient(rgba(11, 34, 64, 0.02) 1.5px, transparent 1.5px) !important;
+  background-size: 28px 28px !important;
+  background-position: 0 0, 14px 14px !important;
+}
+
+/* Section divider - subtle top/bottom border */
+.bg-blue-contrast::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 92, 56, 0.15), transparent);
+}
+
+/* Typography styles - Pucará Ancestral Subtitles */
+.script-subtitle {
+  font-family: var(--font-script) !important;
+  font-size: 2.8rem !important;
+  color: var(--terracotta) !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  margin-bottom: 0.15rem !important;
+  display: block !important;
+  letter-spacing: normal !important;
+  transform: rotate(-1.5deg);
+  text-shadow: none;
+}
+
+.bold-title {
+  font-family: var(--font-heading) !important;
+  font-size: 3.6rem !important;
+  font-weight: 900 !important;
+  color: var(--primary) !important;
+  text-transform: capitalize !important;
+  text-shadow: none !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.1 !important;
+  margin-bottom: 1.5rem !important;
 }
 
 /* Utilities */
@@ -99,42 +185,251 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-weight: 700;
-  border-radius: 4px;
+  padding: 0.85rem 1.75rem;
+  font-weight: 900;
+  border-radius: 50px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   transition: var(--transition-smooth);
 }
 
 .btn-primary {
-  background-color: var(--primary);
-  color: white;
+  background: linear-gradient(135deg, var(--terracotta) 0%, #A04928 100%) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 8px 20px rgba(184, 92, 56, 0.25) !important;
 }
 .btn-primary:hover {
-  background-color: var(--primary-light);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, #A04928 0%, #883B1F 100%) !important;
+  transform: translateY(-2.5px);
+  box-shadow: 0 12px 30px rgba(184, 92, 56, 0.35) !important;
 }
 
 .btn-accent {
-  background-color: var(--accent);
-  color: var(--text-main);
+  background: linear-gradient(135deg, var(--bronze-gold) 0%, #B2881B 100%) !important;
+  color: var(--primary) !important;
+  border: none !important;
+  box-shadow: 0 8px 20px rgba(197, 155, 39, 0.25) !important;
 }
 .btn-accent:hover {
-  background-color: var(--accent-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, #B2881B 0%, #9E7613 100%) !important;
+  transform: translateY(-2.5px);
+  box-shadow: 0 12px 30px rgba(197, 155, 39, 0.35) !important;
 }
 
+/* Cards - Hand-molded Asymmetrical Artisan style */
 .card {
-  background: var(--bg-surface);
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-md);
-  transition: var(--transition-smooth);
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F5 100%) !important;
+  border: 1px solid rgba(11, 34, 64, 0.08) !important;
+  border-top: 4px solid var(--terracotta) !important;
+  border-radius: 36px 12px 36px 12px !important;
+  box-shadow: var(--shadow-md) !important;
+  padding: var(--spacing-md) !important;
+  color: var(--text-main) !important;
+  transition: var(--transition-smooth) !important;
 }
 .card:hover {
-  box-shadow: var(--shadow-premium);
-  transform: translateY(-4px);
+  box-shadow: var(--shadow-premium) !important;
+  transform: translateY(-6px) !important;
+  border-color: rgba(184, 92, 56, 0.25) !important;
+  border-top-color: var(--bronze-gold) !important;
+}
+
+/* Different top borders for variety and richness */
+.card-terracotta {
+  border-top: 4px solid var(--terracotta) !important;
+}
+.card-primary {
+  border-top: 4px solid var(--primary) !important;
+}
+.card-green {
+  border-top: 4px solid var(--ichu-green) !important;
+}
+
+/* Glass Panel - Warm Artisan Theme */
+.glass-panel {
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F5 100%) !important;
+  border: 1px solid rgba(11, 34, 64, 0.08) !important;
+  border-top: 4px solid var(--bronze-gold) !important;
+  border-radius: 36px 12px 36px 12px !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--text-main) !important;
+}
+
+.glass-panel-dark {
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF8F5 100%) !important;
+  border: 1px solid rgba(11, 34, 64, 0.08) !important;
+  border-top: 4px solid var(--terracotta) !important; /* Elegant terracotta top border */
+  border-radius: 36px 12px 36px 12px !important;
+  box-shadow: var(--shadow-premium) !important;
+  color: var(--text-main) !important;
+}
+
+/* Premium Icon Badge Wrapper */
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(15, 44, 89, 0.04);
+  border: 1px solid rgba(15, 44, 89, 0.08);
+  border-radius: 50%;
+  color: var(--primary);
+  box-shadow: 0 4px 10px rgba(15, 44, 89, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.icon-badge:hover {
+  transform: scale(1.15) rotate(8deg);
+  border-color: var(--accent);
+  background: rgba(204, 156, 86, 0.1);
+  box-shadow: 0 0 15px rgba(204, 156, 86, 0.15);
+  color: var(--accent-hover);
+}
+
+.icon-badge-terracotta {
+  color: var(--terracotta);
+}
+.icon-badge-terracotta:hover {
+  border-color: var(--terracotta);
+  background: rgba(200, 88, 51, 0.08);
+  box-shadow: 0 0 15px rgba(200, 88, 51, 0.12);
+  color: var(--terracotta);
+}
+
+.icon-badge-rose {
+  color: var(--rose-stone);
+}
+.icon-badge-rose:hover {
+  border-color: var(--rose-stone);
+  background: rgba(166, 63, 69, 0.08);
+  box-shadow: 0 0 15px rgba(166, 63, 69, 0.12);
+  color: var(--rose-stone);
+}
+
+.icon-badge-moss {
+  color: var(--ichu-green);
+}
+.icon-badge-moss:hover {
+  border-color: var(--ichu-green);
+  background: rgba(106, 123, 81, 0.08);
+  box-shadow: 0 0 15px rgba(106, 123, 81, 0.12);
+  color: var(--ichu-green);
+}
+
+/* Subtle Ambient Blobs (Light theme - very faint) */
+.bg-blobs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -10;
+  pointer-events: none;
+}
+
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(160px);
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  will-change: transform;
+}
+
+.bg-blob-gold {
+  background: radial-gradient(circle, var(--accent) 0%, rgba(204,156,86,0) 70%);
+  width: 550px;
+  height: 550px;
+  top: -10%;
+  left: 20%;
+  animation: floatBlob1 25s infinite alternate ease-in-out;
+}
+
+.bg-blob-coral {
+  background: radial-gradient(circle, var(--terracotta) 0%, rgba(200,88,51,0) 70%);
+  width: 600px;
+  height: 600px;
+  bottom: 5%;
+  right: 5%;
+  animation: floatBlob2 30s infinite alternate ease-in-out;
+}
+
+.bg-blob-blue {
+  background: radial-gradient(circle, var(--primary-light) 0%, rgba(28,69,135,0) 70%);
+  width: 550px;
+  height: 550px;
+  top: 35%;
+  left: -10%;
+  animation: floatBlob3 28s infinite alternate ease-in-out;
+}
+
+@keyframes floatBlob1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(120px, 60px, 0) scale(1.1); }
+}
+@keyframes floatBlob2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-100px, -80px, 0) scale(0.9); }
+}
+@keyframes floatBlob3 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(80px, -60px, 0) scale(1.05); }
+}
+
+/* Leaflet Light Mode Overrides */
+.leaflet-container {
+  background: #F0F4FA !important;
+  font-family: var(--font-body);
+}
+
+.leaflet-bar {
+  border: 1px solid rgba(15, 44, 89, 0.1) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.leaflet-bar a {
+  background-color: #FFFFFF !important;
+  color: var(--primary) !important;
+  border-bottom: 1px solid rgba(15, 44, 89, 0.08) !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: var(--accent) !important;
+  color: var(--primary) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(15, 44, 89, 0.08);
+  color: var(--text-main) !important;
+  border-radius: 14px !important;
+  padding: 0.25rem !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.leaflet-popup-tip {
+  background: #FFFFFF !important;
+}
+
+/* CSS Animation helper */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
 }

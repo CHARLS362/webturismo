@@ -1,68 +1,51 @@
 import { useState, useEffect } from 'react';
-import { Mountain, Utensils, Waves, Users, CheckCircle, ArrowRight, Star, Heart, Camera, Map } from 'lucide-react';
+import { Mountain, Utensils, Users, Heart, Palette, Compass, Landmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import kalasayaImg from '../assets/image/map/kalasaya.png';
+import penonImg from '../assets/image/map/penon.png';
+import temploImg from '../assets/image/map/templo.png';
+import plazaImg from '../assets/image/map/plaza.png';
+import museoImg from '../assets/image/map/museo.png';
+
 const interestsList = [
-    { id: 'culture', label: 'Cultura Ancestral', icon: <Users size={18} /> },
-    { id: 'nature', label: 'Naturaleza & Fauna', icon: <Waves size={18} /> },
-    { id: 'adventure', label: 'Aventura & Adrenalina', icon: <Mountain size={18} /> },
-    { id: 'gastronomy', label: 'Gastronomía Gourmet', icon: <Utensils size={18} /> },
-    { id: 'spirituality', label: 'Espiritualidad', icon: <Star size={18} /> },
-    { id: 'luxury', label: 'Confort & Lujo', icon: <Heart size={18} /> }
+    { id: 'artesania', label: 'Alfarería & Cerámica', icon: <Palette size={20} /> },
+    { id: 'arqueologia', label: 'Arqueología Pre-Inca', icon: <Landmark size={20} /> },
+    { id: 'trekking', label: 'Trekking & Naturaleza', icon: <Mountain size={20} /> },
+    { id: 'gastronomia', label: 'Gastronomía Local', icon: <Utensils size={20} /> },
+    { id: 'misticismo', label: 'Misticismo & Ofrendas', icon: <Compass size={20} /> },
+    { id: 'historia', label: 'Historia Colonial', icon: <Users size={20} /> }
 ];
 
 const activitiesList = [
-    { id: 'trekking', label: 'Trekking de Altura', icon: <Map size={18} /> },
-    { id: 'kayak', label: 'Kayak en Titicaca', icon: <Waves size={18} /> },
-    { id: 'photo', label: 'Fotografía', icon: <Camera size={18} /> },
-    { id: 'cooking', label: 'Clases de Cocina', icon: <Utensils size={18} /> },
-    { id: 'mystic', label: 'Rituales Andinos', icon: <Star size={18} /> }
+    { id: 'moldear', label: 'Moldeado de Arcilla', icon: <Palette size={20} /> },
+    { id: 'escalar', label: 'Escalar el Peñón', icon: <Mountain size={20} /> },
+    { id: 'monolitos', label: 'Explorar Kalasaya', icon: <Landmark size={20} /> },
+    { id: 'queso', label: 'Cata de Quesos', icon: <Utensils size={20} /> },
 ];
 
 const getRecommendation = (interests, activities) => {
-    // Logic to determine the best 30-day package based on selection
-    if (interests.includes('adventure') || activities.includes('trekking')) {
+    if (interests.includes('trekking') || activities.includes('escalar') || activities.includes('pago')) {
         return {
             id: 'adventure',
-            title: "Expedición Andina Total (30 Días)",
-            desc: "Un mes desafiando tus límites. Incluye trekking al nevado Allincapac, kayak extremo en el lado este del lago y camping de lujo bajo las estrellas.",
-            image: "https://images.unsplash.com/photo-1528543045752-dfa806c9a9d7?q=80&w=2574&auto=format&fit=crop"
+            title: "Aventura y Misticismo en Pucará",
+            desc: "Diseñado para espíritus libres. Trekking al gran Peñón de Pucará (Lampa, Puno), ceremonias de pago a la Pachamama con coca y campamentos de altura.",
+            images: [penonImg, kalasayaImg]
         };
     }
-    if (interests.includes('luxury') || interests.includes('gastronomy')) {
+    if (interests.includes('artesania') || activities.includes('moldear') || interests.includes('historia') || activities.includes('queso')) {
         return {
             id: 'luxury',
-            title: "Andes Gourmet & Relax (30 Días)",
-            desc: "La combinación perfecta de descanso y placer. 30 días recorriendo las estancias más exclusivas, con chefs privados y spa andino diario.",
-            image: "https://images.unsplash.com/photo-1557007559-006371cb2b11?q=80&w=2000&auto=format&fit=crop"
+            title: "Inmersión Barroco-Alfarera",
+            desc: "Una experiencia de alta gama que combina arte tradicional andino en Pucará con talleres de cerámica, historia colonial y gastronomía altiplánica de Puno.",
+            images: [plazaImg, temploImg]
         };
     }
-    if (interests.includes('spirituality') || activities.includes('mystic')) {
-        return {
-            id: 'mystic',
-            title: "Ruta Mística Ancestral (30 Días)",
-            desc: "Reconecta con el origen. Un viaje espiritual profundo visitando todos los templos sagrados, con ceremonias de pago a la tierra y meditación diaria.",
-            image: "https://images.unsplash.com/photo-1535942475143-52467d5ae34f?q=80&w=2600&auto=format&fit=crop"
-        };
-    }
-    if (interests.includes('nature') || activities.includes('photo')) {
-        return {
-            id: 'nature',
-            title: "Santuario Natural Titicaca (30 Días)",
-            desc: "Para los amantes de la biodiversidad. Expediciones fotográficas diarias a islas remotas, avistamiento de aves endémicas y atardeceres únicos.",
-            image: "src/assets/image/portada.png"
-        };
-    }
-    // Default
     return {
         id: 'standard',
-        title: "Gran Tour Magia Andina (30 Días)",
-        desc: "La experiencia definitiva. Lo mejor de todos los mundos: cultura, naturaleza y gastronomía equilibrados perfectamente en un itinerario inolvidable.",
-        images: [
-            "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/a7/1d/86.jpg",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSixjOgUyPY8xG-6BH-jGpaDgMFv9231fE1TA&s",
-            "https://chijnayafoundation.org/wp-content/uploads/2022/05/Diadel-torito3-scaled.jpg"
-        ]
+        title: "Pucará Esencial",
+        desc: "El recorrido definitivo. Conoce el templo sagrado de Kalasaya, el Museo Lítico y la historia del Torito de Pucará en Lampa, Puno.",
+        images: [temploImg, museoImg]
     };
 };
 
@@ -79,7 +62,6 @@ const Overview = ({ onSelectPackage }) => {
     };
 
     const recommendation = getRecommendation(selectedInterests, selectedActivities);
-
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -95,20 +77,18 @@ const Overview = ({ onSelectPackage }) => {
     }, [recommendation]);
 
     return (
-        <section className="section bg-white" id="exclusividad">
+        <section className="section bg-blue-base" id="exclusividad" style={{ position: 'relative', overflow: 'hidden' }}>
+            
             <div className="container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    style={{ textAlign: 'center', marginBottom: '3rem' }}
-                >
-                    <span className="text-accent" style={{ fontStyle: 'italic', fontWeight: '500' }}>Diseña tu Viaje</span>
-                    <h2 style={{ color: 'var(--primary)', marginTop: '0.5rem' }}>Personaliza tu Experiencia de 30 Días</h2>
-                    <p style={{ maxWidth: '600px', margin: '0 auto', color: 'var(--text-muted)' }}>
-                        Selecciona tus intereses y actividades favoritas para que nuestra IA turística te recomiende el paquete mensual ideal.
+                {/* Header in Larana Style */}
+                <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
+                    <span className="script-subtitle">Diseña tu Experiencia en...</span>
+                    <h2 className="bold-title">Personaliza tu Ruta Pucará 365</h2>
+                    <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--accent)', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
+                    <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
+                        Selecciona tus intereses y actividades preferidas para generar de manera instantánea el itinerario ideal para ti.
                     </p>
-                </motion.div>
+                </div>
 
                 <div style={{
                     display: 'grid',
@@ -117,131 +97,205 @@ const Overview = ({ onSelectPackage }) => {
                     alignItems: 'start'
                 }} className="profile-grid">
 
-                    {/* Left Column: Selection Controls */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-
-                        {/* Interests */}
-                        <div style={{ backgroundColor: '#F8FAFC', padding: '1.5rem', borderRadius: '16px' }}>
-                            <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Heart size={20} className="text-accent" /> Tus Intereses
+                    {/* Left Column: Interactive Cards (White glass panels with Navy text) */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                        
+                        {/* Interests Selection Box */}
+                        <div className="card card-terracotta" style={{ padding: '2.5rem' }}>
+                            <h4 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
+                                <Heart size={22} className="text-secondary" style={{ color: 'var(--secondary)' }} /> 1. ¿Qué te interesa explorar?
                             </h4>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                {interestsList.map((item) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => toggleSelection(selectedInterests, setSelectedInterests, item.id)}
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            borderRadius: '50px',
-                                            border: `1px solid ${selectedInterests.includes(item.id) ? 'var(--primary)' : '#e2e8f0'}`,
-                                            backgroundColor: selectedInterests.includes(item.id) ? 'var(--primary)' : 'white',
-                                            color: selectedInterests.includes(item.id) ? 'white' : 'var(--text-muted)',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '0.5rem',
-                                            fontSize: '0.9rem',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                    >
-                                        {item.icon} {item.label}
-                                    </button>
-                                ))}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+                                {interestsList.map((item) => {
+                                    const isSelected = selectedInterests.includes(item.id);
+                                    return (
+                                        <motion.button
+                                            key={item.id}
+                                            onClick={() => toggleSelection(selectedInterests, setSelectedInterests, item.id)}
+                                            whileHover={{ y: -4, scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            style={{
+                                                padding: '1.25rem 1rem',
+                                                borderRadius: '20px',
+                                                border: `2px solid ${isSelected ? 'var(--primary)' : 'rgba(15, 44, 89, 0.1)'}`,
+                                                backgroundColor: isSelected ? 'var(--primary)' : 'rgba(15, 44, 89, 0.03)',
+                                                color: isSelected ? 'white' : 'var(--primary)',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '0.75rem',
+                                                fontSize: '0.9rem',
+                                                fontWeight: 800,
+                                                boxShadow: isSelected ? '0 10px 20px rgba(15, 44, 89, 0.15)' : 'none',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <div style={{
+                                                color: isSelected ? 'var(--accent)' : 'var(--secondary)',
+                                                transition: 'color 0.2s'
+                                            }}>
+                                                {item.icon}
+                                            </div>
+                                            <span style={{ textAlign: 'center' }}>{item.label}</span>
+                                        </motion.button>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        {/* Activities */}
-                        <div style={{ backgroundColor: '#F8FAFC', padding: '1.5rem', borderRadius: '16px' }}>
-                            <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Mountain size={20} className="text-accent" /> Actividades Preferidas
+                        {/* Activities Selection Box */}
+                        <div className="card card-primary" style={{ padding: '2.5rem' }}>
+                            <h4 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
+                                <Compass size={22} className="text-secondary" style={{ color: 'var(--terracotta)' }} /> 2. ¿Qué actividades prefieres?
                             </h4>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                {activitiesList.map((item) => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => toggleSelection(selectedActivities, setSelectedActivities, item.id)}
-                                        style={{
-                                            padding: '0.5rem 1rem',
-                                            borderRadius: '50px',
-                                            border: `1px solid ${selectedActivities.includes(item.id) ? 'var(--primary)' : '#e2e8f0'}`,
-                                            backgroundColor: selectedActivities.includes(item.id) ? 'var(--primary)' : 'white',
-                                            color: selectedActivities.includes(item.id) ? 'white' : 'var(--text-muted)',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '0.5rem',
-                                            fontSize: '0.9rem',
-                                            transition: 'all 0.2s ease'
-                                        }}
-                                    >
-                                        {item.icon} {item.label}
-                                    </button>
-                                ))}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
+                                {activitiesList.map((item) => {
+                                    const isSelected = selectedActivities.includes(item.id);
+                                    return (
+                                        <motion.button
+                                            key={item.id}
+                                            onClick={() => toggleSelection(selectedActivities, setSelectedActivities, item.id)}
+                                            whileHover={{ y: -4, scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
+                                            style={{
+                                                padding: '1.25rem 1rem',
+                                                borderRadius: '20px',
+                                                border: `2px solid ${isSelected ? 'var(--primary)' : 'rgba(15, 44, 89, 0.1)'}`,
+                                                backgroundColor: isSelected ? 'var(--primary)' : 'rgba(15, 44, 89, 0.03)',
+                                                color: isSelected ? 'white' : 'var(--primary)',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                gap: '0.75rem',
+                                                fontSize: '0.9rem',
+                                                fontWeight: 800,
+                                                boxShadow: isSelected ? '0 10px 20px rgba(15, 44, 89, 0.15)' : 'none',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                        >
+                                            <div style={{
+                                                color: isSelected ? 'var(--accent)' : 'var(--terracotta)',
+                                                transition: 'color 0.2s'
+                                            }}>
+                                                {item.icon}
+                                            </div>
+                                            <span style={{ textAlign: 'center' }}>{item.label}</span>
+                                        </motion.button>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
 
-                    {/* Right Column: Recommendation Result */}
+                    {/* Right Column: Recommendation Glass Panel */}
                     <div style={{ position: 'sticky', top: '100px' }}>
                         <AnimatePresence mode='wait'>
                             <motion.div
                                 key={recommendation.title}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.4 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.4, ease: 'easeOut' }}
+                                className="glass-panel"
                                 style={{
-                                    backgroundColor: 'white',
-                                    borderRadius: '20px',
+                                    borderRadius: '32px',
                                     overflow: 'hidden',
-                                    boxShadow: '0 20px 40px -10px rgba(0,0,0,0.15)',
-                                    border: '1px solid rgba(0,0,0,0.05)'
+                                    border: '1px solid rgba(15, 44, 89, 0.08)'
                                 }}
                             >
-                                <div style={{ height: '250px', position: 'relative' }}>
+                                <div style={{ height: '280px', position: 'relative', overflow: 'hidden' }}>
                                     <motion.img
                                         key={recommendation.images ? recommendation.images[currentImageIndex] : recommendation.image}
                                         src={recommendation.images ? recommendation.images[currentImageIndex] : recommendation.image}
                                         alt={recommendation.title}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ duration: 0.5 }}
+                                        initial={{ opacity: 0, scale: 1.05 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ duration: 0.6 }}
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     />
-                                    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '1.5rem', background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }}>
-                                        <span style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                                    <div style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        background: 'linear-gradient(to top, rgba(15, 44, 89, 0.95) 0%, rgba(15, 44, 89, 0.3) 60%, transparent 100%)',
+                                        zIndex: 1
+                                    }} />
+                                    
+                                    <div style={{ position: 'absolute', bottom: '1.5rem', left: '2rem', zIndex: 2 }}>
+                                        <span style={{
+                                            backgroundColor: 'var(--accent)',
+                                            color: 'var(--primary)',
+                                            padding: '0.45rem 1.2rem',
+                                            borderRadius: '30px',
+                                            fontSize: '0.8rem',
+                                            fontWeight: 900,
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '0.1em',
+                                            boxShadow: '0 4px 12px rgba(204, 156, 86, 0.3)'
+                                        }}>
                                             Recomendado para ti
                                         </span>
                                     </div>
                                 </div>
-                                <div style={{ padding: '2rem' }}>
-                                    <h3 style={{ color: 'var(--primary)', fontSize: '1.6rem', marginBottom: '1rem', lineHeight: 1.2 }}>
+                                
+                                <div style={{ padding: '2.5rem 3rem' }}>
+                                    <h3 style={{ color: 'var(--primary)', fontSize: '1.75rem', marginBottom: '1rem', lineHeight: 1.2, fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
                                         {recommendation.title}
                                     </h3>
-                                    <p style={{ color: 'var(--text)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                                    <p style={{ color: 'var(--text-muted)', marginBottom: '2rem', lineHeight: 1.6, fontSize: '1.05rem', fontWeight: 600 }}>
                                         {recommendation.desc}
                                     </p>
+                                    
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                        <button
-                                            className="btn btn-primary"
-                                            style={{ flex: 1, justifyContent: 'center' }}
+                                        <motion.button
+                                            whileHover={{ scale: 1.03, boxShadow: '0 8px 24px rgba(15, 44, 89, 0.25)' }}
+                                            whileTap={{ scale: 0.97 }}
+                                            className="btn"
+                                            style={{ 
+                                                flex: 1, 
+                                                justifyContent: 'center', 
+                                                padding: '1.1rem', 
+                                                borderRadius: '16px',
+                                                backgroundColor: 'var(--primary)',
+                                                color: 'white',
+                                                fontWeight: 900,
+                                                fontSize: '0.95rem',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.05em'
+                                            }}
                                             onClick={() => {
                                                 if (onSelectPackage) onSelectPackage(recommendation.id);
                                                 document.getElementById('itinerario')?.scrollIntoView({ behavior: 'smooth' });
                                             }}
                                         >
-                                            Ver Itinerario 30 Días
-                                        </button>
-                                        <button style={{
-                                            padding: '0.75rem',
-                                            border: '1px solid var(--primary)',
-                                            borderRadius: '50%',
-                                            color: 'var(--primary)',
-                                            backgroundColor: 'transparent',
-                                            cursor: 'pointer'
-                                        }}>
-                                            <Heart size={20} />
-                                        </button>
+                                            Ver Itinerario Completo
+                                        </motion.button>
+                                        <motion.button 
+                                            whileHover={{ scale: 1.05, backgroundColor: 'rgba(15, 44, 89, 0.06)' }}
+                                            whileTap={{ scale: 0.95 }}
+                                            style={{
+                                                padding: '1.1rem',
+                                                border: '2px solid var(--primary)',
+                                                borderRadius: '16px',
+                                                color: 'var(--primary)',
+                                                backgroundColor: 'transparent',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                            onClick={() => {
+                                                if (onSelectPackage) onSelectPackage(recommendation.id);
+                                                document.getElementById('pucara-planificador')?.scrollIntoView({ behavior: 'smooth' });
+                                            }}
+                                            title="Configurar amuleto"
+                                        >
+                                            <Palette size={20} />
+                                        </motion.button>
                                     </div>
                                 </div>
                             </motion.div>
@@ -252,7 +306,7 @@ const Overview = ({ onSelectPackage }) => {
                         @media (max-width: 900px) {
                             .profile-grid {
                                 grid-template-columns: 1fr !important;
-                                gap: 2rem !important;
+                                gap: 2.5rem !important;
                             }
                         }
                     `}</style>

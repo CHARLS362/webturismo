@@ -1,110 +1,383 @@
-import { ArrowRight } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useCallback, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import useEmblaCarousel from 'embla-carousel-react';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
+import 'yet-another-react-lightbox/styles.css';
+import { TypeAnimation } from 'react-type-animation';
+import CountUp from 'react-countup';
+import { ArrowRight, Maximize2, ChevronLeft, ChevronRight, Sparkles, Compass } from 'lucide-react';
+
+// Local Pucará assets (Puno / Lampa)
+import kalasayaImg from '../assets/image/map/kalasaya.png';
+import penonImg from '../assets/image/map/penon.png';
+import temploImg from '../assets/image/map/templo.png';
+import plazaImg from '../assets/image/map/plaza.png';
+import museoImg from '../assets/image/map/museo.png';
+
+const heroSlides = [
+    {
+        id: 1,
+        title: "Tierra del Barro Sagrado y Toritos Milenarios",
+        subtitle: "Cultura Pucará · Lampa, Puno",
+        src: temploImg,
+        alt: "Templo colonial de Santa Isabel en Pucará, Lampa, Puno"
+    },
+    {
+        id: 2,
+        title: "Complejo Arqueológico Kalasaya",
+        subtitle: "Templo Sagrado del Altiplano",
+        src: kalasayaImg,
+        alt: "Pirámide y terrazas ceremoniales de Kalasaya"
+    },
+    {
+        id: 3,
+        title: "Museo Lítico y Esculturas Ancestrales",
+        subtitle: "Guardianes de Piedra de Pucará",
+        src: museoImg,
+        alt: "Esculturas y monolitos prehispánicos de Pucará"
+    },
+    {
+        id: 4,
+        title: "El Gran Peñón Mirador de Pucará",
+        subtitle: "A 3,860 metros en el Altiplano",
+        src: penonImg,
+        alt: "El Peñón rocoso mirador de Pucará, Puno"
+    },
+    {
+        id: 5,
+        title: "Plaza Bolívar y Tradición Alfarera",
+        subtitle: "Corazón Artesanal de Lampa y Puno",
+        src: plazaImg,
+        alt: "Plaza de Armas de Pucará y talleres tradicionales"
+    },
+    {
+        id: 6,
+        title: "Iconografía y Mística de Pucará",
+        subtitle: "Arte Ancestral del Altiplano",
+        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhyFp1WYrz1AiauNeFV7aXZNgHCTl6ksc7zw2ALiyM_g&s=10",
+        alt: "Arte e iconografía tradicional de Pucará"
+    }
+];
 
 const Hero = () => {
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 500], [0, 150]);
-    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+    const { t } = useTranslation();
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, speed: 8 });
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+
+    const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+    const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+    const scrollTo = useCallback((index) => emblaApi && emblaApi.scrollTo(index), [emblaApi]);
+
+    const onSelect = useCallback(() => {
+        if (!emblaApi) return;
+        setSelectedIndex(emblaApi.selectedScrollSnap());
+    }, [emblaApi]);
+
+    useEffect(() => {
+        if (!emblaApi) return;
+        onSelect();
+        emblaApi.on('select', onSelect);
+        const timer = setInterval(() => {
+            if (emblaApi.canScrollNext()) emblaApi.scrollNext();
+        }, 6000);
+        return () => {
+            clearInterval(timer);
+            emblaApi.off('select', onSelect);
+        };
+    }, [emblaApi, onSelect]);
 
     return (
-        <section style={{
-            position: 'relative',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            overflow: 'hidden'
-        }}>
-            {/* Parallax Background */}
-            <motion.div style={{
-                position: 'absolute', inset: 0,
-                y,
-                backgroundImage: 'linear-gradient(to bottom, rgba(15, 44, 89, 0.3), rgba(15, 44, 89, 0.7)), url("https://media.traveler.es/photos/63a6f462777730b397020ac4/1:1/w_960,c_limit/GettyImages-523528056.jpg")', // Authentic Puno/Titicaca
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                zIndex: -1
-            }} />
+        <section style={{ position: 'relative', height: '100vh', width: '100%', overflow: 'hidden', color: 'white' }}>
+            
+            {/* Embla Slider Fullscreen Background */}
+            <div ref={emblaRef} style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', height: '100%' }}>
+                    {heroSlides.map((slide, idx) => (
+                        <div
+                            key={slide.id}
+                            style={{
+                                flex: '0 0 100%',
+                                minWidth: 0,
+                                position: 'relative',
+                                height: '100%',
+                                overflow: 'hidden'
+                            }}
+                        >
+                            {/* Ken Burns background zoom animation */}
+                            <motion.div
+                                animate={{ scale: selectedIndex === idx ? [1, 1.08] : 1 }}
+                                transition={{ duration: 7, ease: "linear" }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    backgroundImage: `url(${slide.src})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center'
+                                }}
+                            />
 
-            <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
+                            {/* Warm Gradient Overlay */}
+                            <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'linear-gradient(180deg, rgba(11, 34, 64, 0.45) 0%, rgba(11, 34, 64, 0.75) 50%, rgba(11, 34, 64, 0.92) 100%)'
+                            }} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Main Content Overlay */}
+            <div className="container" style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 10,
+                width: '100%',
+                textAlign: 'center'
+            }}>
+                {/* Badge Tag */}
                 <motion.div
-                    style={{ opacity }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.6rem',
+                        padding: '0.45rem 1.25rem',
+                        borderRadius: '50px',
+                        background: 'rgba(197, 155, 39, 0.18)',
+                        border: '1px solid rgba(197, 155, 39, 0.5)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'var(--accent)',
+                        fontSize: '0.88rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        marginBottom: '1.5rem'
+                    }}
+                >
+                    <Sparkles size={16} color="var(--accent)" />
+                    {heroSlides[selectedIndex].subtitle}
+                </motion.div>
+
+                {/* Main Heading */}
+                <motion.h1
+                    key={`title-${selectedIndex}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    transition={{ duration: 0.8 }}
+                    style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(3rem, 7vw, 6rem)',
+                        fontWeight: 900,
+                        lineHeight: 1.05,
+                        color: 'white',
+                        marginBottom: '1rem',
+                        textShadow: '0 8px 30px rgba(0,0,0,0.6)'
+                    }}
                 >
-                    <motion.span
-                        initial={{ opacity: 0, letterSpacing: '0.8em' }}
-                        animate={{ opacity: 1, letterSpacing: '0.2em' }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
+                    PUCARÁ <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-heading)' }}>365</span>
+                </motion.h1>
+
+                {/* Typewriter subtitle */}
+                <div style={{ height: '3.2rem', marginBottom: '2rem' }}>
+                    <TypeAnimation
+                        sequence={[
+                            'Tierra del Barro Sagrado y los Toritos en Lampa, Puno.',
+                            2500,
+                            'Descubre el Complejo Arqueológico de Kalasaya.',
+                            2500,
+                            'Sumérgete en la Alfarería Ancestral de Pucará.',
+                            2500,
+                            'Una experiencia turística inmersiva en el Altiplano.',
+                            2500
+                        ]}
+                        wrapper="p"
+                        speed={50}
+                        repeat={Infinity}
                         style={{
-                            display: 'block',
-                            color: 'var(--accent)',
-                            textTransform: 'uppercase',
-                            fontSize: '1.1rem',
-                            marginBottom: '1.5rem',
-                            fontWeight: 700,
-                            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                            fontSize: 'clamp(1.1rem, 2.2vw, 1.5rem)',
+                            color: '#F3ECE3',
+                            fontWeight: 400,
+                            maxWidth: '800px',
+                            margin: '0 auto',
+                            textShadow: '0 2px 10px rgba(0,0,0,0.8)'
                         }}
+                    />
+                </div>
+
+                {/* Action Buttons */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2.5rem' }}
+                >
+                    <button
+                        className="btn btn-primary"
+                        style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
+                        onClick={() => document.getElementById('pucara-destinos')?.scrollIntoView({ behavior: 'smooth' })}
                     >
-                        Paquete Exclusivo 30 Días
-                    </motion.span>
+                        <Compass size={20} /> Explorar Atractivos
+                    </button>
+                    <button
+                        className="btn btn-accent"
+                        style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
+                        onClick={() => document.getElementById('pucara-planificador')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        Planificar Mi Viaje <ArrowRight size={20} />
+                    </button>
+                    <button
+                        onClick={() => setLightboxOpen(true)}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '1rem 1.5rem',
+                            borderRadius: '50px',
+                            background: 'rgba(255, 255, 255, 0.12)',
+                            backdropFilter: 'blur(8px)',
+                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                            color: 'white',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            transition: 'var(--transition-smooth)'
+                        }}
+                        title="Ver foto a pantalla completa"
+                    >
+                        <Maximize2 size={18} /> Previsualizar Imagen
+                    </button>
+                </motion.div>
 
-                    <h1 style={{
-                        color: 'white', // Explicitly set to override global h1
-                        fontSize: 'min(5rem, 12vw)',
-                        marginBottom: '1.5rem',
-                        lineHeight: 1.1,
-                        textShadow: '0 4px 20px rgba(0,0,0,0.5)'
-                    }}>
-                        Magia Andina del Titicaca
-                    </h1>
-
-                    <p style={{
-                        fontSize: '1.25rem',
-                        maxWidth: '700px',
-                        margin: '0 auto 2.5rem',
-                        lineHeight: 1.6,
-                        color: '#F3F4F6',
-                        fontWeight: 300,
-                        textShadow: '0 2px 4px rgba(0,0,0,0.5)'
-                    }}>
-                        Un viaje de inmersión cultural, naturaleza virgen y lujo auténtico para reconectar con el origen.
-                    </p>
-
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="btn btn-primary"
-                            style={{ backgroundColor: 'var(--accent)', color: 'var(--primary)', border: 'none' }}
-                            onClick={() => document.getElementById('itinerario').scrollIntoView({ behavior: 'smooth' })}
-                        >
-                            Ver Itinerario Completo
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                            whileTap={{ scale: 0.95 }}
-                            className="btn"
-                            style={{ border: '2px solid white', color: 'white' }}
-                            onClick={() => document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' })}
-                        >
-                            Consultar Disponibilidad <ArrowRight size={18} />
-                        </motion.button>
+                {/* Stats Counter Bar */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    style={{
+                        display: 'inline-flex',
+                        gap: '2.5rem',
+                        padding: '0.85rem 2rem',
+                        borderRadius: '20px',
+                        background: 'rgba(11, 34, 64, 0.65)',
+                        backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(197, 155, 39, 0.3)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                    }}
+                >
+                    <div>
+                        <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
+                            +<CountUp end={2000} duration={2.5} />
+                        </span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Años Historia</span>
+                    </div>
+                    <div style={{ width: '1px', background: 'rgba(255,255,255,0.15)' }} />
+                    <div>
+                        <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
+                            <CountUp end={3860} duration={2} separator="," />m
+                        </span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Altitud Altiplano</span>
+                    </div>
+                    <div style={{ width: '1px', background: 'rgba(255,255,255,0.15)' }} />
+                    <div>
+                        <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
+                            <CountUp end={5} duration={1.5} />
+                        </span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Puntos Sagrados</span>
                     </div>
                 </motion.div>
             </div>
 
-            <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                style={{
-                    position: 'absolute', bottom: '2rem', left: '0', right: '0', textAlign: 'center',
-                    color: 'white', opacity: 0.8
-                }}
-            >
-                <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Descubre más</span>
-            </motion.div>
+            {/* Bottom Controls: Navigation Arrows & Thumbnails */}
+            <div style={{
+                position: 'absolute',
+                bottom: '2rem',
+                left: 0,
+                right: 0,
+                zIndex: 20,
+                padding: '0 var(--spacing-sm)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}>
+                {/* Arrow Controls */}
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button
+                        onClick={scrollPrev}
+                        style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            background: 'rgba(11, 34, 64, 0.65)',
+                            backdropFilter: 'blur(8px)',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <ChevronLeft size={22} />
+                    </button>
+                    <button
+                        onClick={scrollNext}
+                        style={{
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '50%',
+                            background: 'rgba(11, 34, 64, 0.65)',
+                            backdropFilter: 'blur(8px)',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            color: 'white',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <ChevronRight size={22} />
+                    </button>
+                </div>
+
+                {/* Thumbnails Bar */}
+                <div style={{ display: 'flex', gap: '0.6rem', background: 'rgba(11, 34, 64, 0.6)', padding: '0.4rem 0.6rem', borderRadius: '16px', backdropFilter: 'blur(10px)' }}>
+                    {heroSlides.map((slide, idx) => (
+                        <div
+                            key={slide.id}
+                            onClick={() => scrollTo(idx)}
+                            style={{
+                                width: '48px',
+                                height: '32px',
+                                borderRadius: '8px',
+                                overflow: 'hidden',
+                                cursor: 'pointer',
+                                border: selectedIndex === idx ? '2px solid var(--accent)' : '2px solid transparent',
+                                opacity: selectedIndex === idx ? 1 : 0.6,
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <img src={slide.src} alt={slide.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* YARL Lightbox modal */}
+            <Lightbox
+                open={lightboxOpen}
+                close={() => setLightboxOpen(false)}
+                index={selectedIndex}
+                slides={heroSlides.map(s => ({ src: s.src, title: s.title, description: s.subtitle }))}
+                plugins={[Zoom, Fullscreen]}
+            />
         </section>
     );
 };

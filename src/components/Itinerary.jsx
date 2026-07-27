@@ -1,17 +1,15 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Clock, Award, Sailboat, Mountain, Camera,
     HeartHandshake, BedDouble, ArrowRight,
-    Coffee, Bus, Users, MapPin, Calendar
+    Coffee, Bus, Users, MapPin, Calendar, Sun
 } from 'lucide-react';
 import { itineraryPackages } from '../data/itinerary';
 
 const Itinerary = ({ selectedPackage, onPackageChange }) => {
     const [activeWeek, setActiveWeek] = useState(1);
 
-    // Default to 'standard' if not provided
     const currentPackageId = selectedPackage || 'standard';
     const currentPackage = itineraryPackages[currentPackageId];
 
@@ -30,117 +28,135 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
     }, [currentPackage]);
 
     return (
-        <section className="section" id="itinerario" style={{ backgroundColor: '#F8FAFC', padding: '4rem 0' }}>
+        <section className="section bg-blue-base" id="itinerario" style={{ padding: '6.5rem 0', position: 'relative' }}>
             <div className="container">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    style={{ textAlign: 'center', marginBottom: '3rem' }}
-                >
-                    <span className="text-accent" style={{ fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                        Tu Viaje Día a Día
-                    </span>
-                    <h2 style={{ fontSize: '2.5rem', marginTop: '0.5rem', color: 'var(--primary)' }}>Itinerario Detallado</h2>
-                    <div style={{ width: '60px', height: '4px', backgroundColor: 'var(--accent)', margin: '1rem auto' }} />
-                </motion.div>
+                
+                {/* Section Header in Larana Style */}
+                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                    <span className="script-subtitle">Tu Ruta Detallada...</span>
+                    <h2 className="bold-title">Itinerario de Inmersión</h2>
+                    <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--accent)', margin: '1rem auto' }} />
+                </div>
 
-                {/* Package Selector */}
+                {/* Package Selectors (Pills) */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
                     gap: '1rem',
                     flexWrap: 'wrap',
-                    marginBottom: '3rem'
+                    marginBottom: '4rem'
                 }}>
-                    {Object.values(itineraryPackages).map((pkg) => (
-                        <button
-                            key={pkg.id}
-                            onClick={() => {
-                                if (onPackageChange) onPackageChange(pkg.id);
-                                setActiveWeek(1);
-                            }}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                borderRadius: '50px',
-                                border: `1px solid ${currentPackageId === pkg.id ? 'var(--primary)' : '#e2e8f0'} `,
-                                backgroundColor: currentPackageId === pkg.id ? 'var(--primary)' : 'white',
-                                color: currentPackageId === pkg.id ? 'white' : 'var(--text-muted)',
-                                cursor: 'pointer',
-                                fontWeight: '600',
-                                transition: 'all 0.2s ease',
-                                boxShadow: currentPackageId === pkg.id ? '0 4px 12px rgba(15, 44, 89, 0.2)' : 'none'
-                            }}
-                        >
-                            {pkg.title}
-                        </button>
-                    ))}
+                    {Object.values(itineraryPackages).map((pkg) => {
+                        const isActive = currentPackageId === pkg.id;
+                        return (
+                            <motion.button
+                                key={pkg.id}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => {
+                                    if (onPackageChange) onPackageChange(pkg.id);
+                                    setActiveWeek(1);
+                                }}
+                                style={{
+                                    padding: '0.9rem 2rem',
+                                    borderRadius: '50px',
+                                    border: `2px solid ${isActive ? 'var(--accent)' : 'rgba(15, 44, 89, 0.15)'}`,
+                                    backgroundColor: isActive ? 'var(--accent)' : 'rgba(15, 44, 89, 0.03)',
+                                    color: isActive ? 'var(--primary)' : 'var(--primary)',
+                                    cursor: 'pointer',
+                                    fontWeight: '900',
+                                    fontSize: '0.95rem',
+                                    boxShadow: isActive ? '0 10px 20px rgba(204, 156, 86, 0.25)' : 'none',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                {pkg.title}
+                            </motion.button>
+                        );
+                    })}
                 </div>
 
-                {/* Selected Package Info Card */}
+                {/* Main Package Showcase Card */}
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={currentPackageId}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                        className="card itinerary-main-card"
                         style={{
-                            backgroundColor: 'white',
-                            borderRadius: '24px',
                             overflow: 'hidden',
-                            boxShadow: '0 10px 30px -5px rgba(0,0,0,0.05)',
-                            marginBottom: '4rem',
+                            marginBottom: '5rem',
                             display: 'grid',
-                            gridTemplateColumns: '1fr 1.5fr', // Image left, content right
-                            gap: 0
+                            gridTemplateColumns: '1fr 1.3fr',
+                            gap: 0,
+                            padding: 0,
+                            border: '1px solid rgba(15, 44, 89, 0.08)'
                         }}
                     >
-                        <div style={{ position: 'relative', minHeight: '300px' }}>
+                        {/* Left half: Sliding images */}
+                        <div style={{ position: 'relative', minHeight: '350px' }}>
                             <motion.img
                                 key={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
                                 src={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
                                 alt={currentPackage.title}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5 }}
+                                initial={{ opacity: 0, scale: 1.05 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.6 }}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
-                            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.2), transparent)' }}></div>
+                            <div style={{ 
+                                position: 'absolute', 
+                                inset: 0, 
+                                background: 'linear-gradient(to right, rgba(15, 44, 89, 0.4), transparent)' 
+                            }} />
                         </div>
 
+                        {/* Right half: Package metadata & benefits */}
                         <div style={{ padding: '3rem' }}>
-                            <h3 style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '1rem' }}>{currentPackage.subtitle}</h3>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.6 }}>{currentPackage.description}</p>
+                            <span style={{ fontSize: '0.85rem', color: 'var(--secondary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '0.5rem' }}>
+                                {currentPackage.subtitle}
+                            </span>
+                            <h3 style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '1.25rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
+                                Todo Organizado para tu Comodidad
+                            </h3>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', marginBottom: '2.5rem', lineHeight: 1.6, fontWeight: 600 }}>
+                                {currentPackage.description}
+                            </p>
 
-                            <h4 style={{ fontSize: '0.9rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '1rem' }}>Incluido en este paquete:</h4>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+                            <h4 style={{ fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', letterSpacing: '0.05em', marginBottom: '1.25rem', borderBottom: '1px solid rgba(15, 44, 89, 0.1)', paddingBottom: '0.5rem' }}>
+                                Inclusiones destacadas:
+                            </h4>
+                            
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ padding: '0.5rem', backgroundColor: '#FFFBE6', borderRadius: '8px' }}><BedDouble size={20} className="text-accent" /></div>
+                                    <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><BedDouble size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--primary)' }}>Alojamiento</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{currentPackage.benefits.accommodation}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Alojamiento</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.accommodation}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ padding: '0.5rem', backgroundColor: '#FFFBE6', borderRadius: '8px' }}><Coffee size={20} className="text-accent" /></div>
+                                    <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Coffee size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--primary)' }}>Alimentación</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{currentPackage.benefits.food}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Alimentación</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.food}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ padding: '0.5rem', backgroundColor: '#FFFBE6', borderRadius: '8px' }}><Bus size={20} className="text-accent" /></div>
+                                    <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Bus size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--primary)' }}>Transporte</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{currentPackage.benefits.transport}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Logística</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.transport}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{ padding: '0.5rem', backgroundColor: '#FFFBE6', borderRadius: '8px' }}><Users size={20} className="text-accent" /></div>
+                                    <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Users size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--primary)' }}>Guía</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{currentPackage.benefits.guide}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Anfitrión</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.guide}</div>
                                     </div>
                                 </div>
                             </div>
@@ -148,98 +164,97 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Week Selector Tabs */}
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '3rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                    {currentPackage.weeks.map((week) => (
-                        <button
-                            key={week.id}
-                            onClick={() => setActiveWeek(week.id)}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                borderRadius: '12px',
-                                border: 'none',
-                                backgroundColor: activeWeek === week.id ? 'var(--primary)' : 'white',
-                                color: activeWeek === week.id ? 'white' : 'var(--text-muted)',
-                                cursor: 'pointer',
-                                transition: 'all 0.3s ease',
-                                fontWeight: '600',
-                                boxShadow: activeWeek === week.id ? '0 10px 20px -5px rgba(15, 44, 89, 0.3)' : '0 2px 5px rgba(0,0,0,0.05)',
-                                display: 'flex', alignItems: 'center', gap: '0.5rem'
-                            }}
-                        >
-                            {week.id === 1 && <Sailboat size={18} />}
-                            {week.id === 2 && <Mountain size={18} />}
-                            {week.id === 3 && <HeartHandshake size={18} />}
-                            {week.id === 4 && <Camera size={18} />}
-                            {week.title.split(':')[0]}
-                        </button>
-                    ))}
-                </div>
-
-                {/* Vertical Loop for Days */}
+                {/* Day-by-Day Timeline */}
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <AnimatePresence mode='wait'>
                         {currentPackage.weeks.map((week) => (
                             activeWeek === week.id && (
                                 <motion.div
                                     key={week.id}
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.3 }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.4 }}
                                 >
-                                    <h3 style={{ fontSize: '1.5rem', color: 'var(--primary)', marginBottom: '2rem', textAlign: 'center' }}>
-                                        {week.title}
-                                    </h3>
-                                    <div style={{ position: 'relative', paddingLeft: '2rem' }}>
-                                        {/* Main Vertical Line */}
+                                    <div style={{ position: 'relative', paddingLeft: '3rem' }}>
+                                        
+                                        {/* Main Vertical Timeline Line */}
                                         <div style={{
-                                            position: 'absolute', left: '0', top: '0', bottom: '0',
-                                            width: '2px', backgroundColor: '#E2E8F0'
+                                            position: 'absolute', left: '0.6rem', top: '10px', bottom: '10px',
+                                            width: '4px', 
+                                            background: 'linear-gradient(to bottom, var(--accent) 0%, var(--secondary) 100%)',
+                                            borderRadius: '2px',
+                                            opacity: 0.8
                                         }}></div>
 
+                                        {/* Days list */}
                                         {week.days.map((day, index) => (
                                             <motion.div
                                                 key={day.day}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: index * 0.1 }}
-                                                style={{ marginBottom: '2rem', position: 'relative' }}
+                                                initial={{ opacity: 0, x: -30 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                viewport={{ once: true, margin: '-50px' }}
+                                                transition={{ duration: 0.6, delay: index * 0.15, ease: 'easeOut' }}
+                                                style={{ marginBottom: '3rem', position: 'relative' }}
                                             >
-                                                {/* Timeline Dot */}
-                                                <div style={{
-                                                    position: 'absolute', left: '-2.4rem', top: '0.2rem',
-                                                    width: '16px', height: '16px', borderRadius: '50%',
-                                                    backgroundColor: 'white', border: '3px solid var(--accent)',
-                                                    zIndex: 2
-                                                }}></div>
+                                                {/* Timeline Bullet (Pulse Gold with Sun Icon) */}
+                                                <div 
+                                                    className="pulse-gold-animation"
+                                                    style={{
+                                                        position: 'absolute', left: '-3.3rem', top: '0.2rem',
+                                                        width: '32px', height: '32px', borderRadius: '50%',
+                                                        backgroundColor: 'var(--primary)', border: '2px solid var(--accent)',
+                                                        zIndex: 2,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        boxShadow: '0 0 10px rgba(197, 155, 39, 0.4)',
+                                                        color: 'var(--accent)'
+                                                    }}
+                                                >
+                                                    <Sun size={14} fill="var(--accent)" />
+                                                </div>
 
-                                                <div style={{
-                                                    backgroundColor: 'white', padding: '1.5rem', borderRadius: '16px',
-                                                    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)',
-                                                    border: '1px solid #f1f5f9'
-                                                }}>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                                                        <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--primary)' }}>
+                                                <motion.div
+                                                    whileHover={{ y: -6, boxShadow: 'var(--shadow-premium)' }}
+                                                    className={`card ${index % 2 === 0 ? 'card-terracotta' : 'card-primary'}`}
+                                                    style={{
+                                                        padding: '2.5rem', 
+                                                        border: '1px solid rgba(15, 44, 89, 0.08)',
+                                                        transition: 'all 0.3s ease'
+                                                    }}
+                                                >
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                                        <h4 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)', margin: 0 }}>
                                                             Día {day.day}: {day.title}
                                                         </h4>
-                                                        <span style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: '600', backgroundColor: '#FFFBE6', padding: '0.25rem 0.75rem', borderRadius: '20px' }}>
-                                                            8 Horas
+                                                        <span style={{ 
+                                                            fontSize: '0.8rem', 
+                                                            color: 'var(--secondary)', 
+                                                            fontWeight: 800, 
+                                                            backgroundColor: 'rgba(200, 88, 51, 0.12)', 
+                                                            padding: '0.35rem 1rem', 
+                                                            borderRadius: '30px',
+                                                            textTransform: 'uppercase',
+                                                            letterSpacing: '0.05em'
+                                                        }}>
+                                                            Ruta Guiada
                                                         </span>
                                                     </div>
-                                                    <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>
+                                                    
+                                                    <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '1.02rem', marginBottom: '1.5rem', fontWeight: 600 }}>
                                                         {day.desc}
                                                     </p>
-                                                    <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
-                                                        {/* Placeholders for day-specific icons/tags if available in future */}
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                                            <MapPin size={14} /> Puno Region
+
+                                                    <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', borderTop: '1px solid rgba(15, 44, 89, 0.1)', paddingTop: '1.25rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 800 }}>
+                                                            <MapPin size={16} style={{ color: 'var(--secondary)' }} /> Región Puno
                                                         </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                                            <Calendar size={14} /> Actividad Guiada
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 800 }}>
+                                                            <Calendar size={16} style={{ color: 'var(--accent)' }} /> Actividades Vivenciales
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </motion.div>
                                             </motion.div>
                                         ))}
                                     </div>
@@ -251,15 +266,14 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
             </div>
 
             <style>{`
-@media(max - width: 900px) {
-    div[style *= "grid-template-columns: 1fr 1.5fr"] {
-        grid - template - columns: 1fr!important;
-    }
-}
-`}</style>
+                @media (max-width: 900px) {
+                    .itinerary-main-card {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 };
 
 export default Itinerary;
-
