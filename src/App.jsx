@@ -13,6 +13,7 @@ import PucaraWalkingTour from './components/PucaraWalkingTour';
 import PucaraVirtualTour from './components/PucaraVirtualTour';
 import PucaraMap from './components/PucaraMap';
 import PucaraPackages from './components/PucaraPackages';
+import PucaraFlowStudio from './components/PucaraFlowStudio';
 import PucaraFestivals from './components/PucaraFestivals';
 import PucaraPlanner from './components/PucaraPlanner';
 import Roadmap5Years from './components/Roadmap5Years';
@@ -36,7 +37,7 @@ function App() {
         <title>Pucará 365 — Turismo Cultural, Arqueología y Toritos en Puno, Perú</title>
         <meta name="description" content="Descubre la cuna de la cultura Pucará y los artesanos alfareros del Torito de Pucará. Visita el Complejo Arqueológico Kalasaya, el Museo Lítico y rutas del altiplano." />
         <meta property="og:title" content="Pucará 365 — Destino Turístico Ancestral en Puno" />
-        <meta property="og:description" content="Recorridos virtuales, mapas interactivos 3D, mapa del tesoro cultural, paquetes turísticos y rituales místicos." />
+        <meta property="og:description" content="Recorridos virtuales, mapas interactivos 3D, mapa del tesoro cultural, estudio Google Flow IA y paquetes turísticos." />
         <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/4/47/Pucara_kirche.jpg" />
         <meta name="geo.region" content="PE-PUN" />
         <meta name="geo.placename" content="Pucará, Lampa, Puno, Perú" />
@@ -72,12 +73,16 @@ function App() {
         
         {/* 4. CINE, VIDEOS LOCALES HD & REELS (9:16) & TOUR 360° */}
         <PucaraVirtualTour />
+
+        {/* 5. ESTUDIO GOOGLE FLOW IA (Avatar Parlante Pukarin & Prompts de Video) */}
+        <PucaraFlowStudio />
+
         <PucaraFestivals />
         
-        {/* 5. EXPERIENCIA INTERACTIVA 3D & IA */}
+        {/* 6. EXPERIENCIA INTERACTIVA 3D & IA */}
         <PucaraPlanner />
         
-        {/* 6. GESTIÓN DTI: Hoja de Ruta y Smart Dashboard IoT */}
+        {/* 7. GESTIÓN DTI: Hoja de Ruta y Smart Dashboard IoT */}
         <Roadmap5Years />
         <SmartDestinationDashboard />
         <Recommendations />
