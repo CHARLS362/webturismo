@@ -157,7 +157,33 @@ const AIChatBot = () => {
             : 'Es una fantástica pregunta sobre Pucará. Te invito a explorar nuestra sección de **Atractivos**, el **Mapa de Ruta** o a usar el **Planificador Interactivo** al final de la página para estructurar tu viaje ideal. ¿Deseas saber más de algún punto en particular?';
     };
 
-    const sendMessage = (textToSend = null) => {
+    const callGeminiAI = async (userPrompt) => {
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        if (!apiKey) return null;
+        
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `Eres Pukarin, el asistente virtual oficial del proyecto Pucará 365 (Pucará, Lampa, Puno, Perú). Responde de forma cálida, cultural y entusiasta en 2 a 4 oraciones destacando los atractivos de Kalasaya, el Museo Lítico, los Toritos de Pucará o paquetes turísticos. Pregunta del usuario: ${userPrompt}`
+                        }]
+                    }]
+                })
+            });
+            const data = await response.json();
+            if (data.candidates && data.candidates[0]?.content?.parts[0]?.text) {
+                return data.candidates[0].content.parts[0].text;
+            }
+        } catch (err) {
+            console.error("Gemini API call failed, using fallback:", err);
+        }
+        return null;
+    };
+
+    const sendMessage = async (textToSend = null) => {
         const text = textToSend !== null ? textToSend : inputValue;
         if (!text.trim()) return;
 
@@ -166,13 +192,13 @@ const AIChatBot = () => {
         setMessages((prev) => [...prev, newUserMessage]);
         setInputValue('');
 
-        // Bot response simulation after a short delay
-        setTimeout(() => {
-            const botReplyText = getBotResponse(text);
-            const newBotMessage = { sender: 'bot', text: botReplyText };
-            setMessages((prev) => [...prev, newBotMessage]);
-            speakText(botReplyText);
-        }, 800);
+        // Try Google Gemini AI first
+        const geminiReply = await callGeminiAI(text);
+        const botReplyText = geminiReply || getBotResponse(text);
+
+        const newBotMessage = { sender: 'bot', text: botReplyText };
+        setMessages((prev) => [...prev, newBotMessage]);
+        speakText(botReplyText);
     };
 
     const handleQuickQuestion = (question) => {
