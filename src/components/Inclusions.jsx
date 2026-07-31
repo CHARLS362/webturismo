@@ -1,15 +1,40 @@
-import { CheckCircle, ShieldCheck, Coffee, Tent, Car, Palette } from 'lucide-react';
+import { CheckCircle, Coffee, Tent, Car, Palette } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const inclusions = [
-    { icon: Tent, label: "Alojamiento Confortable", text: "Posadas acogedoras y cabañas de montaña con encanto local." },
-    { icon: Coffee, label: "Gastronomía Andina", text: "Desayunos altiplánicos y almuerzos tradicionales con trucha andina y quinua orgánica." },
-    { icon: Car, label: "Transporte Privado", text: "Traslados seguros de ida y vuelta desde el aeropuerto de Juliaca o la ciudad de Puno." },
-    { icon: Palette, label: "Materiales de Alfarería", text: "Arcilla, pinturas tradicionales, pinceles y uso de hornos de leña en los talleres." },
-    { icon: CheckCircle, label: "Todo Incluido", text: "Entradas a Kalasaya y al Museo Lítico, y guiado oficial por historiadores locales." }
+    { 
+        icon: Tent, 
+        label: { es: "Alojamiento Confortable", en: "Comfortable Lodging" }, 
+        text: { es: "Posadas acogedoras y cabañas de montaña con encanto local.", en: "Cozy inns and mountain cabins with local charm." } 
+    },
+    { 
+        icon: Coffee, 
+        label: { es: "Gastronomía Andina", en: "Andean Gastronomy" }, 
+        text: { es: "Desayunos altiplánicos y almuerzos tradicionales con trucha andina y quinua orgánica.", en: "Highland breakfasts and traditional lunches with Andean trout and organic quinoa." } 
+    },
+    { 
+        icon: Car, 
+        label: { es: "Transporte Privado", en: "Private Transport" }, 
+        text: { es: "Traslados seguros de ida y vuelta desde el aeropuerto de Juliaca o la ciudad de Puno.", en: "Safe roundtrip transfers from Juliaca airport or Puno city." } 
+    },
+    { 
+        icon: Palette, 
+        label: { es: "Materiales de Alfarería", en: "Pottery Materials" }, 
+        text: { es: "Arcilla, pinturas tradicionales, pinceles y uso de hornos de leña en los talleres.", en: "Clay, traditional paints, brushes, and wood-fired oven usage in workshops." } 
+    },
+    { 
+        icon: CheckCircle, 
+        label: { es: "Todo Incluido", en: "All Inclusive" }, 
+        text: { es: "Entradas a Kalasaya y al Museo Lítico, y guiado oficial por historiadores locales.", en: "Entry tickets to Kalasaya and the Lytic Museum, and official guiding by local historians." } 
+    }
 ];
 
 const Inclusions = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     return (
         <section className="section bg-blue-contrast" id="inclusiones" style={{ position: 'relative', overflow: 'hidden', padding: '6.5rem 0' }}>
             {/* Background Pattern */}
@@ -27,9 +52,13 @@ const Inclusions = () => {
                     viewport={{ once: true }}
                     style={{ textAlign: 'center', marginBottom: '4rem' }}
                 >
-                    <span className="script-subtitle">Sin Preocupaciones...</span>
-                    <h2 className="bold-title">Todo Incluido en tu Experiencia</h2>
-                    <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem' }}>Nos ocupamos de cada detalle logístico para que tu única responsabilidad sea disfrutar y conectar.</p>
+                    <span className="script-subtitle">{isEn ? 'Worry Free...' : 'Sin Preocupaciones...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Everything Included in Your Experience' : 'Todo Incluido en tu Experiencia'}</h2>
+                    <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem' }}>
+                        {isEn 
+                          ? 'We take care of every logistical detail so your only responsibility is to enjoy and connect.'
+                          : 'Nos ocupamos de cada detalle logístico para que tu única responsabilidad sea disfrutar y conectar.'}
+                    </p>
                 </motion.div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
@@ -65,8 +94,8 @@ const Inclusions = () => {
                                 <item.icon size={36} strokeWidth={1.5} />
                             </div>
                             <div>
-                                <h3 style={{ fontSize: '1.3rem', color: 'var(--primary)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>{item.label}</h3>
-                                <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{item.text}</p>
+                                <h3 style={{ fontSize: '1.3rem', color: 'var(--primary)', marginBottom: '0.5rem', fontFamily: 'var(--font-heading)', fontWeight: 800 }}>{item.label[langKey]}</h3>
+                                <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6, margin: 0 }}>{item.text[langKey]}</p>
                             </div>
                         </motion.div>
                     ))}
