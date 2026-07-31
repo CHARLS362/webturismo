@@ -387,7 +387,7 @@ const Header = () => {
                         }}
                     >
                         <Globe size={15} style={{ color: 'var(--bronze-gold)' }} />
-                        <span style={{ textTransform: 'uppercase' }}>{i18n.language === 'es' ? '🌎 ES' : '🌎 EN'}</span>
+                        <span style={{ textTransform: 'uppercase' }}>{i18n.language === 'es' ? 'ES' : 'EN'}</span>
                     </button>
                 </nav>
 

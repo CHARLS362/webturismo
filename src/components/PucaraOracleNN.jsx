@@ -2,36 +2,46 @@ import { useState } from 'react';
 import brain from 'brain.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, Brain, Sparkles, Trophy, Award, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const QUESTIONS = [
   {
     id: 1,
-    q: 'En tu vida cotidiana, ¿cuál es el valor que consideras más indispensable?',
+    q: {
+      es: 'En tu vida cotidiana, ¿cuál es el valor que consideras más indispensable?',
+      en: 'In your daily life, which value do you consider most indispensable?'
+    },
     options: [
-      { text: 'El amor familiar, la unión y la protección del hogar.', values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
-      { text: 'La prosperidad, el crecimiento intelectual y la abundancia.', values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
-      { text: 'La salud, la vitalidad y la conexión con la Madre Tierra.', values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
-      { text: 'La paz mental, la pureza y la calma ante el caos.', values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
+      { text: { es: 'El amor familiar, la unión y la protección del hogar.', en: 'Family love, unity, and protection of the home.' }, values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
+      { text: { es: 'La prosperidad, el crecimiento intelectual y la abundancia.', en: 'Prosperity, intellectual growth, and abundance.' }, values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
+      { text: { es: 'La salud, la vitalidad y la conexión con la Madre Tierra.', en: 'Health, vitality, and connection with Mother Earth.' }, values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
+      { text: { es: 'La paz mental, la pureza y la calma ante el caos.', en: 'Peace of mind, purity, and calmness in the face of chaos.' }, values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
     ]
   },
   {
     id: 2,
-    q: '¿Cómo reaccionas ante los grandes desafíos y dificultades de la vida?',
+    q: {
+      es: '¿Cómo reaccionas ante los grandes desafíos y dificultades de la vida?',
+      en: 'How do you react to life\'s great challenges and difficulties?'
+    },
     options: [
-      { text: 'Con coraje, pasión interna y fuerza para proteger a los míos.', values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
-      { text: 'Analizando con sabiduría, buscando oportunidades en la crisis.', values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
-      { text: 'Con resiliencia, curando mis heridas en la naturaleza.', values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
-      { text: 'Manteniendo la mente fría, respirando y dialogando en paz.', values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
+      { text: { es: 'Con coraje, pasión interna y fuerza para proteger a los míos.', en: 'With courage, inner passion, and strength to protect my own.' }, values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
+      { text: { es: 'Analizando con sabiduría, buscando oportunidades en la crisis.', en: 'Analyzing with wisdom, seeking opportunities in the crisis.' }, values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
+      { text: { es: 'Con resiliencia, curando mis heridas en la naturaleza.', en: 'With resilience, healing my wounds in nature.' }, values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
+      { text: { es: 'Manteniendo la mente fría, respirando y dialogando en paz.', en: 'Keeping a cool head, breathing, and dialoguing in peace.' }, values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
     ]
   },
   {
     id: 3,
-    q: '¿Qué elemento del místico altiplano de Puno te inspira mayor respeto?',
+    q: {
+      es: '¿Qué elemento del místico altiplano de Puno te inspira mayor respeto?',
+      en: 'Which element of the mystical highlands of Puno inspires the most respect in you?'
+    },
     options: [
-      { text: 'El fuego sagrado de los rituales y la tierra fértil arcillosa.', values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
-      { text: 'El sol radiante (Inti) madurando los campos dorados de quinua.', values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
-      { text: 'Las aguas curativas del Lago Titicaca y las hierbas medicinales.', values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
-      { text: 'Los nevados eternos (Apus) brillando bajo el cielo límpido.', values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
+      { text: { es: 'El fuego sagrado de los rituales y la tierra fértil arcillosa.', en: 'The sacred fire of rituals and the fertile clay soil.' }, values: { amor: 1, sabiduria: 0, naturaleza: 0, paz: 0 } },
+      { text: { es: 'El sol radiante (Inti) madurando los campos dorados de quinua.', en: 'The radiant sun (Inti) ripening the golden quinoa fields.' }, values: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 } },
+      { text: { es: 'Las aguas curativas del Lago Titicaca y las hierbas medicinales.', en: 'The healing waters of Lake Titicaca and medicinal herbs.' }, values: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 } },
+      { text: { es: 'Los nevados eternos (Apus) brillando bajo el cielo límpido.', en: 'The eternal snow-capped mountains (Apus) shining under the clear sky.' }, values: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 } }
     ]
   }
 ];
@@ -41,7 +51,6 @@ const TRAINING_DATA = [
   { input: { amor: 0, sabiduria: 1, naturaleza: 0, paz: 0 }, output: { amarillo: 1 } },
   { input: { amor: 0, sabiduria: 0, naturaleza: 1, paz: 0 }, output: { verde: 1 } },
   { input: { amor: 0, sabiduria: 0, naturaleza: 0, paz: 1 }, output: { blanco: 1 } },
-  // Mixed profiles
   { input: { amor: 0.67, sabiduria: 0.33, naturaleza: 0, paz: 0 }, output: { rojo: 0.8, amarillo: 0.2 } },
   { input: { amor: 0, sabiduria: 0.67, naturaleza: 0, paz: 0.33 }, output: { amarillo: 0.7, blanco: 0.3 } },
   { input: { amor: 0, sabiduria: 0, naturaleza: 0.67, paz: 0.33 }, output: { verde: 0.7, blanco: 0.3 } },
@@ -51,36 +60,39 @@ const TRAINING_DATA = [
 const COLOR_METADATA = {
   rojo: {
     colorKey: 'rojo',
-    name: 'Torito de la Tierra y Protección (Rojo)',
+    name: { es: 'Torito de la Tierra y Protección (Rojo)', en: 'Torito of Earth and Protection (Red)' },
     apu: 'Apu Huajsapata',
-    desc: 'Tu perfil energético está profundamente ligado al coraje y la protección familiar. La red neuronal ha determinado que tu amuleto es el Torito Rojo de arcilla terracota, que ahuyenta las malas vibras y bendice el hogar.',
+    desc: { es: 'Tu perfil energético está profundamente ligado al coraje y la protección familiar. La red neuronal ha determinado que tu amuleto es el Torito Rojo de arcilla terracota, que ahuyenta las malas vibras y bendice el hogar.', en: 'Your energy profile is deeply linked to courage and family protection. The neural network has determined that your amulet is the Red Clay Torito, which wards off bad vibes and blesses the home.' },
     hex: '#c85833'
   },
   amarillo: {
     colorKey: 'amarillo',
-    name: 'Torito del Sol y la Sabiduría (Amarillo)',
+    name: { es: 'Torito del Sol y la Sabiduría (Amarillo)', en: 'Torito of Sun and Wisdom (Yellow)' },
     apu: 'Apu Allinccapac',
-    desc: 'Posees una mente orientada al crecimiento, la prosperidad y la búsqueda constante de la sabiduría. Tu amuleto es el Torito de Oro Cenizo, atrayendo la abundancia material y espiritual.',
+    desc: { es: 'Posees una mente orientada al crecimiento, la prosperidad y la búsqueda constante de la sabiduría. Tu amuleto es el Torito de Oro Cenizo, atrayendo la abundancia material y espiritual.', en: 'You possess a mind oriented to growth, prosperity, and the constant search for wisdom. Your amulet is the Ash Gold Torito, attracting material and spiritual abundance.' },
     hex: '#cc9c56'
   },
   verde: {
     colorKey: 'verde',
-    name: 'Torito de la Salud y la Pachamama (Verde)',
+    name: { es: 'Torito de la Salud y la Pachamama (Verde)', en: 'Torito of Health and Pachamama (Green)' },
     apu: 'Apu Illimani',
-    desc: 'Tu alma busca armonía y curación natural en sintonía con la Pachamama. Tu amuleto es el Torito Verde Ichu, símbolo de esperanza, salud física y equilibrio con la tierra andina.',
+    desc: { es: 'Tu alma busca armonía y curación natural en sintonía con la Pachamama. Tu amuleto es el Torito Verde Ichu, símbolo de esperanza, salud física y equilibrio con la tierra andina.', en: 'Your soul seeks harmony and natural healing in sync with Pachamama. Your amulet is the Ichu Green Torito, a symbol of hope, physical health, and balance with the Andean land.' },
     hex: '#6a7b51'
   },
   blanco: {
     colorKey: 'blanco',
-    name: 'Torito de la Calma y Pureza (Blanco)',
+    name: { es: 'Torito de la Calma y Pureza (Blanco)', en: 'Torito of Calm and Purity (White)' },
     apu: 'Apu Khapia',
-    desc: 'Irradias paz mental, claridad y pureza espiritual. La red neuronal te asigna el Torito de Piedra Tiza, ideal para limpiar las energías familiares, sanar rencores y mantener la calma.',
+    desc: { es: 'Irradias paz mental, claridad y pureza espiritual. La red neuronal te asigna el Torito de Piedra Tiza, ideal para limpiar las energías familiares, sanar rencores y mantener la calma.', en: 'You radiate peace of mind, clarity, and spiritual purity. The neural network assigns you the Chalk Stone Torito, ideal for cleansing family energies, healing grudges, and maintaining calm.' },
     hex: '#dfdcd4'
   }
 };
 
 const PucaraOracleNN = ({ onUnlockColor }) => {
-  // Game state: 'intro', 'quiz', 'training', 'result'
+  const { i18n } = useTranslation();
+  const isEn = i18n.language === 'en';
+  const langKey = isEn ? 'en' : 'es';
+
   const [gameState, setGameState] = useState('intro');
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [accumulatedValues, setAccumulatedValues] = useState({ amor: 0, sabiduria: 0, naturaleza: 0, paz: 0 });
@@ -185,11 +197,13 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
         
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-          <span className="script-subtitle">Ritual Digital & Inteligencia Artificial...</span>
-          <h2 className="bold-title">El Oráculo Místico de los Apus</h2>
+          <span className="script-subtitle">{isEn ? 'Digital Ritual & Artificial Intelligence...' : 'Ritual Digital & Inteligencia Artificial...'}</span>
+          <h2 className="bold-title">{isEn ? 'The Mystic Oracle of the Apus' : 'El Oráculo Místico de los Apus'}</h2>
           <div style={{ height: '4px', background: 'var(--accent)', width: '80px', margin: '1rem auto 1.5rem auto', borderRadius: '2px' }} />
           <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            Responde tres preguntas existenciales para sintonizar tu vibración con el altiplano de Puno. Una **red neuronal artificial** procesará tu energía en vivo para revelarte tu Torito guardián.
+            {isEn
+              ? 'Answer three existential questions to tune your vibration with the Puno highlands. An artificial neural network will process your energy live to reveal your guardian Torito.'
+              : 'Responde tres preguntas existenciales para sintonizar tu vibración con el altiplano de Puno. Una red neuronal artificial procesará tu energía en vivo para revelarte tu Torito guardián.'}
           </p>
         </div>
 
@@ -230,11 +244,13 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                 </div>
 
                 <h3 style={{ margin: 0, fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-                  Inicia la Predicción Neuronal
+                  {isEn ? 'Start Neural Prediction' : 'Inicia la Predicción Neuronal'}
                 </h3>
                 
                 <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: 1.6, maxWidth: '550px', margin: 0 }}>
-                  A diferencia de los cuestionarios estáticos, este oráculo entrena dinámicamente un modelo matemático de neuronas artificiales feed-forward en tu dispositivo, encontrando patrones entre tus respuestas y la mitología de los Apus protectores.
+                  {isEn
+                    ? 'Unlike static quizzes, this oracle dynamically trains a feed-forward neural network model on your device, finding patterns between your answers and the mythology of the guardian Apus.'
+                    : 'A diferencia de los cuestionarios estáticos, este oráculo entrena dinámicamente un modelo matemático de neuronas artificiales feed-forward en tu dispositivo, encontrando patrones entre tus respuestas y la mitología de los Apus protectores.'}
                 </p>
 
                 <button
@@ -257,7 +273,7 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                     marginTop: '1rem'
                   }}
                 >
-                  <Sparkles size={18} /> Iniciar Consulta
+                  <Sparkles size={18} /> {isEn ? 'Consult Oracle' : 'Iniciar Consulta'}
                 </button>
               </motion.div>
             )}
@@ -274,10 +290,10 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
               >
                 <div>
                   <span style={{ fontSize: '0.8rem', background: 'rgba(200, 88, 51, 0.08)', padding: '0.25rem 0.75rem', borderRadius: '8px', fontWeight: 'bold', color: 'var(--secondary)', textTransform: 'uppercase' }}>
-                    Pregunta {currentQuestionIdx + 1} de {QUESTIONS.length}
+                    {isEn ? `Question ${currentQuestionIdx + 1} of ${QUESTIONS.length}` : `Pregunta ${currentQuestionIdx + 1} de ${QUESTIONS.length}`}
                   </span>
                   <h3 style={{ margin: '0.75rem 0 0 0', fontSize: '1.5rem', color: 'var(--primary)', fontWeight: 800, lineHeight: 1.35 }}>
-                    {QUESTIONS[currentQuestionIdx].q}
+                    {QUESTIONS[currentQuestionIdx].q[langKey]}
                   </h3>
                 </div>
 
@@ -308,7 +324,7 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                         e.target.style.background = 'rgba(15, 44, 89, 0.02)';
                       }}
                     >
-                      {opt.text}
+                      {opt.text[langKey]}
                     </button>
                   ))}
                 </div>
@@ -326,10 +342,10 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                   <h4 style={{ margin: 0, fontSize: '1.3rem', color: 'var(--primary)', fontWeight: 800 }}>
-                    Entrenando Red Neuronal Local
+                    {isEn ? 'Training Local Neural Network' : 'Entrenando Red Neuronal Local'}
                   </h4>
                   <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    Ajustando pesos sinápticos en tiempo real (Backpropagation)...
+                    {isEn ? 'Adjusting synaptic weights in real time (Backpropagation)...' : 'Ajustando pesos sinápticos en tiempo real (Backpropagation)...'}
                   </p>
                 </div>
 
@@ -392,8 +408,14 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                   ))}
 
                   {/* Input Nodes (Layer 1) */}
-                  {['Amor', 'Mente', 'Tierra', 'Paz'].map((label, idx) => {
+                  {[
+                    { es: 'Amor', en: 'Love' },
+                    { es: 'Mente', en: 'Mind' },
+                    { es: 'Tierra', en: 'Earth' },
+                    { es: 'Paz', en: 'Peace' }
+                  ].map((labelObj, idx) => {
                     const y = 35 + idx * 40;
+                    const label = labelObj[langKey];
                     return (
                       <g key={`in-${idx}`}>
                         <circle cx="50" cy={y} r="14" fill="var(--primary)" stroke="var(--accent)" strokeWidth="2" />
@@ -413,8 +435,14 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                   })}
 
                   {/* Output Nodes (Layer 3) */}
-                  {['Rojo', 'Amarillo', 'Verde', 'Blanco'].map((label, idx) => {
+                  {[
+                    { es: 'Rojo', en: 'Red' },
+                    { es: 'Amarillo', en: 'Yellow' },
+                    { es: 'Verde', en: 'Green' },
+                    { es: 'Blanco', en: 'White' }
+                  ].map((labelObj, idx) => {
                     const y = 35 + idx * 40;
+                    const label = labelObj[langKey];
                     const colorsList = ['#c85833', '#cc9c56', '#6a7b51', '#dfdcd4'];
                     return (
                       <g key={`out-${idx}`}>
@@ -428,7 +456,7 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                 {/* Progress bar */}
                 <div style={{ width: '100%', maxWidth: '300px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.35rem' }}>
-                    <span>Épocas entrenadas:</span>
+                    <span>{isEn ? 'Trained epochs:' : 'Épocas entrenadas:'}</span>
                     <span>{epochs}/1000</span>
                   </div>
                   <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(15, 44, 89, 0.08)', borderRadius: '4px', overflow: 'hidden' }}>
@@ -460,18 +488,18 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                   <span style={{ fontSize: '0.8rem', color: 'var(--secondary)', fontWeight: 850, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Resultado del Oráculo IA
+                    {isEn ? 'AI Oracle Result' : 'Resultado del Oráculo IA'}
                   </span>
                   <h3 style={{ margin: 0, fontSize: '2.1rem', color: 'var(--primary)', fontWeight: 900, fontFamily: 'var(--font-heading)' }}>
-                    {prediction.name}
+                    {prediction.name[langKey]}
                   </h3>
                   <span style={{ fontSize: '1rem', fontStyle: 'italic', color: 'var(--text-muted)', fontWeight: 700 }}>
-                    Apu Guardián: {prediction.apu}
+                    {isEn ? 'Guardian Apu:' : 'Apu Guardián:'} {prediction.apu}
                   </span>
                 </div>
 
                 <p style={{ color: 'var(--text-muted)', fontSize: '1.02rem', lineHeight: 1.6, maxWidth: '580px', margin: 0 }}>
-                  {prediction.desc}
+                  {prediction.desc[langKey]}
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -493,7 +521,7 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                     onMouseEnter={e => e.target.style.borderColor = 'var(--primary)'}
                     onMouseLeave={e => e.target.style.borderColor = 'rgba(15, 44, 89, 0.15)'}
                   >
-                    <RefreshCw size={18} /> Reintentar Ritual
+                    <RefreshCw size={18} /> {isEn ? 'Retry Ritual' : 'Reintentar Ritual'}
                   </button>
 
                   <button
@@ -515,7 +543,7 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
                       letterSpacing: '0.05em'
                     }}
                   >
-                    <Trophy size={18} /> Desbloquear y Pintar Torito 3D
+                    <Trophy size={18} /> {isEn ? 'Unlock & Paint 3D Torito' : 'Desbloquear y Pintar Torito 3D'}
                   </button>
                 </div>
               </motion.div>
