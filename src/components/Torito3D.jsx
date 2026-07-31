@@ -12,6 +12,9 @@ const Torito3D = ({ colorHex }) => {
     const [loadError, setLoadError] = useState(false);
     const modelRef = useRef(null);
 
+    const colorHexRef = useRef(colorHex);
+    colorHexRef.current = colorHex;
+
     // Dynamic Color Update when prop changes
     useEffect(() => {
         if (modelRef.current) {
@@ -176,7 +179,7 @@ const Torito3D = ({ colorHex }) => {
 
                 // Add to scene and apply initial color tint
                 scene.add(loadedModel);
-                updateModelColor(loadedModel, colorHex);
+                updateModelColor(loadedModel, colorHexRef.current);
 
                 setIsLoading(false);
             },

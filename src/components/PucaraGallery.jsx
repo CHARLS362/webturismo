@@ -139,7 +139,7 @@ const PucaraGallery = () => {
                         </svg>
 
                         {/* Map Waypoints / Treasure Points */}
-                        {treasureWaypoints.map((wpt, idx) => {
+                        {treasureWaypoints.map((wpt) => {
                             const isActive = selectedPoint.id === wpt.id;
                             return (
                                 <motion.div

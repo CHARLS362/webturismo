@@ -41,8 +41,10 @@ const Header = () => {
             'pucara-festividades',
             'pucara-tour360',
             'pucara-planificador',
+            'pucara-oraculo',
             'pucara-roadmap',
-            'pucara-dashboard'
+            'pucara-dashboard',
+            'pucara-qr-generator'
         ];
 
         const observer = new IntersectionObserver((entries) => {
@@ -100,7 +102,9 @@ const Header = () => {
             label: t('header.nav_experimenta', { defaultValue: 'Experimenta' }),
             type: 'dropdown',
             items: [
-                { name: 'Videos & Tour 360°', href: '#pucara-tour360' }
+                { name: 'Videos & Tour 360°', href: '#pucara-tour360' },
+                { name: 'Oráculo de los Apus (IA)', href: '#pucara-oraculo' },
+                { name: 'Generador QR', href: '#pucara-qr-generator' }
             ]
         },
         {

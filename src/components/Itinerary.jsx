@@ -14,10 +14,12 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
     const currentPackage = itineraryPackages[currentPackageId];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [prevPackageId, setPrevPackageId] = useState(currentPackageId);
 
-    useEffect(() => {
+    if (currentPackageId !== prevPackageId) {
+        setPrevPackageId(currentPackageId);
         setCurrentImageIndex(0);
-    }, [currentPackageId]);
+    }
 
     useEffect(() => {
         if (!currentPackage.images) return;

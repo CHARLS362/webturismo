@@ -293,3 +293,62 @@ export const mainTourPackages = [
   }
 ];
 
+export const lockedToritoSkins = [
+  {
+    color: "kalasaya_stone",
+    hex: "#8b5a2b",
+    name: "Piedra Ancestral Kalasaya",
+    meaning: "Sabiduría ancestral y conexión con los templos pre-incas de piedra roja.",
+    symbolizes: ["Historia", "Permanencia", "Conexión Espiritual"],
+    story: "Un material místico inspirado en los bloques tallados del Complejo Ceremonial Kalasaya.",
+    locked: true,
+    monumentId: "kalasaya",
+    pointIdx: 0
+  },
+  {
+    color: "penon_lava",
+    hex: "#ff4500",
+    name: "Fuego del Apu Peñón",
+    meaning: "Vitalidad, fuerza telúrica y energía purificadora del mirador natural.",
+    symbolizes: ["Fuerza", "Energía", "Coraje"],
+    story: "Inspirado en los atardeceres rojizos ardientes sobre la cima del Peñón de Pucará.",
+    locked: true,
+    monumentId: "penon",
+    pointIdx: 1
+  },
+  {
+    color: "templo_gold",
+    hex: "#ffd700",
+    name: "Pan de Oro Barroco",
+    meaning: "Luz divina, abundancia y herencia cultural jesuita.",
+    symbolizes: ["Esplendor", "Abundancia", "Devoción"],
+    story: "Inspirado en los altares cubiertos en pan de oro del Templo de Santa Isabel.",
+    locked: true,
+    monumentId: "templo",
+    pointIdx: 2
+  },
+  {
+    color: "plaza_multicolor",
+    hex: "#ff007f",
+    name: "Cerámica Policromada",
+    meaning: "Alegría, diversidad cultural y tradición viva.",
+    symbolizes: ["Celebración", "Arte", "Tradición"],
+    story: "Inspirado en las coloridas comparsas de los carnavales en la Plaza de Armas.",
+    locked: true,
+    monumentId: "plaza",
+    pointIdx: 3
+  },
+  {
+    color: "museo_granite",
+    hex: "#5c5c5c",
+    name: "Monolito de Granito",
+    meaning: "Firmeza, resistencia al tiempo y protección sagrada.",
+    symbolizes: ["Resiliencia", "Firmeza", "Protección"],
+    story: "Evoca a las estelas líticas sagradas grabadas hace miles de años expuestas en el Museo Lítico.",
+    locked: true,
+    monumentId: "museo",
+    pointIdx: 4
+  }
+];
+
+

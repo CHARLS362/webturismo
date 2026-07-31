@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
+import Lenis from 'lenis';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
@@ -20,10 +21,99 @@ import SmartDestinationDashboard from './components/SmartDestinationDashboard';
 import Recommendations from './components/Recommendations';
 import AccessibilityMenu from './components/AccessibilityMenu';
 import AIChatBot from './components/AIChatBot';
+import PucaraQRGenerator from './components/PucaraQRGenerator';
+import PucaraOracleNN from './components/PucaraOracleNN';
+import { lockedToritoSkins } from './data/pucaraData';
+import { playMisticSound, triggerConfetti } from './utils/effects';
 import './index.css';
 
 function App() {
   const [currentPackage, setCurrentPackage] = useState('standard');
+  const [unlockedSkins, setUnlockedSkins] = useState(() => {
+    try {
+      const saved = localStorage.getItem('pucara_unlocked_skins');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [initialMapPoint, setInitialMapPoint] = useState(null);
+  const [initialToritoColor, setInitialToritoColor] = useState(null);
+  const [initialChatbotQuery, setInitialChatbotQuery] = useState('');
+
+  const unlockSkin = (skinId) => {
+    setUnlockedSkins((prev) => {
+      if (prev.includes(skinId)) return prev;
+      const next = [...prev, skinId];
+      localStorage.setItem('pucara_unlocked_skins', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const feature = params.get('feature');
+    const point = params.get('point');
+    const color = params.get('color');
+    const query = params.get('query');
+    const unlock = params.get('unlock');
+
+    // Handle auto unlocking if parameter present
+    if (unlock) {
+      const foundSkin = lockedToritoSkins.find(s => s.color === unlock);
+      if (foundSkin) {
+        setTimeout(() => {
+          unlockSkin(unlock);
+          playMisticSound();
+          triggerConfetti();
+          toast.success(`🎉 ¡Felicidades! Has desbloqueado el Torito "${foundSkin.name}"`);
+        }, 1500); // Small delay to let the page settle
+      }
+    }
+
+    if (feature) {
+      setTimeout(() => {
+        if (feature === 'mapa') {
+          if (point !== null) {
+            setInitialMapPoint(parseInt(point, 10));
+          }
+          document.getElementById('pucara-mapa')?.scrollIntoView({ behavior: 'smooth' });
+        } else if (feature === 'torito3d') {
+          if (color) {
+            setInitialToritoColor(color);
+          }
+          document.getElementById('pucara-planificador')?.scrollIntoView({ behavior: 'smooth' });
+        } else if (feature === 'oraculo') {
+          document.getElementById('pucara-oraculo')?.scrollIntoView({ behavior: 'smooth' });
+        } else if (feature === 'tour360') {
+          document.getElementById('pucara-tour360')?.scrollIntoView({ behavior: 'smooth' });
+        } else if (feature === 'chatbot' && query) {
+          setInitialChatbotQuery(query);
+        }
+      }, 1200); // Allow rendering to settle
+    }
+  }, []);
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
 
   const handlePackageChange = (packageId) => {
     setCurrentPackage(packageId);
@@ -60,7 +150,7 @@ function App() {
         <PucaraDestinations />
         <PucaraGallery />
         <PucaraWalkingTour />
-        <PucaraMap />
+        <PucaraMap initialPointIdx={initialMapPoint} />
         
         {/* 2. PAQUETES TURÍSTICOS OFICIALES (1 Full Day, 2D/1N, Paquete Místico) */}
         <PucaraPackages />
@@ -75,18 +165,24 @@ function App() {
         <PucaraFestivals />
         
         {/* 5. EXPERIENCIA INTERACTIVA 3D & IA */}
-        <PucaraPlanner />
+        <PucaraPlanner initialToritoColor={initialToritoColor} unlockedSkins={unlockedSkins} />
+
+        {/* 5.5. ORÁCULO DE LOS APUS POR IA LOCAL */}
+        <PucaraOracleNN onUnlockColor={unlockSkin} />
         
         {/* 6. GESTIÓN DTI: Hoja de Ruta y Smart Dashboard IoT */}
         <Roadmap5Years />
         <SmartDestinationDashboard />
         <Recommendations />
+
+        {/* 6.5. CENTRO DE GENERACIÓN QR (ADMIN / PROMO) */}
+        <PucaraQRGenerator />
       </main>
       <Footer />
 
       {/* Floating features */}
       <AccessibilityMenu />
-      <AIChatBot />
+      <AIChatBot initialQuery={initialChatbotQuery} />
     </div>
   );
 }

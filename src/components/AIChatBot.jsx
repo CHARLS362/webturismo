@@ -3,15 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Mic, MicOff, Volume2, VolumeX, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+// Welcome messages by language
+const welcomeMessages = {
+    es: '¡Kamisaraki! (¡Hola!) Soy tu asistente virtual de **PUCARÁ 365**. Estoy aquí para guiarte en tu viaje. ¿Deseas saber sobre Kalasaya, el Museo Lítico, los Toritos tradicionales, cómo llegar o nuestras festividades? Puedes hablarme usando el micrófono 🎙️.',
+    en: 'Kamisaraki! (Hello!) I am your virtual assistant from **PUCARÁ 365**. I am here to guide you on your trip. Do you want to know about Kalasaya, the Lytic Museum, traditional Toritos, how to get here, or our festivals? You can talk to me using the microphone 🎙️.'
+};
+
 const AIChatBot = () => {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
-    
-    // Welcome messages by language
-    const welcomeMessages = {
-        es: '¡Kamisaraki! (¡Hola!) Soy tu asistente virtual de **PUCARÁ 365**. Estoy aquí para guiarte en tu viaje. ¿Deseas saber sobre Kalasaya, el Museo Lítico, los Toritos tradicionales, cómo llegar o nuestras festividades? Puedes hablarme usando el micrófono 🎙️.',
-        en: 'Kamisaraki! (Hello!) I am your virtual assistant from **PUCARÁ 365**. I am here to guide you on your trip. Do you want to know about Kalasaya, the Lytic Museum, traditional Toritos, how to get here, or our festivals? You can talk to me using the microphone 🎙️.'
-    };
+    const sendMessageRef = useRef(null);
 
     const [messages, setMessages] = useState([
         {
@@ -25,15 +26,16 @@ const AIChatBot = () => {
     const messagesEndRef = useRef(null);
     const recognitionRef = useRef(null);
 
-    // Update welcome message when language changes
-    useEffect(() => {
+    const [prevLanguage, setPrevLanguage] = useState(i18n.language);
+    if (i18n.language !== prevLanguage) {
+        setPrevLanguage(i18n.language);
         setMessages([
             {
                 sender: 'bot',
                 text: welcomeMessages[i18n.language] || welcomeMessages['es']
             }
         ]);
-    }, [i18n.language]);
+    }
 
     // Initialize speech recognition
     useEffect(() => {
@@ -54,7 +56,7 @@ const AIChatBot = () => {
             rec.onresult = (e) => {
                 const speechToText = e.results[0][0].transcript;
                 setInputValue(speechToText);
-                sendMessage(speechToText);
+                sendMessageRef.current?.(speechToText);
             };
 
             recognitionRef.current = rec;
@@ -200,6 +202,10 @@ const AIChatBot = () => {
         setMessages((prev) => [...prev, newBotMessage]);
         speakText(botReplyText);
     };
+
+    useEffect(() => {
+        sendMessageRef.current = sendMessage;
+    });
 
     const handleQuickQuestion = (question) => {
         sendMessage(question);

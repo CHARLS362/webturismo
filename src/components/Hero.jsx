@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import useEmblaCarousel from 'embla-carousel-react';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -63,7 +62,6 @@ const heroSlides = [
 ];
 
 const Hero = () => {
-    const { t } = useTranslation();
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, speed: 8 });
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -79,12 +77,17 @@ const Hero = () => {
 
     useEffect(() => {
         if (!emblaApi) return;
-        onSelect();
+        
+        const initTimer = setTimeout(() => {
+            onSelect();
+        }, 0);
+
         emblaApi.on('select', onSelect);
         const timer = setInterval(() => {
             if (emblaApi.canScrollNext()) emblaApi.scrollNext();
         }, 6000);
         return () => {
+            clearTimeout(initTimer);
             clearInterval(timer);
             emblaApi.off('select', onSelect);
         };

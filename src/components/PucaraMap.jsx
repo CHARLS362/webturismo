@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -23,101 +23,107 @@ import temploImg from '../assets/image/map/templo.png';
 import plazaImg from '../assets/image/map/plaza.png';
 import museoImg from '../assets/image/map/museo.png';
 
-const PucaraMap = () => {
-    const { t, i18n } = useTranslation();
+// Coordinates redistributed to be visually separated at zoom 14
+const routePoints = [
+    {
+        id: 1,
+        name: "1. Complejo Arqueológico Kalasaya",
+        lat: -15.0420,
+        lng: -70.3730,
+        image: kalasayaImg,
+        desc: {
+            es: "El gran centro ceremonial de la cultura Pucará. Cuenta con pirámides escalonadas de terrazas de piedra roja, templos semicirculares y patios hundidos donde se realizaban ofrendas sagradas a la lluvia y el agua hace más de dos mil años.",
+            en: "The grand ceremonial center of the Pucará culture. It features stepped pyramids built with red stone terraces, semi-circular temples, and sunken courts where sacred rain and water rituals were performed over two thousand years ago."
+        },
+        tags: ["Arqueología", "Patrimonio", "Pirámides"],
+        duration: "2 horas",
+        height: "3,875m"
+    },
+    {
+        id: 2,
+        name: "2. El Peñón de Pucará (Mirador)",
+        lat: -15.0375,
+        lng: -70.3668,
+        image: penonImg,
+        desc: {
+            es: "Un gigantesco acantilado de piedra roja que resguarda el pueblo. Este mirador natural sagrado ofrece senderismo con vistas panorámicas espectaculares del altiplano, las vías del tren y la cordillera andina.",
+            en: "A gigantic red stone cliff that guards the town. This sacred natural lookout offers scenic hiking with spectacular panoramic views of the high plains, the railway, and the Andean mountain range."
+        },
+        tags: ["Mirador", "Trekking", "Naturaleza"],
+        duration: "1.5 horas",
+        height: "3,980m"
+    },
+    {
+        id: 3,
+        name: "3. Templo de Santa Isabel",
+        lat: -15.0510,
+        lng: -70.3660,
+        image: temploImg,
+        desc: {
+            es: "Una joya arquitectónica del siglo dieciocho construida por los jesuitas. Tallada enteramente en piedra roja caliza de las canteras locales, destaca por su imponente fachada barroca y su sincretismo religioso colonial andino.",
+            en: "An architectural gem from the eighteenth century built by the Jesuits. Carved entirely in red limestone from local quarries, it stands out for its imposing Baroque facade and Andean-Colonial religious syncretism."
+        },
+        tags: ["Colonial", "Arquitectura", "Iglesia"],
+        duration: "45 min",
+        height: "3,858m"
+    },
+    {
+        id: 4,
+        name: "4. Plaza de Armas de Pucará",
+        lat: -15.0498,
+        lng: -70.3705,
+        image: plazaImg,
+        desc: {
+            es: "La plaza central del pueblo, donde se exponen las esculturas monumentales de los Toritos de Pucará y es rodeada de coloridos edificios locales. Es el punto de partida de las principales festividades altiplánicas.",
+            en: "The town's central square, displaying monumental sculptures of the Toritos de Pucará and surrounded by colorful local buildings. It is the starting point for the main altiplano festivals."
+        },
+        tags: ["Plaza", "Cultura", "Paseo"],
+        duration: "30 min",
+        height: "3,857m"
+    },
+    {
+        id: 5,
+        name: "5. Museo Lítico de Pucará",
+        lat: -15.0455,
+        lng: -70.3635,
+        image: museoImg,
+        desc: {
+            es: "Hogar de los míticos monolitos tallados en piedra. Aquí se exhibe la estela del Hatun Ñakaj (el gran degollador) y grabados simbólicos de relámpagos, peces y felinos sagrados que revelan la cosmovisión y el arte lítico andino.",
+            en: "Home to the mythical stone-carved monoliths. It houses the stela of Hatun Ñakaj (the great decapitator) and symbolic carvings of lightning, sacred fish, and felines that reveal the Andean lithic art and worldview."
+        },
+        tags: ["Monolitos", "Escultura", "Cultura"],
+        duration: "1.5 horas",
+        height: "3,860m"
+    }
+];
+
+const PucaraMap = ({ initialPointIdx }) => {
+    const { i18n } = useTranslation();
     const [activePointIdx, setActivePointIdx] = useState(0);
     const [isTourPlaying, setIsTourPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
 
+    const [prevActivePointIdx, setPrevActivePointIdx] = useState(activePointIdx);
+    if (activePointIdx !== prevActivePointIdx) {
+        setPrevActivePointIdx(activePointIdx);
+        setImageLoaded(false);
+    }
+
     const mapContainerRef = useRef(null);
     const leafletMapInstanceRef = useRef(null);
     const markersRef = useRef([]);
     const tourTimerRef = useRef(null);
-
-    // ─── Route Points ────────────────────────────────────────────────────────
-    // Coordinates redistributed to be visually separated at zoom 14
-    const routePoints = [
-        {
-            id: 1,
-            name: "1. Complejo Arqueológico Kalasaya",
-            lat: -15.0420,
-            lng: -70.3730,
-            image: kalasayaImg,
-            desc: {
-                es: "El gran centro ceremonial de la cultura Pucará. Cuenta con pirámides escalonadas de terrazas de piedra roja, templos semicirculares y patios hundidos donde se realizaban ofrendas sagradas a la lluvia y el agua hace más de dos mil años.",
-                en: "The grand ceremonial center of the Pucará culture. It features stepped pyramids built with red stone terraces, semi-circular temples, and sunken courts where sacred rain and water rituals were performed over two thousand years ago."
-            },
-            tags: ["Arqueología", "Patrimonio", "Pirámides"],
-            duration: "2 horas",
-            height: "3,875m"
-        },
-        {
-            id: 2,
-            name: "2. El Peñón de Pucará (Mirador)",
-            lat: -15.0375,
-            lng: -70.3668,
-            image: penonImg,
-            desc: {
-                es: "Un gigantesco acantilado de piedra roja que resguarda el pueblo. Este mirador natural sagrado ofrece senderismo con vistas panorámicas espectaculares del altiplano, las vías del tren y la cordillera andina.",
-                en: "A gigantic red stone cliff that guards the town. This sacred natural lookout offers scenic hiking with spectacular panoramic views of the high plains, the railway, and the Andean mountain range."
-            },
-            tags: ["Mirador", "Trekking", "Naturaleza"],
-            duration: "1.5 horas",
-            height: "3,980m"
-        },
-        {
-            id: 3,
-            name: "3. Templo de Santa Isabel",
-            lat: -15.0510,
-            lng: -70.3660,
-            image: temploImg,
-            desc: {
-                es: "Una joya arquitectónica del siglo dieciocho construida por los jesuitas. Tallada enteramente en piedra roja caliza de las canteras locales, destaca por su imponente fachada barroca y su sincretismo religioso colonial andino.",
-                en: "An architectural gem from the eighteenth century built by the Jesuits. Carved entirely in red limestone from local quarries, it stands out for its imposing Baroque facade and Andean-Colonial religious syncretism."
-            },
-            tags: ["Colonial", "Arquitectura", "Iglesia"],
-            duration: "45 min",
-            height: "3,858m"
-        },
-        {
-            id: 4,
-            name: "4. Plaza de Armas de Pucará",
-            lat: -15.0498,
-            lng: -70.3705,
-            image: plazaImg,
-            desc: {
-                es: "La plaza central del pueblo, donde se exponen las esculturas monumentales de los Toritos de Pucará y es rodeada de coloridos edificios locales. Es el punto de partida de las principales festividades altiplánicas.",
-                en: "The town's central square, displaying monumental sculptures of the Toritos de Pucará and surrounded by colorful local buildings. It is the starting point for the main altiplano festivals."
-            },
-            tags: ["Plaza", "Cultura", "Paseo"],
-            duration: "30 min",
-            height: "3,857m"
-        },
-        {
-            id: 5,
-            name: "5. Museo Lítico de Pucará",
-            lat: -15.0455,
-            lng: -70.3635,
-            image: museoImg,
-            desc: {
-                es: "Hogar de los míticos monolitos tallados en piedra. Aquí se exhibe la estela del Hatun Ñakaj (el gran degollador) y grabados simbólicos de relámpagos, peces y felinos sagrados que revelan la cosmovisión y el arte lítico andino.",
-                en: "Home to the mythical stone-carved monoliths. It houses the stela of Hatun Ñakaj (the great decapitator) and symbolic carvings of lightning, sacred fish, and felines that reveal the Andean lithic art and worldview."
-            },
-            tags: ["Monolitos", "Escultura", "Cultura"],
-            duration: "1.5 horas",
-            height: "3,860m"
-        }
-    ];
+    const handleSelectPointRef = useRef(null);
 
     const activePoint = routePoints[activePointIdx];
 
     // ─── Speak Active Point ───────────────────────────────────────────────────
-    const speakActivePoint = () => {
+    const speakActivePoint = useCallback(() => {
         if (isMuted) return;
         const text = activePoint.desc[i18n.language] || activePoint.desc['es'];
         aiVoice.speak(text, i18n.language);
-    };
+    }, [activePoint, isMuted, i18n.language]);
 
     // ─── Initialize Leaflet Map ───────────────────────────────────────────────
     useEffect(() => {
@@ -140,7 +146,7 @@ const PucaraMap = () => {
         markersRef.current = [];
 
         routePoints.forEach((pt, idx) => {
-            const isSelected = idx === activePointIdx;
+            const isSelected = idx === 0;
 
             const customIcon = L.divIcon({
                 className: 'custom-leaflet-marker',
@@ -156,6 +162,9 @@ const PucaraMap = () => {
                     transform: scale(${isSelected ? 1.3 : 1});
                     z-index: ${isSelected ? 999 : 1};
                 ">
+                    <!-- Pulsing sonar ring background for active marker -->
+                    <div class="marker-pulse-ring marker-pulse-ring-${pt.id}" style="display: ${isSelected ? 'block' : 'none'};"></div>
+
                     <svg viewBox="0 0 100 100" style="width:100%; height:100%; transition: all 0.3s;" class="marker-svg-${pt.id}">
                         <path d="M50,95 C30,70 15,50 15,35 A35,35 0 0,1 85,35 C85,50 70,70 50,95 Z" fill="${isSelected ? 'var(--terracotta)' : 'var(--primary)'}" />
                         <path d="M50,90 C34,68 20,49 20,35 A30,30 0 0,1 80,35 C80,49 66,68 50,90 Z" fill="white" />
@@ -196,14 +205,78 @@ const PucaraMap = () => {
                 iconAnchor: [24, 48]
             });
 
+            const popupHtml = `
+              <div style="
+                font-family: var(--font-body);
+                width: 200px;
+                border-radius: 18px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                gap: 0.6rem;
+                padding: 0.5rem;
+                background: white;
+              ">
+                <!-- Thumbnail -->
+                <div style="
+                  width: 100%;
+                  height: 100px;
+                  border-radius: 12px;
+                  overflow: hidden;
+                  position: relative;
+                  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+                ">
+                  <img src="${pt.image}" alt="${pt.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+                  <div style="
+                    position: absolute;
+                    bottom: 6px;
+                    left: 6px;
+                    background: rgba(11, 34, 64, 0.85);
+                    backdrop-filter: blur(4px);
+                    color: white;
+                    padding: 0.2rem 0.5rem;
+                    border-radius: 6px;
+                    font-size: 0.65rem;
+                    font-weight: 800;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.25rem;
+                  ">
+                    🏔️ ${pt.height}
+                  </div>
+                </div>
+
+                <!-- Info -->
+                <div style="display: flex; flex-direction: column; padding: 0.15rem 0.25rem 0.25rem 0.25rem;">
+                  <h4 style="
+                    font-family: var(--font-heading);
+                    font-size: 0.92rem;
+                    color: var(--primary);
+                    margin: 0;
+                    font-weight: 800;
+                    line-height: 1.3;
+                  ">
+                    ${pt.name.split('. ')[1]}
+                  </h4>
+                  <div style="
+                    display: flex;
+                    gap: 0.5rem;
+                    font-size: 0.72rem;
+                    color: var(--terracotta);
+                    font-weight: bold;
+                    margin-top: 0.35rem;
+                  ">
+                    <span>⏱️ ${pt.duration}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+
             const marker = L.marker([pt.lat, pt.lng], { icon: customIcon })
                 .addTo(map)
-                .bindPopup(`<div style="font-family: var(--font-body); padding: 0.25rem 0.1rem;">
-                    <b style="color: var(--primary); font-size: 0.88rem;">${pt.name.split('. ')[1]}</b><br/>
-                    <span style="font-size: 0.73rem; opacity:0.75; color: var(--text-muted);">⛰ ${pt.height}</span>
-                </div>`);
+                .bindPopup(popupHtml);
 
-            marker.on('click', () => handleSelectPoint(idx));
+            marker.on('click', () => handleSelectPointRef.current?.(idx));
             markersRef.current.push(marker);
         });
 
@@ -217,8 +290,8 @@ const PucaraMap = () => {
         }).addTo(map);
 
         // Open active popup initially
-        if (markersRef.current[activePointIdx]) {
-            markersRef.current[activePointIdx].openPopup();
+        if (markersRef.current[0]) {
+            markersRef.current[0].openPopup();
         }
 
         return () => {
@@ -247,6 +320,7 @@ const PucaraMap = () => {
             const el = document.querySelector(`.map-node-inner-${rp.id}`);
             const path1 = document.querySelector(`.marker-svg-${rp.id} path:nth-of-type(1)`);
             const path3 = document.querySelector(`.marker-svg-${rp.id} path:nth-of-type(3)`);
+            const pulse = document.querySelector(`.marker-pulse-ring-${rp.id}`);
             if (el && path1 && path3) {
                 const active = rp.id === pt.id;
                 path1.setAttribute('fill', active ? 'var(--terracotta)' : 'var(--primary)');
@@ -254,10 +328,11 @@ const PucaraMap = () => {
                 el.style.transform = `scale(${active ? 1.3 : 1})`;
                 el.style.zIndex = active ? '999' : '1';
                 el.style.filter = `drop-shadow(0 4px 12px rgba(184,92,56,${active ? 0.7 : 0.35}))`;
+                if (pulse) {
+                    pulse.style.display = active ? 'block' : 'none';
+                }
             }
         });
-
-        setImageLoaded(false);
     }, [activePointIdx]);
 
     // ─── Auto-Tour Loop ───────────────────────────────────────────────────────
@@ -283,10 +358,10 @@ const PucaraMap = () => {
             if (tourTimerRef.current) clearTimeout(tourTimerRef.current);
         }
         return () => { if (tourTimerRef.current) clearTimeout(tourTimerRef.current); };
-    }, [isTourPlaying, activePointIdx, i18n.language]);
+    }, [isTourPlaying, activePointIdx, i18n.language, speakActivePoint]);
 
     // ─── Handlers ─────────────────────────────────────────────────────────────
-    const handleSelectPoint = (idx) => {
+    const handleSelectPoint = useCallback((idx) => {
         setIsTourPlaying(false);
         setActivePointIdx(idx);
         aiVoice.stop();
@@ -296,7 +371,20 @@ const PucaraMap = () => {
                 aiVoice.speak(text, i18n.language);
             }
         }, 120);
-    };
+    }, [isMuted, i18n.language]);
+
+    useEffect(() => {
+        handleSelectPointRef.current = handleSelectPoint;
+    });
+
+    useEffect(() => {
+        if (initialPointIdx !== null && initialPointIdx !== undefined && initialPointIdx >= 0 && initialPointIdx < routePoints.length) {
+            const timer = setTimeout(() => {
+                handleSelectPoint(initialPointIdx);
+            }, 50);
+            return () => clearTimeout(timer);
+        }
+    }, [initialPointIdx, handleSelectPoint]);
 
     const handlePrev = () => {
         const prev = (activePointIdx - 1 + routePoints.length) % routePoints.length;
@@ -720,12 +808,38 @@ const PucaraMap = () => {
                     border: none !important;
                 }
                 .leaflet-popup-content-wrapper {
-                    border-radius: 14px !important;
-                    box-shadow: 0 8px 28px rgba(11,34,64,0.14) !important;
-                    border: 1px solid rgba(255,255,255,0.6) !important;
+                    border-radius: 18px !important;
+                    box-shadow: var(--shadow-premium) !important;
+                    border: 1px solid rgba(184, 92, 56, 0.15) !important;
+                    padding: 0 !important;
+                    overflow: hidden;
                 }
-                .leaflet-popup-tip {
+                .leaflet-popup-content {
+                    margin: 0 !important;
+                    width: auto !important;
+                }
+                .leaflet-popup-tip-container {
                     display: none;
+                }
+                @keyframes markerPulse {
+                    0% {
+                        transform: scale(0.6);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: scale(2.2);
+                        opacity: 0;
+                    }
+                }
+                .marker-pulse-ring {
+                    position: absolute;
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(184, 92, 56, 0.4) 0%, transparent 70%);
+                    animation: markerPulse 2s cubic-bezier(0.25, 0, 0, 1) infinite;
+                    pointer-events: none;
+                    z-index: -1;
                 }
             `}</style>
         </section>

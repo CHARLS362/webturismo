@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
+import { QRCodeCanvas } from 'qrcode.react';
 import { 
     Compass, 
     ExternalLink, 
@@ -22,7 +22,6 @@ import plazaImg from '../assets/image/map/plaza.png';
 import museoImg from '../assets/image/map/museo.png';
 
 const PucaraVirtualTour = () => {
-    const { t } = useTranslation();
     const tour360Url = "https://visitavirtual.cultura.pe/recorridos/MLP/museo-litico-pukara/index.html";
     const [activeTab, setActiveTab] = useState('doc'); // 'doc', 'reels', 'virtual'
 
@@ -87,13 +86,10 @@ const PucaraVirtualTour = () => {
     ];
 
     const [selectedDoc, setSelectedDoc] = useState(docList[0]);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
     const docVideoRef = useRef(null);
 
     const handleSelectDoc = (video) => {
         setSelectedDoc(video);
-        setIsPlaying(true);
         if (docVideoRef.current) {
             docVideoRef.current.src = video.src;
             docVideoRef.current.play();
@@ -208,8 +204,6 @@ const PucaraVirtualTour = () => {
                                         controls
                                         playsInline
                                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                                        onPlay={() => setIsPlaying(true)}
-                                        onPause={() => setIsPlaying(false)}
                                     />
                                 </div>
 
@@ -318,38 +312,134 @@ const PucaraVirtualTour = () => {
                             style={{
                                 background: 'white',
                                 borderRadius: '24px',
-                                padding: '1.5rem',
+                                padding: '2.5rem',
                                 boxShadow: 'var(--shadow-lg)',
-                                border: '1px solid rgba(184, 92, 56, 0.15)'
+                                border: '1px solid rgba(184, 92, 56, 0.15)',
+                                display: 'grid',
+                                gridTemplateColumns: '1.2fr 1fr',
+                                gap: '3rem',
+                                alignItems: 'center'
                             }}
+                            className="virtual-tour-grid"
                         >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '1rem' }}>
+                            {/* Left Side: Immersive Preview */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '1.4rem', color: 'var(--primary)', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-                                        Museo Lítico de Pukara — Recorrido 360° Interactivo
+                                    <span style={{
+                                        background: 'rgba(184, 92, 56, 0.12)',
+                                        color: 'var(--terracotta)',
+                                        padding: '0.25rem 0.75rem',
+                                        borderRadius: '20px',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 800,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.05em'
+                                    }}>
+                                        Experiencia Inmersiva
+                                    </span>
+                                    <h3 style={{ fontSize: '1.85rem', color: 'var(--primary)', fontWeight: 800, margin: '0.5rem 0 0.8rem 0', fontFamily: 'var(--font-heading)' }}>
+                                        Museo Lítico de Pucará — Recorrido 360°
                                     </h3>
-                                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                        Navega libremente por las salas del museo del Ministerio de Cultura.
+                                    <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: '1.6' }}>
+                                        Explora las salas sagradas del museo oficial del Ministerio de Cultura de manera interactiva. Por razones de seguridad del portal oficial, la experiencia completa en pantalla completa está optimizada para ser explorada directamente o escaneada en tu móvil.
                                     </p>
                                 </div>
-                                <a
-                                    href={tour360Url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn btn-primary"
-                                    style={{ fontSize: '0.85rem', padding: '0.6rem 1.2rem' }}
-                                >
-                                    Abrir en Pantalla Completa <ExternalLink size={16} />
-                                </a>
+
+                                <div style={{
+                                    position: 'relative',
+                                    borderRadius: '20px',
+                                    overflow: 'hidden',
+                                    height: '280px',
+                                    boxShadow: 'var(--shadow-md)',
+                                    border: '1px solid rgba(15, 44, 89, 0.1)'
+                                }}>
+                                    <img
+                                        src={museoImg}
+                                        alt="Museo Lítico de Pucará"
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.6)' }}
+                                    />
+                                    <div style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        padding: '2rem',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{
+                                            width: '64px',
+                                            height: '64px',
+                                            borderRadius: '50%',
+                                            backgroundColor: 'var(--terracotta)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginBottom: '1rem',
+                                            boxShadow: '0 0 20px rgba(184, 92, 56, 0.4)'
+                                        }} className="pulse-slow">
+                                            <Compass size={32} className="float-animation" />
+                                        </div>
+                                        <span style={{ fontSize: '1.1rem', fontWeight: 800, fontFamily: 'var(--font-heading)', letterSpacing: '0.05em', marginBottom: '1rem' }}>
+                                            RECORRIDO INTERACTIVO 360°
+                                        </span>
+                                        <a
+                                            href={tour360Url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="btn btn-accent"
+                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
+                                        >
+                                            Abrir Recorrido 360° <ExternalLink size={16} />
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div style={{ width: '100%', height: '550px', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(11, 34, 64, 0.1)' }}>
-                                <iframe
-                                    src={tour360Url}
-                                    title="Museo Lítico de Pukará Tour Virtual 360"
-                                    style={{ width: '100%', height: '100%', border: 'none' }}
-                                    allowFullScreen
-                                />
+                            {/* Right Side: QR Scanner Box */}
+                            <div style={{
+                                background: 'var(--bg-body)',
+                                border: '1px solid rgba(15, 44, 89, 0.08)',
+                                borderRadius: '24px',
+                                padding: '2rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: '1.5rem',
+                                textAlign: 'center'
+                            }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
+                                    <Smartphone size={28} style={{ color: 'var(--terracotta)' }} />
+                                    <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--primary)', margin: '0.25rem 0 0 0' }}>
+                                        Escanea en tu Celular
+                                    </h4>
+                                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                                        Usa la cámara de tu móvil para escanear el QR y navegar de forma inmersiva con el giroscopio.
+                                    </p>
+                                </div>
+
+                                {/* QR Canvas wrapped in scanning brackets */}
+                                <div style={{ position: 'relative', padding: '1rem', background: 'white', borderRadius: '16px', boxShadow: 'var(--shadow-sm)' }}>
+                                    {/* Scanning frame brackets (SVG corners) */}
+                                    <div style={{ position: 'absolute', top: '2px', left: '2px', width: '12px', height: '12px', borderTop: '3px solid var(--terracotta)', borderLeft: '3px solid var(--terracotta)' }} />
+                                    <div style={{ position: 'absolute', top: '2px', right: '2px', width: '12px', height: '12px', borderTop: '3px solid var(--terracotta)', borderRight: '3px solid var(--terracotta)' }} />
+                                    <div style={{ position: 'absolute', bottom: '2px', left: '2px', width: '12px', height: '12px', borderBottom: '3px solid var(--terracotta)', borderLeft: '3px solid var(--terracotta)' }} />
+                                    <div style={{ position: 'absolute', bottom: '2px', right: '2px', width: '12px', height: '12px', borderBottom: '3px solid var(--terracotta)', borderRight: '3px solid var(--terracotta)' }} />
+                                    
+                                    <QRCodeCanvas
+                                        value={tour360Url}
+                                        size={160}
+                                        level="H"
+                                        includeMargin={false}
+                                        style={{ display: 'block' }}
+                                    />
+                                </div>
+
+                                <span style={{ fontSize: '0.78rem', color: 'var(--terracotta)', fontWeight: 'bold', letterSpacing: '0.05em' }} className="pulse-slow">
+                                    🔴 ESCANEAR AHORA
+                                </span>
                             </div>
                         </motion.div>
                     )}
@@ -359,8 +449,10 @@ const PucaraVirtualTour = () => {
             <style>{`
                 @media (max-width: 900px) {
                     .doc-tab-grid { grid-template-columns: 1fr !important; }
+                    .virtual-tour-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
                 }
             `}</style>
+
         </section>
     );
 };

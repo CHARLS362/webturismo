@@ -16,11 +16,12 @@ import {
     AlertTriangle, 
     HelpCircle 
 } from 'lucide-react';
-import { suggestedRoutes, toritoColors } from '../data/pucaraData';
+import { suggestedRoutes, toritoColors, lockedToritoSkins } from '../data/pucaraData';
+import { toast } from 'sonner';
 
 const Torito3D = lazy(() => import('./Torito3D'));
 
-const PucaraPlanner = () => {
+const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
     const { t, i18n } = useTranslation();
 
     // Mode Selector: 'classic' or 'ai'
@@ -29,7 +30,13 @@ const PucaraPlanner = () => {
     // Classic Planner State
     const [selectedDuration, setSelectedDuration] = useState('full'); // 'half', 'full', 'weekend'
     const [selectedInterest, setSelectedInterest] = useState('artesania'); // 'cultura', 'artesania', 'aventura'
-    const [activeRoute, setActiveRoute] = useState(null);
+    const activeRoute = suggestedRoutes.find(route => {
+        const isHalf = selectedDuration === 'half' && route.id === 'express';
+        const isFull = selectedDuration === 'full' && route.id === 'artesanal';
+        const isWeekend = selectedDuration === 'weekend' && route.id === 'aventura';
+        
+        return isHalf || isFull || isWeekend;
+    }) || suggestedRoutes[1];
 
     // AI Itinerary Planner State
     const [aiDays, setAiDays] = useState('2'); // '1', '2', '3'
@@ -50,6 +57,18 @@ const PucaraPlanner = () => {
     const [selectedToritoColor, setSelectedToritoColor] = useState(toritoColors[0]); // Default Original
     const [includeSouvenir, setIncludeSouvenir] = useState(true);
     const [is3D, setIs3D] = useState(true);
+
+    useEffect(() => {
+        if (initialToritoColor) {
+            const found = [...toritoColors, ...lockedToritoSkins].find(tc => tc.color === initialToritoColor);
+            if (found) {
+                const timer = setTimeout(() => {
+                    setSelectedToritoColor(found);
+                }, 50);
+                return () => clearTimeout(timer);
+            }
+        }
+    }, [initialToritoColor]);
 
     // Quiz Questions Data
     const quizQuestions = [
@@ -82,18 +101,7 @@ const PucaraPlanner = () => {
         }
     ];
 
-    // Effect to update the suggested route when filters change (Classic Mode)
-    useEffect(() => {
-        const matchingRoute = suggestedRoutes.find(route => {
-            const isHalf = selectedDuration === 'half' && route.id === 'express';
-            const isFull = selectedDuration === 'full' && route.id === 'artesanal';
-            const isWeekend = selectedDuration === 'weekend' && route.id === 'aventura';
-            
-            return isHalf || isFull || isWeekend;
-        }) || suggestedRoutes[1];
 
-        setActiveRoute(matchingRoute);
-    }, [selectedDuration, selectedInterest]);
 
     // Handle AI Itinerary Generation
     const generateAiItinerary = () => {
@@ -1000,48 +1008,72 @@ const PucaraPlanner = () => {
                                 Elige el color del Torito
                             </label>
                             <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
-                                {toritoColors.map(tc => (
-                                    <motion.button
-                                        key={tc.color}
-                                        onClick={() => {
-                                            setSelectedToritoColor(tc);
-                                            setPredictedColor(null); // Clear quiz prediction on manual choice
-                                        }}
-                                        title={tc.name}
-                                        whileHover={{ scale: 1.2 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        style={{
-                                            width: '44px',
-                                            height: '44px',
-                                            borderRadius: '50%',
-                                            backgroundColor: tc.hex,
-                                            border: selectedToritoColor.color === tc.color ? '3px solid white' : '1px solid rgba(15, 44, 89, 0.2)',
-                                            boxShadow: selectedToritoColor.color === tc.color ? '0 0 15px ' + tc.hex : 'none',
-                                            transform: selectedToritoColor.color === tc.color ? 'scale(1.15)' : 'scale(1)',
-                                            transition: 'transform 0.2s ease, border-color 0.2s',
-                                            position: 'relative',
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        {selectedToritoColor.color === tc.color && (
-                                            <span style={{
-                                                position: 'absolute',
-                                                top: '-3px',
-                                                right: '-3px',
-                                                width: '15px',
-                                                height: '15px',
+                                {[...toritoColors, ...lockedToritoSkins].map(tc => {
+                                    const isLocked = tc.locked && !unlockedSkins.includes(tc.color);
+                                    const isSelected = selectedToritoColor.color === tc.color;
+
+                                    return (
+                                        <motion.button
+                                            key={tc.color}
+                                            onClick={() => {
+                                                if (isLocked) {
+                                                    toast.info(`🔒 "${tc.name}" está bloqueado. Escanea el código QR de este monumento o completa el Oráculo de los Apus para desbloquearlo.`);
+                                                    return;
+                                                }
+                                                setSelectedToritoColor(tc);
+                                                setPredictedColor(null); // Clear quiz prediction on manual choice
+                                            }}
+                                            title={tc.name}
+                                            whileHover={{ scale: isLocked ? 1 : 1.2 }}
+                                            whileTap={{ scale: isLocked ? 1 : 0.9 }}
+                                            style={{
+                                                width: '44px',
+                                                height: '44px',
                                                 borderRadius: '50%',
-                                                backgroundColor: 'var(--accent)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                border: '1px solid white'
-                                            }}>
-                                                <CheckCircle2 size={10} color="var(--primary)" />
-                                            </span>
-                                        )}
-                                    </motion.button>
-                                ))}
+                                                backgroundColor: tc.hex,
+                                                border: isSelected ? '3px solid white' : '1px solid rgba(15, 44, 89, 0.2)',
+                                                boxShadow: isSelected ? '0 0 15px ' + tc.hex : 'none',
+                                                transform: isSelected ? 'scale(1.15)' : 'scale(1)',
+                                                transition: 'transform 0.2s ease, border-color 0.2s',
+                                                position: 'relative',
+                                                cursor: 'pointer',
+                                                opacity: isLocked ? 0.45 : 1
+                                            }}
+                                        >
+                                            {isSelected && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    top: '-3px',
+                                                    right: '-3px',
+                                                    width: '15px',
+                                                    height: '15px',
+                                                    borderRadius: '50%',
+                                                    backgroundColor: 'var(--accent)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '1px solid white'
+                                                }}>
+                                                    <CheckCircle2 size={10} color="var(--primary)" />
+                                                </span>
+                                            )}
+                                            {isLocked && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    inset: 0,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '0.9rem',
+                                                    color: 'white',
+                                                    textShadow: '0 1px 3px rgba(0,0,0,0.8)'
+                                                }}>
+                                                    🔒
+                                                </span>
+                                            )}
+                                        </motion.button>
+                                    );
+                                })}
                             </div>
                         </div>
 

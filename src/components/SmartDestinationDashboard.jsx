@@ -120,12 +120,7 @@ const SmartDestinationDashboard = () => {
         { name: 'Empleo Local (%)', 'Línea Base': 30, 'Meta 2030': 60, 'Actual 2026': 45 }
     ];
 
-    // Pie chart for Sentiment Analysis
-    const sentimentPieData = [
-        { name: t('dashboard.sent_positive'), value: reviews.filter(r => r.rating >= 4).length },
-        { name: t('dashboard.sent_neutral'), value: reviews.filter(r => r.rating === 3).length },
-        { name: t('dashboard.sent_negative'), value: reviews.filter(r => r.rating <= 2).length }
-    ];
+
 
     // Handle review submission
     const handleAddReview = (e) => {

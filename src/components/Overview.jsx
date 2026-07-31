@@ -63,10 +63,12 @@ const Overview = ({ onSelectPackage }) => {
 
     const recommendation = getRecommendation(selectedInterests, selectedActivities);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [prevRecId, setPrevRecId] = useState(recommendation.id);
 
-    useEffect(() => {
+    if (recommendation.id !== prevRecId) {
+        setPrevRecId(recommendation.id);
         setCurrentImageIndex(0);
-    }, [recommendation.id]);
+    }
 
     useEffect(() => {
         if (!recommendation.images) return;
