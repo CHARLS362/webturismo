@@ -1,8 +1,13 @@
 import { motion } from 'framer-motion';
 import { Calendar, Award, Star } from 'lucide-react';
 import { pucaraFestivals } from '../data/pucaraData';
+import { useTranslation } from 'react-i18next';
 
 const PucaraFestivals = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const cardVariants = {
         hidden: { opacity: 0, y: 30 },
         visible: (i) => ({
@@ -20,11 +25,13 @@ const PucaraFestivals = () => {
         <section id="pucara-festividades" className="section bg-blue-contrast" style={{ position: 'relative', padding: '6.5rem 0' }}>
             <div className="container">
                 <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <span className="script-subtitle">Calendario Cultural...</span>
-                    <h2 className="bold-title">Festividades Tradicionales de Pucará</h2>
+                    <span className="script-subtitle">{isEn ? 'Cultural Calendar...' : 'Calendario Cultural...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Traditional Festivals of Pucará' : 'Festividades Tradicionales de Pucará'}</h2>
                     <div style={{ height: '4px', background: 'var(--accent)', width: '80px', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
                     <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Pucará es tierra de celebraciones místicas y católicas sincréticas. Organiza tu viaje en torno a nuestras festividades más emblemáticas.
+                        {isEn
+                          ? 'Pucará is a land of mystical and syncretic Catholic celebrations. Plan your trip around our most emblematic festivals.'
+                          : 'Pucará es tierra de celebraciones místicas y católicas sincréticas. Organiza tu viaje en torno a nuestras festividades más emblemáticas.'}
                     </p>
                 </div>
 
@@ -55,7 +62,7 @@ const PucaraFestivals = () => {
                             <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
                                 <img 
                                     src={fest.image} 
-                                    alt={fest.name} 
+                                    alt={fest.name[langKey]} 
                                     style={{
                                         width: '100%',
                                         height: '100%',
@@ -81,7 +88,7 @@ const PucaraFestivals = () => {
                                     border: '1px solid rgba(255,255,255,0.15)'
                                 }}>
                                     <Calendar size={12} style={{ color: 'var(--accent)' }} />
-                                    <span>{fest.date}</span>
+                                    <span>{fest.date[langKey]}</span>
                                 </div>
                             </div>
 
@@ -94,7 +101,7 @@ const PucaraFestivals = () => {
                                     marginBottom: '1rem',
                                     fontFamily: 'var(--font-heading)'
                                 }}>
-                                    {fest.name}
+                                    {fest.name[langKey]}
                                 </h3>
                                 <p style={{
                                     color: 'var(--text-muted)',
@@ -104,7 +111,7 @@ const PucaraFestivals = () => {
                                     flexGrow: 1,
                                     fontWeight: 600
                                 }}>
-                                    {fest.description}
+                                    {fest.description[langKey]}
                                 </p>
 
                                 <div style={{ height: '1px', backgroundColor: 'rgba(15, 44, 89, 0.1)', marginBottom: '1rem' }} />
@@ -113,7 +120,7 @@ const PucaraFestivals = () => {
                                 <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
                                     <Star size={16} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '0.1rem' }} />
                                     <span style={{ fontSize: '0.8rem', fontWeight: 850, color: 'var(--primary)' }}>
-                                        Principal atractivo: <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{fest.highlight}</span>
+                                        {isEn ? 'Main attraction' : 'Principal atractivo'}: <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{fest.highlight[langKey]}</span>
                                     </span>
                                 </div>
                             </div>

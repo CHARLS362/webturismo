@@ -3,8 +3,13 @@ import { motion } from 'framer-motion';
 import { Clock, MapPin, Compass, Share2 } from 'lucide-react';
 import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon } from 'react-share';
 import { pucaraAttractions } from '../data/pucaraData';
+import { useTranslation } from 'react-i18next';
 
 const PucaraDestinations = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     return (
         <section id="pucara-destinos" className="section bg-blue-contrast" style={{ position: 'relative', overflow: 'hidden', padding: '6.5rem 0' }}>
             {/* Background ambient light */}
@@ -31,11 +36,13 @@ const PucaraDestinations = () => {
 
             <div className="container">
                 <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
-                    <span className="script-subtitle">Tierra del Barro Sagrado...</span>
-                    <h2 className="bold-title">Atractivos Imperdibles de Pucará</h2>
+                    <span className="script-subtitle">{isEn ? 'Land of Sacred Clay...' : 'Tierra del Barro Sagrado...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Must-See Attractions in Pucará' : 'Atractivos Imperdibles de Pucará'}</h2>
                     <div style={{ height: '4px', background: 'var(--accent)', margin: '0 auto 1.5rem auto', borderRadius: '2px', width: '80px' }} />
                     <p style={{ maxWidth: '700px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Descubre una de las culturas vivas y arqueológicas más antiguas de Sudamérica. Desde sus imponentes pirámides de piedra roja hasta la magia de sus artesanos alfareros.
+                        {isEn 
+                          ? 'Discover one of the oldest living and archaeological cultures in South America. From its imposing red stone pyramids to the magic of its pottery artisans.'
+                          : 'Descubre una de las culturas vivas y arqueológicas más antiguas de Sudamérica. Desde sus imponentes pirámides de piedra roja hasta la magia de sus artesanos alfareros.'}
                     </p>
                 </div>
 
@@ -79,7 +86,7 @@ const PucaraDestinations = () => {
                                 <div style={{ position: 'relative', height: '260px', overflow: 'hidden' }}>
                                     <img 
                                         src={attraction.image} 
-                                        alt={attraction.title}
+                                        alt={attraction.title[langKey]}
                                         style={{
                                             width: '100%',
                                             height: '100%',
@@ -114,7 +121,7 @@ const PucaraDestinations = () => {
                                         border: '1px solid rgba(255,255,255,0.1)'
                                     }}>
                                         <Compass size={14} style={{ color: 'var(--accent)' }} />
-                                        <span>{attraction.altitude}</span>
+                                        <span>{attraction.altitude[langKey]}</span>
                                     </div>
                                     
                                     <div style={{
@@ -134,7 +141,7 @@ const PucaraDestinations = () => {
                                         border: '1px solid rgba(255,255,255,0.1)'
                                     }}>
                                         <Clock size={14} style={{ color: 'var(--accent)' }} />
-                                        <span>{attraction.duration}</span>
+                                        <span>{attraction.duration[langKey]}</span>
                                     </div>
                                 </div>
 
@@ -148,7 +155,7 @@ const PucaraDestinations = () => {
                                         lineHeight: '1.25',
                                         fontWeight: 800
                                     }}>
-                                        {attraction.title}
+                                        {attraction.title[langKey]}
                                     </h3>
                                     <p style={{
                                         color: 'var(--terracotta)',
@@ -158,7 +165,7 @@ const PucaraDestinations = () => {
                                         letterSpacing: '0.08em',
                                         marginBottom: '1.25rem'
                                     }}>
-                                        {attraction.subtitle}
+                                        {attraction.subtitle[langKey]}
                                     </p>
                                     <p style={{
                                         color: 'var(--text-muted)',
@@ -167,7 +174,7 @@ const PucaraDestinations = () => {
                                         marginBottom: '1.75rem',
                                         flexGrow: 1
                                     }}>
-                                        {attraction.description}
+                                        {attraction.description[langKey]}
                                     </p>
 
                                     <div style={{ height: '1px', background: 'rgba(11, 34, 64, 0.1)', margin: '1rem 0' }} />
@@ -177,13 +184,16 @@ const PucaraDestinations = () => {
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                                             <MapPin size={16} style={{ color: 'var(--terracotta)' }} />
                                             <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--primary)' }}>
-                                                {attraction.highlight}
+                                                {attraction.highlight[langKey]}
                                             </span>
                                         </div>
 
                                         {/* Social Share Buttons */}
                                         <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                                            <WhatsappShareButton url="https://pucara365.com" title={`¡Mira ${attraction.title} en Pucará! 🐂✨`}>
+                                            <WhatsappShareButton 
+                                                url="https://pucara365.com" 
+                                                title={isEn ? `Check out ${attraction.title[langKey]} in Pucará! 🐂✨` : `¡Mira ${attraction.title[langKey]} en Pucará! 🐂✨`}
+                                            >
                                                 <WhatsappIcon size={28} round bgStyle={{ fill: 'var(--ichu-green)' }} />
                                             </WhatsappShareButton>
                                             <FacebookShareButton url="https://pucara365.com" hashtag="#PucaraTurismo">

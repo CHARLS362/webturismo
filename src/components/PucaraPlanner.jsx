@@ -23,6 +23,8 @@ const Torito3D = lazy(() => import('./Torito3D'));
 
 const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
     const { t, i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
 
     // Mode Selector: 'classic' or 'ai'
     const [plannerMode, setPlannerMode] = useState('ai'); 
@@ -228,26 +230,31 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
     // Handle WhatsApp messaging
     const handleBookWhatsApp = () => {
         let baseMessage = "";
-        const isEn = i18n.language === 'en';
 
         if (plannerMode === 'ai' && aiItinerary) {
             baseMessage = isEn
                 ? `Hello! I would like to book my AI Generated Itinerary:\n\n` +
                   `📍 *AI Route:* ${aiItinerary.title}\n` +
                   `⏱️ *Duration:* ${aiDays} Days (${aiFocus.toUpperCase()})\n` +
-                  (includeSouvenir ? `🎁 *Souvenir:* Hand-painted Torito in *${selectedToritoColor.name}*\n` : `🎁 *Souvenir:* Not included\n`) +
+                  (includeSouvenir ? `🎁 *Souvenir:* Hand-painted Torito in *${selectedToritoColor.name[langKey]}*\n` : `🎁 *Souvenir:* Not included\n`) +
                   `\nCould you please send me rates and availability? Thank you!`
                 : `¡Hola! Me gustaría cotizar mi Itinerario Inteligente de Pucará diseñado por la IA:\n\n` +
                   `📍 *Ruta IA:* ${aiItinerary.title}\n` +
                   `⏱️ *Duración:* ${aiDays} Días (${aiFocus.toUpperCase()})\n` +
-                  (includeSouvenir ? `🎁 *Recuerdo:* Torito de Pucará en color *${selectedToritoColor.name}* (Significado: ${selectedToritoColor.symbolizes.join(', ')})\n` : `🎁 *Recuerdo:* No incluido\n`) +
+                  (includeSouvenir ? `🎁 *Recuerdo:* Torito de Pucará en color *${selectedToritoColor.name[langKey]}* (Significado: ${selectedToritoColor.symbolizes[langKey].join(', ')})\n` : `🎁 *Recuerdo:* No incluido\n`) +
                   `\n¿Podrían indicarme tarifas, disponibilidad y transporte privado? ¡Gracias!`;
         } else if (activeRoute) {
-            baseMessage = `¡Hola! Me gustaría cotizar mi viaje personalizado a Pucará con los siguientes detalles:\n\n` +
-                `📍 *Ruta:* ${activeRoute.name} (${activeRoute.duration})\n` +
-                `🎯 *Interés Principal:* ${selectedInterest.toUpperCase()}\n` +
-                (includeSouvenir ? `🎁 *Suvenir Personalizado:* Torito de Pucará en color *${selectedToritoColor.name}* (Significado: ${selectedToritoColor.symbolizes.join(', ')})\n` : `🎁 *Suvenir:* No incluido\n`) +
-                `\n¿Podrían brindarme información sobre tarifas, movilidad privada y fechas disponibles? ¡Gracias!`;
+            baseMessage = isEn
+                ? `Hello! I would like to quote my custom trip to Pucará with the following details:\n\n` +
+                  `📍 *Route:* ${activeRoute.name[langKey]} (${activeRoute.duration[langKey]})\n` +
+                  `🎯 *Main Interest:* ${selectedInterest.toUpperCase()}\n` +
+                  (includeSouvenir ? `🎁 *Customized Souvenir:* Torito de Pucará in color *${selectedToritoColor.name[langKey]}* (Meaning: ${selectedToritoColor.symbolizes[langKey].join(', ')})\n` : `🎁 *Souvenir:* Not included\n`) +
+                  `\nCould you please provide information on rates, private mobility, and available dates? Thank you!`
+                : `¡Hola! Me gustaría cotizar mi viaje personalizado a Pucará con los siguientes detalles:\n\n` +
+                  `📍 *Ruta:* ${activeRoute.name[langKey]} (${activeRoute.duration[langKey]})\n` +
+                  `🎯 *Interés Principal:* ${selectedInterest.toUpperCase()}\n` +
+                  (includeSouvenir ? `🎁 *Suvenir Personalizado:* Torito de Pucará en color *${selectedToritoColor.name[langKey]}* (Significado: ${selectedToritoColor.symbolizes[langKey].join(', ')})\n` : `🎁 *Suvenir:* No incluido\n`) +
+                  `\n¿Podrían brindarme información sobre tarifas, movilidad privada y fechas disponibles? ¡Gracias!`;
         }
 
         const encodedMessage = encodeURIComponent(baseMessage);
@@ -422,14 +429,14 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
                                             >
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                                                     <h4 style={{ fontSize: '1.2rem', color: 'var(--primary)', fontWeight: 800 }}>
-                                                        {activeRoute.name}
+                                                        {activeRoute.name[langKey]}
                                                     </h4>
                                                     <span style={{ fontSize: '0.8rem', color: 'var(--secondary)', background: 'rgba(200, 88, 51, 0.08)', padding: '0.3rem 0.8rem', borderRadius: '20px', fontWeight: 800, border: '1px solid rgba(200, 88, 51, 0.15)' }}>
-                                                        {activeRoute.duration}
+                                                        {activeRoute.duration[langKey]}
                                                     </span>
                                                 </div>
                                                 <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginBottom: '2rem', lineHeight: '1.5' }}>
-                                                    {activeRoute.description}
+                                                    {activeRoute.description[langKey]}
                                                 </p>
 
                                                 {/* Timeline steps */}
@@ -451,10 +458,10 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
                                                                 {step.time}
                                                             </div>
                                                             <h5 style={{ fontSize: '1rem', color: 'var(--primary)', fontWeight: 700, marginBottom: '0.2rem' }}>
-                                                                {step.title}
+                                                                {step.title[langKey]}
                                                             </h5>
                                                             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
-                                                                {step.desc}
+                                                                {step.desc[langKey]}
                                                             </p>
                                                         </div>
                                                     ))}
@@ -1017,13 +1024,13 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
                                             key={tc.color}
                                             onClick={() => {
                                                 if (isLocked) {
-                                                    toast.info(`🔒 "${tc.name}" está bloqueado. Escanea el código QR de este monumento o completa el Oráculo de los Apus para desbloquearlo.`);
+                                                    toast.info(isEn ? `🔒 "${tc.name[langKey]}" is locked. Scan the QR code of this monument or complete the Oracle of the Apus to unlock it.` : `🔒 "${tc.name[langKey]}" está bloqueado. Escanea el código QR de este monumento o completa el Oráculo de los Apus para desbloquearlo.`);
                                                     return;
                                                 }
                                                 setSelectedToritoColor(tc);
                                                 setPredictedColor(null); // Clear quiz prediction on manual choice
                                             }}
-                                            title={tc.name}
+                                            title={tc.name[langKey]}
                                             whileHover={{ scale: isLocked ? 1 : 1.2 }}
                                             whileTap={{ scale: isLocked ? 1 : 0.9 }}
                                             style={{
@@ -1094,13 +1101,13 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
                                 }}
                             >
                                 <h4 style={{ fontSize: '1.2rem', color: 'var(--secondary)', fontWeight: 800, marginBottom: '0.5rem' }}>
-                                    {selectedToritoColor.name}
+                                    {selectedToritoColor.name[langKey]}
                                 </h4>
                                 <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: '1.5', marginBottom: '1rem' }}>
-                                    {selectedToritoColor.meaning}
+                                    {selectedToritoColor.meaning[langKey]}
                                 </p>
                                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                                    {selectedToritoColor.symbolizes.map((sym, i) => (
+                                    {selectedToritoColor.symbolizes[langKey].map((sym, i) => (
                                         <span key={i} style={{
                                             fontSize: '0.7rem',
                                             backgroundColor: 'var(--accent)',
@@ -1114,7 +1121,7 @@ const PucaraPlanner = ({ initialToritoColor, unlockedSkins = [] }) => {
                                     ))}
                                 </div>
                                 <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', borderTop: '1px solid rgba(15, 44, 89, 0.08)', paddingTop: '0.75rem', lineHeight: '1.4' }}>
-                                    <strong>Leyenda:</strong> {selectedToritoColor.story}
+                                    <strong>{isEn ? 'Legend:' : 'Leyenda:'}</strong> {selectedToritoColor.story[langKey]}
                                 </p>
                             </motion.div>
                         </AnimatePresence>

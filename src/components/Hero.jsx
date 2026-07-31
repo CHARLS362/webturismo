@@ -8,6 +8,7 @@ import 'yet-another-react-lightbox/styles.css';
 import { TypeAnimation } from 'react-type-animation';
 import CountUp from 'react-countup';
 import { ArrowRight, Maximize2, ChevronLeft, ChevronRight, Sparkles, Compass } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // Local Pucará assets (Puno / Lampa)
 import kalasayaImg from '../assets/image/map/kalasaya.png';
@@ -19,49 +20,89 @@ import museoImg from '../assets/image/map/museo.png';
 const heroSlides = [
     {
         id: 1,
-        title: "Tierra del Barro Sagrado y Toritos Milenarios",
-        subtitle: "Cultura Pucará · Lampa, Puno",
+        title: {
+            es: "Tierra del Barro Sagrado y Toritos Milenarios",
+            en: "Land of the Sacred Clay and Millenary Toritos"
+        },
+        subtitle: {
+            es: "Cultura Pucará · Lampa, Puno",
+            en: "Pucará Culture · Lampa, Puno"
+        },
         src: temploImg,
         alt: "Templo colonial de Santa Isabel en Pucará, Lampa, Puno"
     },
     {
         id: 2,
-        title: "Complejo Arqueológico Kalasaya",
-        subtitle: "Templo Sagrado del Altiplano",
+        title: {
+            es: "Complejo Arqueológico Kalasaya",
+            en: "Kalasaya Archaeological Complex"
+        },
+        subtitle: {
+            es: "Templo Sagrado del Altiplano",
+            en: "Sacred Temple of the Altiplano"
+        },
         src: kalasayaImg,
         alt: "Pirámide y terrazas ceremoniales de Kalasaya"
     },
     {
         id: 3,
-        title: "Museo Lítico y Esculturas Ancestrales",
-        subtitle: "Guardianes de Piedra de Pucará",
+        title: {
+            es: "Museo Lítico y Esculturas Ancestrales",
+            en: "Lytic Museum and Ancestral Sculptures"
+        },
+        subtitle: {
+            es: "Guardianes de Piedra de Pucará",
+            en: "Stone Guardians of Pucará"
+        },
         src: museoImg,
         alt: "Esculturas y monolitos prehispánicos de Pucará"
     },
     {
         id: 4,
-        title: "El Gran Peñón Mirador de Pucará",
-        subtitle: "A 3,860 metros en el Altiplano",
+        title: {
+            es: "El Gran Peñón Mirador de Pucará",
+            en: "The Great Pucará Lookout"
+        },
+        subtitle: {
+            es: "A 3,860 metros en el Altiplano",
+            en: "At 3,860 meters in the Altiplano"
+        },
         src: penonImg,
         alt: "El Peñón rocoso mirador de Pucará, Puno"
     },
     {
         id: 5,
-        title: "Plaza Bolívar y Tradición Alfarera",
-        subtitle: "Corazón Artesanal de Lampa y Puno",
+        title: {
+            es: "Plaza Bolívar y Tradición Alfarera",
+            en: "Bolivar Plaza and Pottery Tradition"
+        },
+        subtitle: {
+            es: "Corazón Artesanal de Lampa y Puno",
+            en: "Artisanal Heart of Lampa and Puno"
+        },
         src: plazaImg,
         alt: "Plaza de Armas de Pucará y talleres tradicionales"
     },
     {
         id: 6,
-        title: "Iconografía y Mística de Pucará",
-        subtitle: "Arte Ancestral del Altiplano",
+        title: {
+            es: "Iconografía y Mística de Pucará",
+            en: "Iconography and Mysticism of Pucará"
+        },
+        subtitle: {
+            es: "Arte Ancestral del Altiplano",
+            en: "Ancestral Art of the Altiplano"
+        },
         src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhyFp1WYrz1AiauNeFV7aXZNgHCTl6ksc7zw2ALiyM_g&s=10",
         alt: "Arte e iconografía tradicional de Pucará"
     }
 ];
 
 const Hero = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, speed: 8 });
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -92,6 +133,26 @@ const Hero = () => {
             emblaApi.off('select', onSelect);
         };
     }, [emblaApi, onSelect]);
+
+    const sequence = isEn ? [
+        'Land of the Sacred Clay and Toritos in Lampa, Puno.',
+        2500,
+        'Discover the Archaeological Complex of Kalasaya.',
+        2500,
+        'Immerse yourself in the Ancestral Pottery of Pucará.',
+        2500,
+        'An immersive tourist experience in the Altiplano.',
+        2500
+    ] : [
+        'Tierra del Barro Sagrado y los Toritos en Lampa, Puno.',
+        2500,
+        'Descubre el Complejo Arqueológico de Kalasaya.',
+        2500,
+        'Sumérgete en la Alfarería Ancestral de Pucará.',
+        2500,
+        'Una experiencia turística inmersiva en el Altiplano.',
+        2500
+    ];
 
     return (
         <section style={{ position: 'relative', height: '100vh', width: '100%', overflow: 'hidden', color: 'white' }}>
@@ -167,7 +228,7 @@ const Hero = () => {
                     }}
                 >
                     <Sparkles size={16} color="var(--accent)" />
-                    {heroSlides[selectedIndex].subtitle}
+                    {heroSlides[selectedIndex].subtitle[langKey]}
                 </motion.div>
 
                 {/* Main Heading */}
@@ -192,16 +253,8 @@ const Hero = () => {
                 {/* Typewriter subtitle */}
                 <div style={{ height: '3.2rem', marginBottom: '2rem' }}>
                     <TypeAnimation
-                        sequence={[
-                            'Tierra del Barro Sagrado y los Toritos en Lampa, Puno.',
-                            2500,
-                            'Descubre el Complejo Arqueológico de Kalasaya.',
-                            2500,
-                            'Sumérgete en la Alfarería Ancestral de Pucará.',
-                            2500,
-                            'Una experiencia turística inmersiva en el Altiplano.',
-                            2500
-                        ]}
+                        key={langKey}
+                        sequence={sequence}
                         wrapper="p"
                         speed={50}
                         repeat={Infinity}
@@ -228,14 +281,14 @@ const Hero = () => {
                         style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
                         onClick={() => document.getElementById('pucara-destinos')?.scrollIntoView({ behavior: 'smooth' })}
                     >
-                        <Compass size={20} /> Explorar Atractivos
+                        <Compass size={20} /> {isEn ? 'Explore Attractions' : 'Explorar Atractivos'}
                     </button>
                     <button
                         className="btn btn-accent"
                         style={{ fontSize: '1rem', padding: '1rem 2.2rem' }}
                         onClick={() => document.getElementById('pucara-planificador')?.scrollIntoView({ behavior: 'smooth' })}
                     >
-                        Planificar Mi Viaje <ArrowRight size={20} />
+                        {isEn ? 'Plan My Trip' : 'Planificar Mi Viaje'} <ArrowRight size={20} />
                     </button>
                     <button
                         onClick={() => setLightboxOpen(true)}
@@ -253,9 +306,9 @@ const Hero = () => {
                             cursor: 'pointer',
                             transition: 'var(--transition-smooth)'
                         }}
-                        title="Ver foto a pantalla completa"
+                        title={isEn ? 'View photo in fullscreen' : 'Ver foto a pantalla completa'}
                     >
-                        <Maximize2 size={18} /> Previsualizar Imagen
+                        <Maximize2 size={18} /> {isEn ? 'Preview Image' : 'Previsualizar Imagen'}
                     </button>
                 </motion.div>
 
@@ -279,21 +332,27 @@ const Hero = () => {
                         <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
                             +<CountUp end={2000} duration={2.5} />
                         </span>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Años Historia</span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>
+                            {isEn ? 'Years of History' : 'Años Historia'}
+                        </span>
                     </div>
                     <div style={{ width: '1px', background: 'rgba(255,255,255,0.15)' }} />
                     <div>
                         <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
                             <CountUp end={3860} duration={2} separator="," />m
                         </span>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Altitud Altiplano</span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>
+                            {isEn ? 'Altiplano Altitude' : 'Altitud Altiplano'}
+                        </span>
                     </div>
                     <div style={{ width: '1px', background: 'rgba(255,255,255,0.15)' }} />
                     <div>
                         <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--accent)', display: 'block' }}>
                             <CountUp end={5} duration={1.5} />
                         </span>
-                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>Puntos Sagrados</span>
+                        <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>
+                            {isEn ? 'Sacred Places' : 'Puntos Sagrados'}
+                        </span>
                     </div>
                 </motion.div>
             </div>
@@ -320,7 +379,7 @@ const Hero = () => {
                             borderRadius: '50%',
                             background: 'rgba(11, 34, 64, 0.65)',
                             backdropFilter: 'blur(8px)',
-                            border: '1px solid rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
                             color: 'white',
                             display: 'flex',
                             alignItems: 'center',
@@ -338,7 +397,7 @@ const Hero = () => {
                             borderRadius: '50%',
                             background: 'rgba(11, 34, 64, 0.65)',
                             backdropFilter: 'blur(8px)',
-                            border: '1px solid rgba(255,255,255,0.2)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
                             color: 'white',
                             display: 'flex',
                             alignItems: 'center',
@@ -367,7 +426,7 @@ const Hero = () => {
                                 transition: 'all 0.3s ease'
                             }}
                         >
-                            <img src={slide.src} alt={slide.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src={slide.src} alt={slide.title[langKey]} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                     ))}
                 </div>
@@ -378,9 +437,10 @@ const Hero = () => {
                 open={lightboxOpen}
                 close={() => setLightboxOpen(false)}
                 index={selectedIndex}
-                slides={heroSlides.map(s => ({ src: s.src, title: s.title, description: s.subtitle }))}
+                slides={heroSlides.map(slide => ({ src: slide.src, alt: slide.title[langKey] }))}
                 plugins={[Zoom, Fullscreen]}
             />
+
         </section>
     );
 };

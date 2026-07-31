@@ -8,6 +8,7 @@ import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/captions.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, MapPin, Sparkles, Maximize2, Gift, Lock, Key, Award } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 // Local Pucará assets
 import kalasayaImg from '../assets/image/map/kalasaya.png';
@@ -19,52 +20,56 @@ import museoImg from '../assets/image/map/museo.png';
 const treasureWaypoints = [
     {
         id: 1,
-        step: "Tesoro I",
-        title: "Templo Colonial Santa Isabel",
+        step: { es: "Tesoro I", en: "Treasure I" },
+        title: { es: "Templo Colonial Santa Isabel", en: "Santa Isabel Colonial Temple" },
         coords: { x: '18%', y: '65%' },
         src: temploImg,
-        secret: "Piedra Roja Barroco-Andina tallada por manos jesuitas sobre muros incaicos.",
-        tag: "Patrimonio Barroco"
+        secret: { es: "Piedra Roja Barroco-Andina tallada por manos jesuitas sobre muros incaicos.", en: "Baroque-Andean Red Stone carved by Jesuit hands over Inca walls." },
+        tag: { es: "Patrimonio Barroco", en: "Baroque Heritage" }
     },
     {
         id: 2,
-        step: "Tesoro II",
-        title: "Plaza Bolívar & Talleres Alfareros",
+        step: { es: "Tesoro II", en: "Treasure II" },
+        title: { es: "Plaza Bolívar & Talleres Alfareros", en: "Bolivar Plaza & Pottery Workshops" },
         coords: { x: '35%', y: '35%' },
         src: plazaImg,
-        secret: "Cuna artesanal donde se moldea el célebre Torito de Pucará en barro rojo sagrado.",
-        tag: "Herencia Viva"
+        secret: { es: "Cuna artesanal donde se moldea el célebre Torito de Pucará en barro rojo sagrado.", en: "Artisanal cradle where the famous Torito de Pucará is molded in sacred red clay." },
+        tag: { es: "Herencia Viva", en: "Living Legacy" }
     },
     {
         id: 3,
-        step: "Tesoro III",
-        title: "Museo Lítico de Pukara",
+        step: { es: "Tesoro III", en: "Treasure III" },
+        title: { es: "Museo Lítico de Pukara", en: "Pucará Lytic Museum" },
         coords: { x: '52%', y: '60%' },
         src: museoImg,
-        secret: "La famosa estela del Hatun Ñakaj (El Degollador) y monolitos grabados prehispánicos.",
-        tag: "Arqueología 200 a.C."
+        secret: { es: "La famosa estela del Hatun Ñakaj (El Degollador) y monolitos grabados prehispánicos.", en: "The famous stela of Hatun Ñakaj (The Decapitator) and pre-Hispanic engraved monoliths." },
+        tag: { es: "Arqueología 200 a.C.", en: "Archaeology 200 B.C." }
     },
     {
         id: 4,
-        step: "Tesoro IV",
-        title: "Complejo Arqueológico Kalasaya",
+        step: { es: "Tesoro IV", en: "Treasure IV" },
+        title: { es: "Complejo Arqueológico Kalasaya", en: "Kalasaya Archaeological Complex" },
         coords: { x: '72%', y: '30%' },
         src: kalasayaImg,
-        secret: "Pirámide escalonada ceremonial y patio hundido sagrado del agua y la fertilidad.",
-        tag: "Centro Ceremonial"
+        secret: { es: "Pirámide escalonada ceremonial y patio hundido sagrado del agua y la fertilidad.", en: "Ceremonial stepped pyramid and sacred sunken court of water and fertility." },
+        tag: { es: "Centro Ceremonial", en: "Ceremonial Center" }
     },
     {
         id: 5,
-        step: "Tesoro V",
-        title: "El Peñón Mirador del Altiplano",
+        step: { es: "Tesoro V", en: "Treasure V" },
+        title: { es: "El Peñón Mirador del Altiplano", en: "The Altiplano Lookout" },
         coords: { x: '88%', y: '50%' },
         src: penonImg,
-        secret: "Formación rocosa natural a 4,050 msnm con vistas panorámicas de 360° sobre Puno.",
-        tag: "Mirador Ancestral"
+        secret: { es: "Formación rocosa natural a 4,050 msnm con vistas panorámicas de 360° sobre Puno.", en: "Natural rock formation at 4,050 masl with 360° panoramic views over Puno." },
+        tag: { es: "Mirador Ancestral", en: "Ancestral Lookout" }
     }
 ];
 
 const PucaraGallery = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const [selectedPoint, setSelectedPoint] = useState(treasureWaypoints[0]);
     const [lightboxIndex, setLightboxIndex] = useState(-1);
 
@@ -81,11 +86,13 @@ const PucaraGallery = () => {
 
             <div className="container" style={{ position: 'relative', zIndex: 10 }}>
                 <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-                    <span className="script-subtitle">Ruta del Tesoro Cultural...</span>
-                    <h2 className="bold-title">Galería Inmersiva "El Mapa del Tesoro Pucará"</h2>
+                    <span className="script-subtitle">{isEn ? 'Cultural Treasure Route...' : 'Ruta del Tesoro Cultural...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Immersive Gallery "The Pucará Treasure Map"' : 'Galería Inmersiva "El Mapa del Tesoro Pucará"'}</h2>
                     <div style={{ height: '4px', background: 'var(--bronze-gold)', width: '80px', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
                     <p style={{ maxWidth: '700px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Navega por la ruta del tesoro siguiendo la línea del mapa ancestral. Haz clic en cada hito para desvelar las reliquias arqueológicas y culturales de Pucará, Lampa y Puno.
+                        {isEn
+                          ? 'Navigate the treasure route following the line of the ancestral map. Click on each milestone to reveal the archaeological and cultural relics of Pucará, Lampa, and Puno.'
+                          : 'Navega por la ruta del tesoro siguiendo la línea del mapa ancestral. Haz clic en cada hito para desvelar las reliquias arqueológicas y culturales de Pucará, Lampa y Puno.'}
                     </p>
                 </div>
 
@@ -118,7 +125,7 @@ const PucaraGallery = () => {
                         backdropFilter: 'blur(8px)',
                         border: '1px solid rgba(197, 155, 39, 0.3)'
                     }}>
-                        <Compass size={18} className="spin-slow" /> Mapa de Expedición Altiplánica
+                        <Compass size={18} className="spin-slow" /> {isEn ? 'Altiplano Expedition Map' : 'Mapa de Expedición Altiplánica'}
                     </div>
 
                     {/* Treasure Map Trail SVG dotted curve line */}
@@ -141,6 +148,7 @@ const PucaraGallery = () => {
                         {/* Map Waypoints / Treasure Points */}
                         {treasureWaypoints.map((wpt) => {
                             const isActive = selectedPoint.id === wpt.id;
+                            const titleStr = wpt.title[langKey];
                             return (
                                 <motion.div
                                     key={wpt.id}
@@ -203,7 +211,7 @@ const PucaraGallery = () => {
                                         backdropFilter: 'blur(6px)',
                                         border: '1px solid rgba(255,255,255,0.1)'
                                     }}>
-                                        {wpt.title.split(' ')[0]} {wpt.title.split(' ')[1]}
+                                        {titleStr.split(' ')[0]} {titleStr.split(' ')[1] || ''}
                                     </span>
                                 </motion.div>
                             );
@@ -246,7 +254,7 @@ const PucaraGallery = () => {
                         >
                             <img
                                 src={selectedPoint.src}
-                                alt={selectedPoint.title}
+                                alt={selectedPoint.title[langKey]}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                             <div style={{
@@ -268,7 +276,7 @@ const PucaraGallery = () => {
                                     fontWeight: 800,
                                     fontSize: '0.85rem'
                                 }}>
-                                    <Maximize2 size={16} /> Abrir Foto Fullscreen
+                                    <Maximize2 size={16} /> {isEn ? 'Open Fullscreen Photo' : 'Abrir Foto Fullscreen'}
                                 </div>
                             </div>
                         </div>
@@ -284,7 +292,7 @@ const PucaraGallery = () => {
                                     fontSize: '0.8rem',
                                     fontWeight: 800
                                 }}>
-                                    {selectedPoint.step}
+                                    {selectedPoint.step[langKey]}
                                 </span>
                                 <span style={{
                                     background: 'rgba(197, 155, 39, 0.15)',
@@ -294,16 +302,16 @@ const PucaraGallery = () => {
                                     fontSize: '0.8rem',
                                     fontWeight: 800
                                 }}>
-                                    {selectedPoint.tag}
+                                    {selectedPoint.tag[langKey]}
                                 </span>
                             </div>
 
                             <h3 style={{ fontSize: '2rem', color: 'var(--primary)', fontWeight: 900, fontFamily: 'var(--font-heading)', lineHeight: 1.15 }}>
-                                {selectedPoint.title}
+                                {selectedPoint.title[langKey]}
                             </h3>
 
                             <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: 1.7 }}>
-                                {selectedPoint.secret}
+                                {selectedPoint.secret[langKey]}
                             </p>
 
                             <div style={{
@@ -318,10 +326,12 @@ const PucaraGallery = () => {
                                 <Gift size={24} color="var(--terracotta)" style={{ flexShrink: 0 }} />
                                 <div>
                                     <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--primary)', display: 'block' }}>
-                                        Secreto del Tesoro Cultural
+                                        {isEn ? 'Cultural Treasure Secret' : 'Secreto del Tesoro Cultural'}
                                     </span>
                                     <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                        Haz clic en la imagen para inspeccionar los detalles arqueológicos en alta definición.
+                                        {isEn 
+                                          ? 'Click on the image to inspect archaeological details in high definition.'
+                                          : 'Haz clic en la imagen para inspeccionar los detalles arqueológicos en alta definición.'}
                                     </span>
                                 </div>
                             </div>
@@ -335,7 +345,7 @@ const PucaraGallery = () => {
                 open={lightboxIndex >= 0}
                 index={lightboxIndex}
                 close={() => setLightboxIndex(-1)}
-                slides={treasureWaypoints.map(w => ({ src: w.src, title: w.title, description: w.secret }))}
+                slides={treasureWaypoints.map(w => ({ src: w.src, title: w.title[langKey], description: w.secret[langKey] }))}
                 plugins={[Zoom, Fullscreen, Slideshow, Captions]}
             />
 

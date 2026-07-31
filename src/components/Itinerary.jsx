@@ -6,8 +6,13 @@ import {
     Coffee, Bus, Users, MapPin, Calendar, Sun
 } from 'lucide-react';
 import { itineraryPackages } from '../data/itinerary';
+import { useTranslation } from 'react-i18next';
 
 const Itinerary = ({ selectedPackage, onPackageChange }) => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const [activeWeek, setActiveWeek] = useState(1);
 
     const currentPackageId = selectedPackage || 'standard';
@@ -35,8 +40,8 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                 
                 {/* Section Header in Larana Style */}
                 <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <span className="script-subtitle">Tu Ruta Detallada...</span>
-                    <h2 className="bold-title">Itinerario de Inmersión</h2>
+                    <span className="script-subtitle">{isEn ? 'Your Detailed Route...' : 'Tu Ruta Detallada...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Immersion Itinerary' : 'Itinerario de Inmersión'}</h2>
                     <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--accent)', margin: '1rem auto' }} />
                 </div>
 
@@ -72,7 +77,7 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                                     transition: 'all 0.3s ease'
                                 }}
                             >
-                                {pkg.title}
+                                {pkg.title[langKey]}
                             </motion.button>
                         );
                     })}
@@ -102,7 +107,7 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                             <motion.img
                                 key={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
                                 src={currentPackage.images ? currentPackage.images[currentImageIndex] : currentPackage.image}
-                                alt={currentPackage.title}
+                                alt={currentPackage.title[langKey]}
                                 initial={{ opacity: 0, scale: 1.05 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0 }}
@@ -119,46 +124,46 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                         {/* Right half: Package metadata & benefits */}
                         <div style={{ padding: '3rem' }}>
                             <span style={{ fontSize: '0.85rem', color: 'var(--secondary)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: '0.5rem' }}>
-                                {currentPackage.subtitle}
+                                {currentPackage.subtitle[langKey]}
                             </span>
                             <h3 style={{ fontSize: '2rem', color: 'var(--primary)', marginBottom: '1.25rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-                                Todo Organizado para tu Comodidad
+                                {isEn ? 'Everything Organized for Your Comfort' : 'Todo Organizado para tu Comodidad'}
                             </h3>
                             <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', marginBottom: '2.5rem', lineHeight: 1.6, fontWeight: 600 }}>
-                                {currentPackage.description}
+                                {currentPackage.description[langKey]}
                             </p>
 
                             <h4 style={{ fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', color: 'var(--primary)', letterSpacing: '0.05em', marginBottom: '1.25rem', borderBottom: '1px solid rgba(15, 44, 89, 0.1)', paddingBottom: '0.5rem' }}>
-                                Inclusiones destacadas:
+                                {isEn ? 'Key inclusions:' : 'Inclusiones destacadas:'}
                             </h4>
                             
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><BedDouble size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Alojamiento</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.accommodation}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>{isEn ? 'Accommodation' : 'Alojamiento'}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.accommodation[langKey]}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Coffee size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Alimentación</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.food}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>{isEn ? 'Food' : 'Alimentación'}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.food[langKey]}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Bus size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Logística</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.transport}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>{isEn ? 'Logistics' : 'Logística'}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.transport[langKey]}</div>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div className="icon-badge icon-badge-terracotta" style={{ padding: '0.6rem', borderRadius: '12px' }}><Users size={20} /></div>
                                     <div>
-                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>Anfitrión</div>
-                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.guide}</div>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: 'var(--primary)' }}>{isEn ? 'Host' : 'Anfitrión'}</div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>{currentPackage.benefits.guide[langKey]}</div>
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +233,7 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                                                 >
                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                                                         <h4 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--primary)', fontFamily: 'var(--font-heading)', margin: 0 }}>
-                                                            Día {day.day}: {day.title}
+                                                            {isEn ? 'Day' : 'Día'} {day.day}: {day.title[langKey]}
                                                         </h4>
                                                         <span style={{ 
                                                             fontSize: '0.8rem', 
@@ -240,20 +245,20 @@ const Itinerary = ({ selectedPackage, onPackageChange }) => {
                                                             textTransform: 'uppercase',
                                                             letterSpacing: '0.05em'
                                                         }}>
-                                                            Ruta Guiada
+                                                            {isEn ? 'Guided Route' : 'Ruta Guiada'}
                                                         </span>
                                                     </div>
                                                     
                                                     <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '1.02rem', marginBottom: '1.5rem', fontWeight: 600 }}>
-                                                        {day.desc}
+                                                        {day.desc[langKey]}
                                                     </p>
 
                                                     <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', borderTop: '1px solid rgba(15, 44, 89, 0.1)', paddingTop: '1.25rem' }}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 800 }}>
-                                                            <MapPin size={16} style={{ color: 'var(--secondary)' }} /> Región Puno
+                                                            <MapPin size={16} style={{ color: 'var(--secondary)' }} /> {isEn ? 'Puno Region' : 'Región Puno'}
                                                         </div>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 800 }}>
-                                                            <Calendar size={16} style={{ color: 'var(--accent)' }} /> Actividades Vivenciales
+                                                            <Calendar size={16} style={{ color: 'var(--accent)' }} /> {isEn ? 'Experiential Activities' : 'Actividades Vivenciales'}
                                                         </div>
                                                     </div>
                                                 </motion.div>

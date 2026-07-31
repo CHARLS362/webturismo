@@ -3,25 +3,37 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Clock, Sparkles, Send, ShieldCheck, ArrowRight, X, Flame } from 'lucide-react';
 import { toast } from 'sonner';
 import { mainTourPackages } from '../data/pucaraData';
+import { useTranslation } from 'react-i18next';
 
 const PucaraPackages = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const [selectedPackage, setSelectedPackage] = useState(null);
 
     const handleBookWhatsApp = (pkg) => {
-        const text = encodeURIComponent(`¡Hola! Estoy interesado en reservar el *${pkg.name}* (${pkg.price} ${pkg.unit}) para Pucará, Puno. ¿Me brindan disponibilidad?`);
-        window.open(`https://wa.me/51916598012?text=${text}`, '_blank');
-        toast.success(`Redirigiendo a WhatsApp para reservar ${pkg.name}... 🐂✨`);
+        const nameVal = pkg.name[langKey];
+        const unitVal = pkg.unit[langKey];
+        const textMsg = isEn 
+          ? `Hello! I am interested in booking the *${nameVal}* (${pkg.price} ${unitVal}) for Pucará, Puno. Do you have availability?`
+          : `¡Hola! Estoy interesado en reservar el *${nameVal}* (${pkg.price} ${unitVal}) para Pucará, Puno. ¿Me brindan disponibilidad?`;
+        const encodedText = encodeURIComponent(textMsg);
+        window.open(`https://wa.me/51916598012?text=${encodedText}`, '_blank');
+        toast.success(isEn ? `Redirecting to WhatsApp to book ${nameVal}... 🐂✨` : `Redirigiendo a WhatsApp para reservar ${nameVal}... 🐂✨`);
     };
 
     return (
         <section id="pucara-paquetes" className="section bg-blue-contrast" style={{ position: 'relative', padding: '6.5rem 0' }}>
             <div className="container">
                 <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
-                    <span className="script-subtitle">Planes de Viaje Diseñados...</span>
-                    <h2 className="bold-title">Paquetes Turísticos Oficiales de Pucará</h2>
+                    <span className="script-subtitle">{isEn ? 'Designed Travel Plans...' : 'Planes de Viaje Diseñados...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Official Tour Packages of Pucará' : 'Paquetes Turísticos Oficiales de Pucará'}</h2>
                     <div style={{ height: '4px', background: 'var(--accent)', width: '80px', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
                     <p style={{ maxWidth: '720px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Elige la experiencia que mejor se adapte a tu viaje por Puno. Incluyen transporte guiado, entradas arqueológicas, talleres vivenciales y rituales ancestrales.
+                        {isEn
+                          ? 'Choose the experience that best suits your trip to Puno. Includes guided transport, archaeological tickets, hands-on workshops, and ancestral rituals.'
+                          : 'Elige la experiencia que mejor se adapte a tu viaje por Puno. Incluyen transporte guiado, entradas arqueológicas, talleres vivenciales y rituales ancestrales.'}
                     </p>
                 </div>
 
@@ -55,7 +67,7 @@ const PucaraPackages = () => {
                             <div style={{ position: 'relative', height: '220px', overflow: 'hidden' }}>
                                 <img
                                     src={pkg.image}
-                                    alt={pkg.name}
+                                    alt={pkg.name[langKey]}
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />
                                 <div style={{
@@ -83,7 +95,7 @@ const PucaraPackages = () => {
                                     gap: '0.4rem'
                                 }}>
                                     {pkg.id === 'paquete-mistico' && <Flame size={14} />}
-                                    {pkg.badge}
+                                    {pkg.badge[langKey]}
                                 </div>
                             </div>
 
@@ -94,27 +106,27 @@ const PucaraPackages = () => {
                                         {pkg.price}
                                     </span>
                                     <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                                        {pkg.unit}
+                                        {pkg.unit[langKey]}
                                     </span>
                                 </div>
 
                                 <h3 style={{ fontSize: '1.35rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '0.5rem', fontFamily: 'var(--font-heading)', lineHeight: 1.25 }}>
-                                    {pkg.name}
+                                    {pkg.name[langKey]}
                                 </h3>
 
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--terracotta)', fontSize: '0.85rem', fontWeight: 800, marginBottom: '1.25rem' }}>
-                                    <Clock size={16} /> {pkg.duration}
+                                    <Clock size={16} /> {pkg.duration[langKey]}
                                 </div>
 
                                 <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                                    {pkg.description}
+                                    {pkg.description[langKey]}
                                 </p>
 
                                 <div style={{ height: '1px', background: 'rgba(11, 34, 64, 0.08)', marginBottom: '1.25rem' }} />
 
                                 {/* Includes checklist preview */}
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '2rem', flexGrow: 1 }}>
-                                    {pkg.includes.slice(0, 4).map((inc, i) => (
+                                    {pkg.includes[langKey].slice(0, 4).map((inc, i) => (
                                         <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.88rem', color: 'var(--text-main)' }}>
                                             <CheckCircle2 size={16} style={{ color: 'var(--ichu-green)', flexShrink: 0, marginTop: '2px' }} />
                                             <span>{inc}</span>
@@ -139,7 +151,7 @@ const PucaraPackages = () => {
                                             transition: 'all 0.3s ease'
                                         }}
                                     >
-                                        Ver Itinerario Completo
+                                        {isEn ? 'View Full Itinerary' : 'Ver Itinerario Completo'}
                                     </button>
 
                                     <button
@@ -153,7 +165,7 @@ const PucaraPackages = () => {
                                             borderRadius: '12px'
                                         }}
                                     >
-                                        <Send size={16} /> Reservar Paquete
+                                        <Send size={16} /> {isEn ? 'Book Package' : 'Reservar Paquete'}
                                     </button>
                                 </div>
                             </div>
@@ -220,22 +232,22 @@ const PucaraPackages = () => {
                             </button>
 
                             <span style={{ color: 'var(--terracotta)', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                                {selectedPackage.badge} · {selectedPackage.duration}
+                                {selectedPackage.badge[langKey]} · {selectedPackage.duration[langKey]}
                             </span>
                             
                             <h3 style={{ fontSize: '1.8rem', color: 'var(--primary)', fontWeight: 900, fontFamily: 'var(--font-heading)', margin: '0.5rem 0 1rem' }}>
-                                {selectedPackage.name}
+                                {selectedPackage.name[langKey]}
                             </h3>
 
                             <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                                {selectedPackage.description}
+                                {selectedPackage.description[langKey]}
                             </p>
 
                             <h4 style={{ fontSize: '1.05rem', color: 'var(--primary)', fontWeight: 800, marginBottom: '0.85rem' }}>
-                                📋 Desglose del Itinerario Guiado:
+                                {isEn ? '📋 Guided Itinerary Breakdown:' : '📋 Desglose del Itinerario Guiado:'}
                             </h4>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
-                                {selectedPackage.itinerary.map((step, idx) => (
+                                {selectedPackage.itinerary[langKey].map((step, idx) => (
                                     <div key={idx} style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(250, 246, 240, 0.9)', borderLeft: '4px solid var(--terracotta)', fontSize: '0.9rem', color: 'var(--primary)', fontWeight: 600 }}>
                                         {step}
                                     </div>
@@ -245,14 +257,14 @@ const PucaraPackages = () => {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', borderTop: '1px solid rgba(11, 34, 64, 0.1)', paddingTop: '1.5rem' }}>
                                 <div>
                                     <span style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--primary)' }}>{selectedPackage.price}</span>
-                                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginLeft: '0.4rem' }}>{selectedPackage.unit}</span>
+                                    <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginLeft: '0.4rem' }}>{selectedPackage.unit[langKey]}</span>
                                 </div>
                                 <button
                                     onClick={() => handleBookWhatsApp(selectedPackage)}
                                     className="btn btn-accent"
                                     style={{ padding: '0.9rem 2rem' }}
                                 >
-                                    Reservar via WhatsApp <ArrowRight size={18} />
+                                    {isEn ? 'Book via WhatsApp' : 'Reservar via WhatsApp'} <ArrowRight size={18} />
                                 </button>
                             </div>
                         </motion.div>

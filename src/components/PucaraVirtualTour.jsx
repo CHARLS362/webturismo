@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeCanvas } from 'qrcode.react';
+import { useTranslation } from 'react-i18next';
 import { 
     Compass, 
     ExternalLink, 
@@ -22,6 +23,8 @@ import plazaImg from '../assets/image/map/plaza.png';
 import museoImg from '../assets/image/map/museo.png';
 
 const PucaraVirtualTour = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
     const tour360Url = "https://visitavirtual.cultura.pe/recorridos/MLP/museo-litico-pukara/index.html";
     const [activeTab, setActiveTab] = useState('doc'); // 'doc', 'reels', 'virtual'
 
@@ -29,26 +32,32 @@ const PucaraVirtualTour = () => {
     const docList = [
         {
             id: 'pucara-tour',
-            title: '1. Documental Turístico Pucará 365',
+            title: isEn ? '1. Pucará 365 Tourist Documentary' : '1. Documental Turístico Pucará 365',
             src: '/videos/pucara-tour.mp4',
             duration: '0:55 min',
-            desc: 'Recorrido cinematográfico completo por los atractivos principales, templos y la mística de Pucará.',
+            desc: isEn 
+              ? 'Complete cinematic journey through the main attractions, temples, and the mysticism of Pucará.' 
+              : 'Recorrido cinematográfico completo por los atractivos principales, templos y la mística de Pucará.',
             thumbnail: temploImg
         },
         {
             id: 'pucara-artesanos',
-            title: '2. Taller de Alfarería Tradicional y Toritos',
+            title: isEn ? '2. Traditional Pottery & Toritos Workshop' : '2. Taller de Alfarería Tradicional y Toritos',
             src: '/videos/pucara-artesanos.mp4',
             duration: '1:12 min',
-            desc: 'La herencia alfarera en acción: manos de maestros moldeando el barro rojo sagrado para crear Toritos.',
+            desc: isEn 
+              ? 'Pottery heritage in action: master hands molding the sacred red clay to create Toritos.' 
+              : 'La herencia alfarera en acción: manos de maestros moldeando el barro rojo sagrado para crear Toritos.',
             thumbnail: plazaImg
         },
         {
             id: 'pucara-alrededores',
-            title: '3. Paisajes Aéreos y Peñón de Pucará',
+            title: isEn ? '3. Aerial Landscapes & Pucará Lookout' : '3. Paisajes Aéreos y Peñón de Pucará',
             src: '/videos/pucara-alrededores.mp4',
             duration: '0:14 min',
-            desc: 'Vistas aéreas y panorámicas del gran Peñón de Pucará y los campos fértiles de Lampa y Puno.',
+            desc: isEn 
+              ? 'Aerial and panoramic views of the great Pucará Lookout and the fertile fields of Lampa and Puno.' 
+              : 'Vistas aéreas y panorámicas del gran Peñón de Pucará y los campos fértiles de Lampa y Puno.',
             thumbnail: penonImg
         }
     ];
@@ -57,28 +66,28 @@ const PucaraVirtualTour = () => {
     const reelList = [
         {
             id: 'reel-1',
-            title: '4. Vivencia y Tradición en Pucará',
+            title: isEn ? '4. Experience & Tradition in Pucará' : '4. Vivencia y Tradición en Pucará',
             src: '/videos/WhatsApp Video 2026-07-22 at 3.31.35 PM.mp4',
             tag: '#TurismoPucara',
             thumbnail: kalasayaImg
         },
         {
             id: 'reel-2',
-            title: '5. Arte Alfarero del Torito',
+            title: isEn ? '5. Pottery Art of the Torito' : '5. Arte Alfarero del Torito',
             src: '/videos/WhatsApp Video 2026-07-22 at 3.31.36 PM.mp4',
             tag: '#AlfareriaAncestral',
             thumbnail: plazaImg
         },
         {
             id: 'reel-3',
-            title: '6. Mística en el Templo Kalasaya',
+            title: isEn ? '6. Mysticism at Kalasaya Temple' : '6. Mística en el Templo Kalasaya',
             src: '/videos/WhatsApp Video 2026-07-22 at 3.31.37 PM.mp4',
             tag: '#Kalasaya200aC',
             thumbnail: museoImg
         },
         {
             id: 'reel-4',
-            title: '7. Ruta Cultural Pucará - Lampa',
+            title: isEn ? '7. Historical Legacy of Santa Isabel' : '7. Legado Histórico de Santa Isabel',
             src: '/videos/WhatsApp Video 2026-07-22 at 3.31.37 PM (1).mp4',
             tag: '#PunoMagico',
             thumbnail: temploImg
@@ -114,13 +123,15 @@ const PucaraVirtualTour = () => {
                         fontSize: '0.85rem',
                         marginBottom: '1rem'
                     }}>
-                        <Video size={16} /> 7 Videos Locales Incluidos (3 Documentales HD + 4 Reels Verticals)
+                        <Video size={16} /> {isEn ? '7 Local Videos Included (3 HD Documentaries + 4 Vertical Reels)' : '7 Videos Locales Incluidos (3 Documentales HD + 4 Reels Verticales)'}
                     </div>
 
-                    <h2 className="bold-title">Videoteca & Tour Virtual 360° de Pucará</h2>
+                    <h2 className="bold-title">{isEn ? 'Video Library & 360° Virtual Tour of Pucará' : 'Videoteca & Tour Virtual 360° de Pucará'}</h2>
                     <div style={{ height: '4px', background: 'var(--terracotta)', width: '80px', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
                     <p style={{ maxWidth: '700px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Explora la colección completa de los 7 videos grabados en Pucará (3 documentales panorámicos y 4 reels verticales) junto con el recorrido 360° interactivo.
+                        {isEn
+                          ? 'Explore the complete collection of 7 videos recorded in Pucará (3 panoramic documentaries and 4 vertical reels) along with the interactive 360° tour.'
+                          : 'Explora la colección completa de los 7 videos grabados en Pucará (3 documentales panorámicos y 4 reels verticales) junto con el recorrido 360° interactivo.'}
                     </p>
                 </div>
 
@@ -137,7 +148,7 @@ const PucaraVirtualTour = () => {
                             fontSize: '0.92rem'
                         }}
                     >
-                        <Film size={18} /> 3 Documentales (16:9)
+                        <Film size={18} /> {isEn ? '3 Documentaries (16:9)' : '3 Documentales (16:9)'}
                     </button>
                     <button
                         onClick={() => setActiveTab('reels')}
@@ -150,7 +161,7 @@ const PucaraVirtualTour = () => {
                             fontSize: '0.92rem'
                         }}
                     >
-                        <Smartphone size={18} /> 4 Reels Verticals (9:16)
+                        <Smartphone size={18} /> {isEn ? '4 Vertical Reels (9:16)' : '4 Reels Verticales (9:16)'}
                     </button>
                     <button
                         onClick={() => setActiveTab('virtual')}
@@ -163,7 +174,7 @@ const PucaraVirtualTour = () => {
                             fontSize: '0.92rem'
                         }}
                     >
-                        <Compass size={18} /> Tour Virtual 360°
+                        <Compass size={18} /> {isEn ? '360° Virtual Tour' : 'Tour Virtual 360°'}
                     </button>
                 </div>
 
@@ -335,13 +346,15 @@ const PucaraVirtualTour = () => {
                                         textTransform: 'uppercase',
                                         letterSpacing: '0.05em'
                                     }}>
-                                        Experiencia Inmersiva
+                                        {isEn ? 'Immersive Experience' : 'Experiencia Inmersiva'}
                                     </span>
                                     <h3 style={{ fontSize: '1.85rem', color: 'var(--primary)', fontWeight: 800, margin: '0.5rem 0 0.8rem 0', fontFamily: 'var(--font-heading)' }}>
-                                        Museo Lítico de Pucará — Recorrido 360°
+                                        {isEn ? 'Pucará Lytic Museum — 360° Virtual Tour' : 'Museo Lítico de Pucará — Recorrido 360°'}
                                     </h3>
                                     <p style={{ color: 'var(--text-muted)', fontSize: '1rem', lineHeight: '1.6' }}>
-                                        Explora las salas sagradas del museo oficial del Ministerio de Cultura de manera interactiva. Por razones de seguridad del portal oficial, la experiencia completa en pantalla completa está optimizada para ser explorada directamente o escaneada en tu móvil.
+                                        {isEn
+                                            ? 'Explore the sacred halls of the official museum of the Ministry of Culture interactively. For security reasons of the official portal, the complete fullscreen experience is optimized to be explored directly or scanned on your mobile device.'
+                                            : 'Explora las salas sagradas del museo oficial del Ministerio de Cultura de manera interactiva. Por razones de seguridad del portal oficial, la experiencia completa en pantalla completa está optimizada para ser explorada directamente o escaneada en tu móvil.'}
                                     </p>
                                 </div>
 
@@ -383,7 +396,7 @@ const PucaraVirtualTour = () => {
                                             <Compass size={32} className="float-animation" />
                                         </div>
                                         <span style={{ fontSize: '1.1rem', fontWeight: 800, fontFamily: 'var(--font-heading)', letterSpacing: '0.05em', marginBottom: '1rem' }}>
-                                            RECORRIDO INTERACTIVO 360°
+                                            {isEn ? '360° INTERACTIVE TOUR' : 'RECORRIDO INTERACTIVO 360°'}
                                         </span>
                                         <a
                                             href={tour360Url}
@@ -392,7 +405,7 @@ const PucaraVirtualTour = () => {
                                             className="btn btn-accent"
                                             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
                                         >
-                                            Abrir Recorrido 360° <ExternalLink size={16} />
+                                            {isEn ? 'Open 360° Tour' : 'Abrir Recorrido 360°'} <ExternalLink size={16} />
                                         </a>
                                     </div>
                                 </div>
@@ -413,10 +426,12 @@ const PucaraVirtualTour = () => {
                                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}>
                                     <Smartphone size={28} style={{ color: 'var(--terracotta)' }} />
                                     <h4 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--primary)', margin: '0.25rem 0 0 0' }}>
-                                        Escanea en tu Celular
+                                        {isEn ? 'Scan on your Mobile' : 'Escanea en tu Celular'}
                                     </h4>
                                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-                                        Usa la cámara de tu móvil para escanear el QR y navegar de forma inmersiva con el giroscopio.
+                                        {isEn
+                                            ? 'Use your mobile camera to scan the QR and navigate immersively with the gyroscope.'
+                                            : 'Usa la cámara de tu móvil para escanear el QR y navegar de forma inmersiva con el giroscopio.'}
                                     </p>
                                 </div>
 
@@ -438,7 +453,7 @@ const PucaraVirtualTour = () => {
                                 </div>
 
                                 <span style={{ fontSize: '0.78rem', color: 'var(--terracotta)', fontWeight: 'bold', letterSpacing: '0.05em' }} className="pulse-slow">
-                                    🔴 ESCANEAR AHORA
+                                    {isEn ? '🔴 SCAN NOW' : '🔴 ESCANEAR AHORA'}
                                 </span>
                             </div>
                         </motion.div>

@@ -3,22 +3,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Send, ExternalLink, Globe } from 'lucide-react';
-
-const schema = z.object({
-    nombre: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-    email: z.string().email('Ingresa un correo electrónico válido'),
-    destino: z.string().min(1, 'Selecciona un atractivo'),
-    fecha: z.string().min(1, 'Selecciona una fecha aproximada'),
-    mensaje: z.string().max(300, 'El mensaje no puede exceder 300 caracteres').optional()
-});
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+
+    const schema = z.object({
+        nombre: z.string().min(2, isEn ? 'Name must be at least 2 characters' : 'El nombre debe tener al menos 2 caracteres'),
+        email: z.string().email(isEn ? 'Enter a valid email address' : 'Ingresa un correo electrónico válido'),
+        destino: z.string().min(1, isEn ? 'Select an attraction' : 'Selecciona un atractivo'),
+        fecha: z.string().min(1, isEn ? 'Select an approximate date' : 'Selecciona una fecha aproximada'),
+        mensaje: z.string().max(300, isEn ? 'Message cannot exceed 300 characters' : 'El mensaje no puede exceder 300 caracteres').optional()
+    });
+
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(schema)
     });
 
     const onSubmit = (data) => {
-        toast.success(`¡Gracias, ${data.nombre}! Consulta enviada. Te contactaremos pronto. 🐂✨`, {
+        toast.success(isEn ? `Thank you, ${data.nombre}! Query sent. We will contact you soon. 🐂✨` : `¡Gracias, ${data.nombre}! Consulta enviada. Te contactaremos pronto. 🐂✨`, {
             duration: 5000,
             style: { background: '#FAF6F0', color: 'var(--primary)', border: '1px solid var(--terracotta)' }
         });
@@ -80,11 +84,13 @@ const Footer = () => {
                             PUCARÁ 365
                         </h3>
                         <p style={{ opacity: 0.85, lineHeight: 1.8, marginBottom: '1.8rem', fontSize: '0.95rem', fontWeight: 300 }}>
-                            Plataforma oficial de turismo de Pucará, Lampa, Puno. Conecta con el misticismo del altiplano, el Complejo Arqueológico de Kalasaya y la tradición de los Toritos de Pucará.
+                            {isEn 
+                              ? 'Official tourism platform of Pucará, Lampa, Puno. Connect with the mysticism of the high plateau, the Kalasaya Archaeological Complex, and the tradition of the Toritos de Pucará.' 
+                              : 'Plataforma oficial de turismo de Pucará, Lampa, Puno. Conecta con el misticismo del altiplano, el Complejo Arqueológico de Kalasaya y la tradición de los Toritos de Pucará.'}
                         </p>
                         
                         <h4 style={{ fontSize: '0.9rem', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.75rem', fontWeight: 700 }}>
-                            Redes Sociales & Enlaces Oficiales
+                            {isEn ? 'Social Media & Official Links' : 'Redes Sociales & Enlaces Oficiales'}
                         </h4>
                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                             {socialLinks.map((item, idx) => {
@@ -127,12 +133,12 @@ const Footer = () => {
                     {/* Column 2 — Official Contact */}
                     <div>
                         <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.25rem', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>
-                            Oficina de Turismo Pucará
+                            {isEn ? 'Pucará Tourism Office' : 'Oficina de Turismo Pucará'}
                         </h4>
                         <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginBottom: '2rem' }}>
                             <li style={{ display: 'flex', gap: '0.85rem', alignItems: 'center', fontSize: '0.95rem', opacity: 0.9 }}>
                                 <Phone size={20} color="var(--accent)" />
-                                <span>+51 916 598 012 (Atención Turística)</span>
+                                <span>{isEn ? '+51 916 598 012 (Tourist Support)' : '+51 916 598 012 (Atención Turística)'}</span>
                             </li>
                             <li style={{ display: 'flex', gap: '0.85rem', alignItems: 'center', fontSize: '0.95rem', opacity: 0.9 }}>
                                 <Mail size={20} color="var(--accent)" />
@@ -152,24 +158,24 @@ const Footer = () => {
                             fontSize: '0.85rem',
                             opacity: 0.85
                         }}>
-                            🏛️ <strong>Municipalidad Distrital de Pucará</strong><br />
-                            Portal de transparencia y gestión local:<br />
+                            🏛️ <strong>{isEn ? 'District Municipality of Pucará' : 'Municipalidad Distrital de Pucará'}</strong><br />
+                            {isEn ? 'Transparency portal and local management:' : 'Portal de transparencia y gestión local:'}<br />
                             <a href="https://www.gob.pe/munipucara" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
                                 www.gob.pe/munipucara <ExternalLink size={12} style={{ display: 'inline' }} />
                             </a>
                         </div>
                     </div>
 
-                    {/* Column 3 — Formulario de Consulta / Reserva (React Hook Form + Zod) */}
+                    {/* Column 3 — Formulario de Consulta / Reserva */}
                     <div>
                         <h4 style={{ color: 'white', marginBottom: '1.25rem', fontSize: '1.25rem', fontWeight: 700, fontFamily: 'var(--font-heading)' }}>
-                            Reserva tu Consulta de Viaje
+                            {isEn ? 'Request a Travel Consultation' : 'Reserva tu Consulta de Viaje'}
                         </h4>
                         <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                             <div>
                                 <input
                                     {...register('nombre')}
-                                    placeholder="Tu Nombre Completo *"
+                                    placeholder={isEn ? "Your Full Name *" : "Tu Nombre Completo *"}
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem 1rem',
@@ -187,7 +193,7 @@ const Footer = () => {
                             <div>
                                 <input
                                     {...register('email')}
-                                    placeholder="Correo Electrónico *"
+                                    placeholder={isEn ? "Email Address *" : "Correo Electrónico *"}
                                     style={{
                                         width: '100%',
                                         padding: '0.75rem 1rem',
@@ -217,11 +223,11 @@ const Footer = () => {
                                             fontSize: '0.85rem'
                                         }}
                                     >
-                                        <option value="">Atractivo...</option>
-                                        <option value="Kalasaya">Templo Kalasaya</option>
-                                        <option value="Torito">Taller Alfarero</option>
-                                        <option value="Museo">Museo Lítico</option>
-                                        <option value="Penon">El Peñón</option>
+                                        <option value="">{isEn ? "Attraction..." : "Atractivo..."}</option>
+                                        <option value="Kalasaya">{isEn ? "Kalasaya Temple" : "Templo Kalasaya"}</option>
+                                        <option value="Torito">{isEn ? "Pottery Workshop" : "Taller Alfarero"}</option>
+                                        <option value="Museo">{isEn ? "Lytic Museum" : "Museo Lítico"}</option>
+                                        <option value="Penon">{isEn ? "Pucará Lookout" : "El Peñón"}</option>
                                     </select>
                                     {errors.destino && <span style={{ color: '#F87171', fontSize: '0.75rem', marginTop: '2px', display: 'block' }}>{errors.destino.message}</span>}
                                 </div>
@@ -257,7 +263,7 @@ const Footer = () => {
                                     fontSize: '0.9rem'
                                 }}
                             >
-                                <Send size={16} />Enviar Consulta de Reserva
+                                <Send size={16} />{isEn ? 'Send Booking Query' : 'Enviar Consulta de Reserva'}
                             </button>
                         </form>
                     </div>
@@ -277,11 +283,11 @@ const Footer = () => {
                     opacity: 0.7
                 }}>
                     <div>
-                        &copy; {new Date().getFullYear()} PUCARÁ 365 — Proyecto de Desarrollo Turístico Sostenible Altiplano Puno.
+                        &copy; {new Date().getFullYear()} {isEn ? 'PUCARÁ 365 — Sustainable Tourism Development Project Altiplano Puno.' : 'PUCARÁ 365 — Proyecto de Desarrollo Turístico Sostenible Altiplano Puno.'}
                     </div>
                     <div style={{ display: 'flex', gap: '1.5rem' }}>
                         <span>Pucará, Lampa, Puno, Perú</span>
-                        <span>Cultura Pre-Inca (200 a.C.)</span>
+                        <span>{isEn ? 'Pre-Inca Culture (200 B.C.)' : 'Cultura Pre-Inca (200 a.C.)'}</span>
                     </div>
                 </div>
             </div>

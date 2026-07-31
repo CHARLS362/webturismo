@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Mountain, Utensils, Users, Heart, Palette, Compass, Landmark } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 import kalasayaImg from '../assets/image/map/kalasaya.png';
 import penonImg from '../assets/image/map/penon.png';
@@ -9,47 +10,57 @@ import plazaImg from '../assets/image/map/plaza.png';
 import museoImg from '../assets/image/map/museo.png';
 
 const interestsList = [
-    { id: 'artesania', label: 'Alfarería & Cerámica', icon: <Palette size={20} /> },
-    { id: 'arqueologia', label: 'Arqueología Pre-Inca', icon: <Landmark size={20} /> },
-    { id: 'trekking', label: 'Trekking & Naturaleza', icon: <Mountain size={20} /> },
-    { id: 'gastronomia', label: 'Gastronomía Local', icon: <Utensils size={20} /> },
-    { id: 'misticismo', label: 'Misticismo & Ofrendas', icon: <Compass size={20} /> },
-    { id: 'historia', label: 'Historia Colonial', icon: <Users size={20} /> }
+    { id: 'artesania', label: { es: 'Alfarería & Cerámica', en: 'Pottery & Ceramics' }, icon: <Palette size={20} /> },
+    { id: 'arqueologia', label: { es: 'Arqueología Pre-Inca', en: 'Pre-Inca Archaeology' }, icon: <Landmark size={20} /> },
+    { id: 'trekking', label: { es: 'Trekking & Naturaleza', en: 'Trekking & Nature' }, icon: <Mountain size={20} /> },
+    { id: 'gastronomia', label: { es: 'Gastronomía Local', en: 'Local Gastronomy' }, icon: <Utensils size={20} /> },
+    { id: 'misticismo', label: { es: 'Misticismo & Ofrendas', en: 'Mysticism & Offerings' }, icon: <Compass size={20} /> },
+    { id: 'historia', label: { es: 'Historia Colonial', en: 'Colonial History' }, icon: <Users size={20} /> }
 ];
 
 const activitiesList = [
-    { id: 'moldear', label: 'Moldeado de Arcilla', icon: <Palette size={20} /> },
-    { id: 'escalar', label: 'Escalar el Peñón', icon: <Mountain size={20} /> },
-    { id: 'monolitos', label: 'Explorar Kalasaya', icon: <Landmark size={20} /> },
-    { id: 'queso', label: 'Cata de Quesos', icon: <Utensils size={20} /> },
+    { id: 'moldear', label: { es: 'Moldeado de Arcilla', en: 'Clay Molding' }, icon: <Palette size={20} /> },
+    { id: 'escalar', label: { es: 'Escalar el Peñón', en: 'Climbing the Lookout' }, icon: <Mountain size={20} /> },
+    { id: 'monolitos', label: { es: 'Explorar Kalasaya', en: 'Explore Kalasaya' }, icon: <Landmark size={20} /> },
+    { id: 'queso', label: { es: 'Cata de Quesos', en: 'Cheese Tasting' }, icon: <Utensils size={20} /> },
 ];
 
-const getRecommendation = (interests, activities) => {
+const getRecommendation = (interests, activities, isEn) => {
     if (interests.includes('trekking') || activities.includes('escalar') || activities.includes('pago')) {
         return {
             id: 'adventure',
-            title: "Aventura y Misticismo en Pucará",
-            desc: "Diseñado para espíritus libres. Trekking al gran Peñón de Pucará (Lampa, Puno), ceremonias de pago a la Pachamama con coca y campamentos de altura.",
+            title: isEn ? "Adventure & Mysticism in Pucará" : "Aventura y Misticismo en Pucará",
+            desc: isEn 
+              ? "Designed for free spirits. Trekking to the great Pucará Lookout (Lampa, Puno), Pachamama payment ceremonies with coca, and altitude campings."
+              : "Diseñado para espíritus libres. Trekking al gran Peñón de Pucará (Lampa, Puno), ceremonias de pago a la Pachamama con coca y campamentos de altura.",
             images: [penonImg, kalasayaImg]
         };
     }
     if (interests.includes('artesania') || activities.includes('moldear') || interests.includes('historia') || activities.includes('queso')) {
         return {
             id: 'luxury',
-            title: "Inmersión Barroco-Alfarera",
-            desc: "Una experiencia de alta gama que combina arte tradicional andino en Pucará con talleres de cerámica, historia colonial y gastronomía altiplánica de Puno.",
+            title: isEn ? "Baroque-Pottery Immersion" : "Inmersión Barroco-Alfarera",
+            desc: isEn 
+              ? "A high-end experience combining traditional Andean art in Pucará with pottery workshops, colonial history, and highland gastronomy of Puno."
+              : "Una experiencia de alta gama que combina arte tradicional andino en Pucará con talleres de cerámica, historia colonial y gastronomía altiplánica de Puno.",
             images: [plazaImg, temploImg]
         };
     }
     return {
         id: 'standard',
-        title: "Pucará Esencial",
-        desc: "El recorrido definitivo. Conoce el templo sagrado de Kalasaya, el Museo Lítico y la historia del Torito de Pucará en Lampa, Puno.",
+        title: isEn ? "Essential Pucará" : "Pucará Esencial",
+        desc: isEn 
+              ? "The definitive tour. Discover the sacred temple of Kalasaya, the Lytic Museum, and the history of the Torito de Pucará in Lampa, Puno."
+              : "El recorrido definitivo. Conoce el templo sagrado de Kalasaya, el Museo Lítico y la historia del Torito de Pucará en Lampa, Puno.",
         images: [temploImg, museoImg]
     };
 };
 
 const Overview = ({ onSelectPackage }) => {
+    const { i18n } = useTranslation();
+    const isEn = i18n.language === 'en';
+    const langKey = isEn ? 'en' : 'es';
+
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [selectedActivities, setSelectedActivities] = useState([]);
 
@@ -61,7 +72,7 @@ const Overview = ({ onSelectPackage }) => {
         }
     };
 
-    const recommendation = getRecommendation(selectedInterests, selectedActivities);
+    const recommendation = getRecommendation(selectedInterests, selectedActivities, isEn);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [prevRecId, setPrevRecId] = useState(recommendation.id);
 
@@ -84,11 +95,13 @@ const Overview = ({ onSelectPackage }) => {
             <div className="container">
                 {/* Header in Larana Style */}
                 <div style={{ textAlign: 'center', marginBottom: '4.5rem' }}>
-                    <span className="script-subtitle">Diseña tu Experiencia en...</span>
-                    <h2 className="bold-title">Personaliza tu Ruta Pucará 365</h2>
+                    <span className="script-subtitle">{isEn ? 'Design Your Experience in...' : 'Diseña tu Experiencia en...'}</span>
+                    <h2 className="bold-title">{isEn ? 'Customize Your Pucará 365 Route' : 'Personaliza tu Ruta Pucará 365'}</h2>
                     <div style={{ width: '80px', height: '4px', backgroundColor: 'var(--accent)', margin: '0 auto 1.5rem auto', borderRadius: '2px' }} />
                     <p style={{ maxWidth: '650px', margin: '0 auto', color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Selecciona tus intereses y actividades preferidas para generar de manera instantánea el itinerario ideal para ti.
+                        {isEn 
+                          ? 'Select your interests and preferred activities to instantly generate the ideal itinerary for you.'
+                          : 'Selecciona tus intereses y actividades preferidas para generar de manera instantánea el itinerario ideal para ti.'}
                     </p>
                 </div>
 
@@ -105,7 +118,7 @@ const Overview = ({ onSelectPackage }) => {
                         {/* Interests Selection Box */}
                         <div className="card card-terracotta" style={{ padding: '2.5rem' }}>
                             <h4 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-                                <Heart size={22} className="text-secondary" style={{ color: 'var(--secondary)' }} /> 1. ¿Qué te interesa explorar?
+                                <Heart size={22} className="text-secondary" style={{ color: 'var(--secondary)' }} /> {isEn ? '1. What are you interested in exploring?' : '1. ¿Qué te interesa explorar?'}
                             </h4>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
                                 {interestsList.map((item) => {
@@ -140,7 +153,7 @@ const Overview = ({ onSelectPackage }) => {
                                             }}>
                                                 {item.icon}
                                             </div>
-                                            <span style={{ textAlign: 'center' }}>{item.label}</span>
+                                            <span style={{ textAlign: 'center' }}>{item.label[langKey]}</span>
                                         </motion.button>
                                     );
                                 })}
@@ -150,7 +163,7 @@ const Overview = ({ onSelectPackage }) => {
                         {/* Activities Selection Box */}
                         <div className="card card-primary" style={{ padding: '2.5rem' }}>
                             <h4 style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontWeight: 800, fontFamily: 'var(--font-heading)' }}>
-                                <Compass size={22} className="text-secondary" style={{ color: 'var(--terracotta)' }} /> 2. ¿Qué actividades prefieres?
+                                <Compass size={22} className="text-secondary" style={{ color: 'var(--terracotta)' }} /> {isEn ? '2. What activities do you prefer?' : '2. ¿Qué actividades prefieres?'}
                             </h4>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
                                 {activitiesList.map((item) => {
@@ -185,7 +198,7 @@ const Overview = ({ onSelectPackage }) => {
                                             }}>
                                                 {item.icon}
                                             </div>
-                                            <span style={{ textAlign: 'center' }}>{item.label}</span>
+                                            <span style={{ textAlign: 'center' }}>{item.label[langKey]}</span>
                                         </motion.button>
                                     );
                                 })}
@@ -230,7 +243,7 @@ const Overview = ({ onSelectPackage }) => {
                                         <span style={{
                                             backgroundColor: 'var(--accent)',
                                             color: 'var(--primary)',
-                                            padding: '0.45rem 1.2rem',
+                                            padding: '0.45rem 1.2/rem',
                                             borderRadius: '30px',
                                             fontSize: '0.8rem',
                                             fontWeight: 900,
@@ -238,7 +251,7 @@ const Overview = ({ onSelectPackage }) => {
                                             letterSpacing: '0.1em',
                                             boxShadow: '0 4px 12px rgba(204, 156, 86, 0.3)'
                                         }}>
-                                            Recomendado para ti
+                                            {isEn ? 'Recommended for you' : 'Recomendado para ti'}
                                         </span>
                                     </div>
                                 </div>
@@ -273,7 +286,7 @@ const Overview = ({ onSelectPackage }) => {
                                                 document.getElementById('itinerario')?.scrollIntoView({ behavior: 'smooth' });
                                             }}
                                         >
-                                            Ver Itinerario Completo
+                                            {isEn ? 'View Full Itinerary' : 'Ver Itinerario Completo'}
                                         </motion.button>
                                         <motion.button 
                                             whileHover={{ scale: 1.05, backgroundColor: 'rgba(15, 44, 89, 0.06)' }}
@@ -294,7 +307,7 @@ const Overview = ({ onSelectPackage }) => {
                                                 if (onSelectPackage) onSelectPackage(recommendation.id);
                                                 document.getElementById('pucara-planificador')?.scrollIntoView({ behavior: 'smooth' });
                                             }}
-                                            title="Configurar amuleto"
+                                            title={isEn ? 'Configure amulet' : 'Configurar amuleto'}
                                         >
                                             <Palette size={20} />
                                         </motion.button>
