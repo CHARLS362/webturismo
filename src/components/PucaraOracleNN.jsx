@@ -126,13 +126,17 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
     setGameState('training');
     setAnimateSynapses(true);
 
-    // 1. Setup Brain.js neural network
-    const net = new brain.NeuralNetwork({
-      hiddenLayers: [4] // 4 hidden neurons
-    });
-
-    // 2. Train network locally (takes less than 1ms, but we animate epochs for wow factor)
-    net.train(TRAINING_DATA, { iterations: 1000 });
+    // 1. Setup Brain.js neural network with safe fallback
+    let net = null;
+    try {
+      const NeuralNetClass = brain.NeuralNetwork || (brain.default && brain.default.NeuralNetwork);
+      if (NeuralNetClass) {
+        net = new NeuralNetClass({ hiddenLayers: [4] });
+        net.train(TRAINING_DATA, { iterations: 1000 });
+      }
+    } catch (e) {
+      console.warn("Brain.js fallback applied:", e);
+    }
 
     // Animate epoch counter
     let epochCounter = 0;
@@ -150,12 +154,22 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
           paz: accumulatedValues.paz / 3
         };
 
-        // 4. Predict output using trained network
-        const output = net.run(finalInput);
+        // 4. Predict output using trained network or direct weighted calculation fallback
+        let output = {};
+        if (net && typeof net.run === 'function') {
+          output = net.run(finalInput);
+        } else {
+          output = {
+            rojo: finalInput.amor,
+            amarillo: finalInput.sabiduria,
+            verde: finalInput.naturaleza,
+            blanco: finalInput.paz
+          };
+        }
 
         // Find max output key
         let maxKey = 'rojo';
-        let maxValue = 0;
+        let maxValue = -1;
         Object.entries(output).forEach(([key, val]) => {
           if (val > maxValue) {
             maxValue = val;
