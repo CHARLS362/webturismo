@@ -22,7 +22,6 @@ import Recommendations from './components/Recommendations';
 import AccessibilityMenu from './components/AccessibilityMenu';
 import AIChatBot from './components/AIChatBot';
 import PucaraQRGenerator from './components/PucaraQRGenerator';
-import PucaraOracleNN from './components/PucaraOracleNN';
 import { lockedToritoSkins } from './data/pucaraData';
 import { playMisticSound, triggerConfetti } from './utils/effects';
 import './index.css';
@@ -166,9 +165,6 @@ function App() {
         
         {/* 5. EXPERIENCIA INTERACTIVA 3D & IA */}
         <PucaraPlanner initialToritoColor={initialToritoColor} unlockedSkins={unlockedSkins} />
-
-        {/* 5.5. ORÁCULO DE LOS APUS POR IA LOCAL */}
-        <PucaraOracleNN onUnlockColor={unlockSkin} />
         
         {/* 6. GESTIÓN DTI: Hoja de Ruta y Smart Dashboard IoT */}
         <Roadmap5Years />
