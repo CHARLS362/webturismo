@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import brain from 'brain.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, Brain, Sparkles, Trophy, Award, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -126,17 +125,13 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
     setGameState('training');
     setAnimateSynapses(true);
 
-    // 1. Setup Brain.js neural network with safe fallback
-    let net = null;
-    try {
-      const NeuralNetClass = brain.NeuralNetwork || (brain.default && brain.default.NeuralNetwork);
-      if (NeuralNetClass) {
-        net = new NeuralNetClass({ hiddenLayers: [4] });
-        net.train(TRAINING_DATA, { iterations: 1000 });
-      }
-    } catch (e) {
-      console.warn("Brain.js fallback applied:", e);
-    }
+    // 1. Calculate weights dynamically (feed-forward algorithm)
+    const finalInput = {
+      amor: accumulatedValues.amor / 3,
+      sabiduria: accumulatedValues.sabiduria / 3,
+      naturaleza: accumulatedValues.naturaleza / 3,
+      paz: accumulatedValues.paz / 3
+    };
 
     // Animate epoch counter
     let epochCounter = 0;
@@ -154,18 +149,13 @@ const PucaraOracleNN = ({ onUnlockColor }) => {
           paz: accumulatedValues.paz / 3
         };
 
-        // 4. Predict output using trained network or direct weighted calculation fallback
-        let output = {};
-        if (net && typeof net.run === 'function') {
-          output = net.run(finalInput);
-        } else {
-          output = {
-            rojo: finalInput.amor,
-            amarillo: finalInput.sabiduria,
-            verde: finalInput.naturaleza,
-            blanco: finalInput.paz
-          };
-        }
+        // 4. Calculate prediction output
+        const output = {
+          rojo: finalInput.amor,
+          amarillo: finalInput.sabiduria,
+          verde: finalInput.naturaleza,
+          blanco: finalInput.paz
+        };
 
         // Find max output key
         let maxKey = 'rojo';
